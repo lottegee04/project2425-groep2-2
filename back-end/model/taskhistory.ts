@@ -1,7 +1,7 @@
 import { Task } from "./task";
-import { User } from "./User";
+import { User } from "./user";
 
-export class History {
+export class TaskHistory {
     private user: User;
     private finishedTasks : Task[];
 
