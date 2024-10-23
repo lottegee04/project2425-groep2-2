@@ -5,11 +5,11 @@ export class User {
     private password: string;
     private tasks : Task[]
 
-    constructor(user : { id?: number; username: string; password: string; }) {
+    constructor(user : { id?: number; username: string; password: string; tasks: Task[]}) {
         this.id = user.id;
         this.username = user.username;
         this.password = user.password;
-        this.tasks = [];
+        this.tasks = user.tasks;
     }
 
     getId(): number | undefined {

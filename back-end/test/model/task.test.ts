@@ -1,4 +1,4 @@
-import {set, addDays} from "date-fns";
+import {addDays} from "date-fns";
 import { Task } from "../../model/task";
 import { start } from "repl";
 
@@ -12,7 +12,7 @@ const deadline = addDays(startDate,1);
 
 test("given: valid task parameters; when: creating a task; a task with the correct parameters is created;", () => {
     //when:
-    const task = new Task({id,description,sidenote,deadline})
+    const task = new Task({id,description,sidenote,startDate,deadline})
     //then:
     expect(task.getId()).toEqual(id);
     expect(task.getDescription()).toEqual(description);

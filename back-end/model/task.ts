@@ -10,11 +10,11 @@ export class Task{
     private status: boolean;
     private priority: Priority | null;
 
-    constructor(task : {id?:number,description: string, sidenote?: string, deadline: Date}) {
+    constructor(task : {id?:number,description: string, sidenote?: string, startDate: Date,deadline: Date}) {
         this.id = task.id;
         this.description = task.description;
         this.sidenote = task.sidenote;
-        this.startDate = new Date();
+        this.startDate = task.startDate;
         this.endDate = null;
         this.deadline = task.deadline;
         this.status = false;

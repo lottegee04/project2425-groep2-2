@@ -1,3 +1,4 @@
+import { Task } from "../../model/task";
 import { TaskHistory } from "../../model/taskhistory";
 import { User } from "../../model/user";
 
@@ -5,11 +6,12 @@ import { User } from "../../model/user";
 const id = 1;
 const username = 'JohnDoe';
 const password ="password1234"
-const user = new User({id,username,password});
+const tasks:Task[] = [];
+const user = new User({id,username,password,tasks});
 test("given valid history parameters; when: creating a new history; then: a history is created with the right parameters;", () => {
     //when:
     const history = new TaskHistory({user});
     //then:
     expect(history.getUser()).toEqual(user);
-    expect(history.getFinishedTasks()).toEqual([]);
+    expect(history.getFinishedTasks()).toEqual(tasks);
 })
