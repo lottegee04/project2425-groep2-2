@@ -12,7 +12,7 @@ const deadline = addDays(startDate,1);
 
 test("given: valid task parameters; when: creating a task; a task with the correct parameters is created;", () => {
     //when:
-    const task = new Task({id,description,sidenote,startDate,deadline})
+    const task = new Task({id,description,sidenote,startDate, endDate: null,deadline, status:true, priority:null})
     //then:
     expect(task.getId()).toEqual(id);
     expect(task.getDescription()).toEqual(description);

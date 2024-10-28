@@ -10,7 +10,8 @@ export class Task{
     private status: boolean;
     private priority: Priority | null;
 
-    constructor(task : {id?:number,description: string, sidenote?: string, startDate: Date,deadline: Date}) {
+    constructor(task : {id?:number, description: string, sidenote?: string, startDate: Date, endDate: Date | null, deadline: Date, status: boolean, priority: Priority | null}) {
+        this.validate(task)
         this.id = task.id;
         this.description = task.description;
         this.sidenote = task.sidenote;
@@ -19,6 +20,15 @@ export class Task{
         this.deadline = task.deadline;
         this.status = true;
         this.priority = null;
+    }
+
+    validate(task: { description: string, deadline: Date}) {
+        if (!task.description) {
+            throw new Error("Description is required.")
+        }
+        if (!task.deadline) {
+            throw new Error("Deadline is required.")
+        }
     }
 
     getId(): number | undefined {
