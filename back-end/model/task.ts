@@ -17,7 +17,7 @@ export class Task{
         this.startDate = task.startDate;
         this.endDate = null;
         this.deadline = task.deadline;
-        this.status = false;
+        this.status = true;
         this.priority = null;
     }
 

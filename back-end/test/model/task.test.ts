@@ -20,6 +20,6 @@ test("given: valid task parameters; when: creating a task; a task with the corre
     expect(task.getStartDate().toLocaleDateString()).toEqual(startDate.toLocaleDateString());
     expect(task.getEndDate()).toEqual(null);
     expect(task.getDeadline().toLocaleDateString()).toEqual(deadline.toLocaleDateString());
-    expect(task.getStatus()).toBeFalsy();
+    expect(task.getStatus()).toBeTruthy();
     expect(task.getPriority()).toEqual(null);
 }) 
