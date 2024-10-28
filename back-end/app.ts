@@ -11,7 +11,7 @@ const app = express();
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
 
-app.use(cors());
+app.use(cors({origin:'http://localhost:8080'}));
 app.use(bodyParser.json());
 //routes
 app.use('/users', userRouter);
