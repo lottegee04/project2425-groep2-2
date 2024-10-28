@@ -7,14 +7,20 @@ const allTasks = [
         description: "shopping",
         sidenote: "need to do shopping for food.",
         startDate: new Date(),
-        deadline: addDays(new Date(),1)
+        endDate: null,
+        deadline: addDays(new Date(),1),
+        status: true,
+        priority: null
     }),
     new Task({
         id:2,
         description:"uploading paper",
         sidenote:"uploading a paper for a certain course",
         startDate: new Date(),
-        deadline: addDays(new Date(),4)
+        endDate: null,
+        deadline: addDays(new Date(),4),
+        status: true,
+        priority: null
     })
 ]
 

@@ -10,7 +10,7 @@ const startDate = new Date();
 //deadline morgen te laten zijn
 const deadline = addDays(startDate,1);
 
-test("given: valid task parameters; when: creating a task; a task with the correct parameters is created;", () => {
+test("given: valid task parameters; when: creating a task;then: a task with the correct parameters is created;", () => {
     //when:
     const task = new Task({id,description,sidenote,startDate, endDate: null,deadline, status:true, priority:null})
     //then:
@@ -23,3 +23,12 @@ test("given: valid task parameters; when: creating a task; a task with the corre
     expect(task.getStatus()).toBeTruthy();
     expect(task.getPriority()).toEqual(null);
 }) 
+
+test("given: no description; when: creating a task; then: an error is thrown ", () => {
+    //when:
+    const task = () => {
+        const task = new Task({id,description:"",sidenote,startDate, endDate: null,deadline, status:true, priority:null})
+    };
+    //then
+    expect(task).toThrow("Description is required.");
+})
