@@ -48,7 +48,12 @@ const getUserById =({id}: {id: number}): User | null => {
     return users.find((user) => user.getId() === id) || null;
 }
 
+const addTasktoUser= ({user}: {user:User}, {task}:{task:Task}): void => {
+    user.addTask(task);
+}
+
 export default {
     getAllUsers,
-    getUserById
+    getUserById,
+    addTasktoUser
 };

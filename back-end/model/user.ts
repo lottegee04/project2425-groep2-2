@@ -32,4 +32,8 @@ export class User {
     getTasks() : Task[] {
         return this.tasks;
     }
+
+    addTask(task: Task) {
+        this.tasks.push(task);
+    }
 }

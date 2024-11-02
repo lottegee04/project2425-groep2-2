@@ -35,11 +35,13 @@ const userId = 1;
 let addTasktoAllTasksMock: jest.Mock;
 let mockUserDbGetUserById: jest.Mock;
 let mockPriorityDbGetPriorityByName: jest.Mock;
+let mockUserDbAddTaskToUser: jest.Mock;
 
 beforeEach(() => {
     mockUserDbGetUserById = jest.fn();
     mockPriorityDbGetPriorityByName = jest.fn();
     addTasktoAllTasksMock = jest.fn();
+    mockUserDbAddTaskToUser = jest.fn();
 });
 afterEach(() => {
     jest.clearAllMocks();
@@ -49,7 +51,8 @@ test("given: valid task, when: task is created, then task is created with those 
     //given:
     userDb.getUserById = mockUserDbGetUserById.mockReturnValue(user);
     priorityDb.getPriorityByName = mockPriorityDbGetPriorityByName.mockReturnValue(priority);
-    taskDb.addTasktoAllTasks = addTasktoAllTasksMock
+    userDb.addTasktoUser = mockUserDbAddTaskToUser;
+    taskDb.addTasktoAllTasks = addTasktoAllTasksMock;
     //when:
     taskService.createTask({
         description,sidenote,deadline,priority:priorityInput,userId

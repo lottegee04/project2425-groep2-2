@@ -16,6 +16,7 @@ const createTask = ({description,sidenote,deadline,priority: priorityInput,userI
     if (!priority) { throw new Error("Priority does not exist.")}
     const startDate = new Date();
     const task = new Task({description,sidenote,startDate,endDate:null,status: true,deadline,priority,userId});
+    userDb.addTasktoUser({user},{task});
     return taskDb.addTasktoAllTasks(task);
 }
 
