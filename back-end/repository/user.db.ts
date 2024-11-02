@@ -1,6 +1,7 @@
 import { addDays } from "date-fns";
 import { Task } from "../model/task";
 import { User } from "../model/user";
+import { Priority } from "../model/priority";
 
 const users = [
     new User({
@@ -15,7 +16,8 @@ const users = [
             endDate: null,
             deadline: addDays(new Date(),1),
             status: true,
-            priority: null
+            priority: new Priority({levelName:"basic", colour:"green"}),
+            userId: 1
         })]
     }),
     new User({
@@ -31,7 +33,8 @@ const users = [
                 endDate: null,
                 deadline: addDays(new Date(),4),
                 status: true,
-                priority: null
+                priority: new Priority({levelName:"basic", colour:"green"}),
+                userId: 2
             })
         ]
     })
@@ -41,6 +44,11 @@ const getAllUsers = (): User[] => {
     return users;
 };
 
+const getUserById =({id}: {id: number}): User | null => {
+    return users.find((user) => user.getId() === id) || null;
+}
+
 export default {
-    getAllUsers
+    getAllUsers,
+    getUserById
 };

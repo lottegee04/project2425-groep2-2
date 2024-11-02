@@ -10,7 +10,7 @@ export class Priority{
     getLevelName(): string {
         return this.levelName;
     }
-    getcolour(): string {
+    getColour(): string {
         return this.colour;
     }
 }

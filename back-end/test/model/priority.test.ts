@@ -8,5 +8,5 @@ test("given valid priority parameters; when: creating a new priority; then: a pr
     const basic = new Priority({levelName,colour})
     //then:
     expect(basic.getLevelName()).toEqual(levelName);
-    expect(basic.getcolour()).toEqual(colour);
+    expect(basic.getColour()).toEqual(colour);
 })

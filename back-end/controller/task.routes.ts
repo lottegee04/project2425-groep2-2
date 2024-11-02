@@ -7,7 +7,7 @@
  *      scheme: bearer
  *      bearerFormat: JWT
  *    schemas:
- *      Task:
+ *       Task:
  *          type: object
  *          properties:
  *            id:
@@ -42,9 +42,37 @@
  *                    colour:
  *                        type: string
  *              description: the level of priority of the task.
+ *            userId:
+ *              type: number
+ *              format: int64
+ *       TaskInput:
+    *          type: object
+    *          properties:
+    *            id:
+    *              type: number
+    *              format: int64
+    *            description:
+    *              type: string
+    *            sidenote:
+    *              type: string
+    *            deadline: 
+    *              type: string
+    *              format: date-time
+    *              description: due date of the task.
+    *            priority:
+    *              type: object
+    *              properties:
+    *                 levelName:
+    *                      type: string
+    *                 colour:
+    *                      type: string
+    *            userId:
+    *              type: number
+    *              format: int64
  */
 import express, {NextFunction, Request, Response} from 'express';
 import taskService from '../service/task.service';
+import { TaskInput } from '../types';
 
 const taskRouter = express.Router();
 
@@ -67,5 +95,30 @@ taskRouter.get('/', async ( requ: Request, res:Response, next: NextFunction) => 
     const tasks = await taskService.getAllTasks();
     res.status(200).json(tasks);
 });
+
+/**
+ * @swagger
+ * /tasks:
+ *   post:
+ *      summary: Create a new task for a existing user.
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/TaskInput'
+ *      responses:
+ *         200:
+ *            description: The created task.
+ *            content:
+ *              application/json:
+ *                schema:
+ *                  $ref: '#/components/schemas/Task'
+ */
+taskRouter.post("/",async(req:Request, res:Response) => {
+    const task = <TaskInput>req.body;
+    const result = await taskService.createTask(task);
+    res.status(200).json(result);
+}) ;
 
 export {taskRouter}
