@@ -6,7 +6,7 @@ import { TaskInput } from "../types";
 
 const getAllTasks = (): Task[] => taskDb.getAllTasks();
 
-const createTask = ({description,sidenote,deadline,priority: priorityInput,userId}: TaskInput) : Task => {
+const createTask = ({id,description,sidenote,deadline,priority: priorityInput,userId}: TaskInput) : Task => {
     if (!description) { throw new Error("Description is required.")};
     if (!deadline) { throw new Error("Deadline is required.")};
     if (!userId) { throw new Error("userId is required.")};
@@ -15,7 +15,7 @@ const createTask = ({description,sidenote,deadline,priority: priorityInput,userI
     const priority = priorityDb.getPriorityByName({levelName: priorityInput.levelName});
     if (!priority) { throw new Error("Priority does not exist.")}
     const startDate = new Date();
-    const task = new Task({description,sidenote,startDate,endDate:null,status: true,deadline,priority,userId});
+    const task = new Task({id,description,sidenote,startDate,endDate:null,status: true,deadline,priority,userId});
     userDb.addTasktoUser({user},{task});
     return taskDb.addTasktoAllTasks(task);
 }
