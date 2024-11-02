@@ -5,7 +5,10 @@ type TaskInput = {
     description: string;
     sidenote?: string;
     deadline: Date;
+    startDate?:Date;
+    endDate?: Date;
     priority: PriorityInput;
+    status?: boolean;
     userId: number;
 }
 

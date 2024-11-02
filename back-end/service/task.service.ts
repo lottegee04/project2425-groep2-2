@@ -7,7 +7,7 @@ import { TaskInput } from "../types";
 const getAllTasks = (): Task[] => taskDb.getAllTasks();
 
 const createTask = ({description,sidenote,deadline,priority: priorityInput,userId}: TaskInput) : Task => {
-    if (!description) { throw new Error("Description/title is required.")};
+    if (!description) { throw new Error("Description is required.")};
     if (!deadline) { throw new Error("Deadline is required.")};
     if (!userId) { throw new Error("userId is required.")};
     const user = userDb.getUserById({id: userId})

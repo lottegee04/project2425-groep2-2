@@ -17,9 +17,9 @@ const priorityInput : PriorityInput = {
 const priority = new Priority({
     ...priorityInput
 });
-
+let id = 1
 const user = new User({
-    id:1,
+    id:id,
     username:"johnDoe",
     password: "password1234",
     tasks: [],
@@ -60,9 +60,72 @@ test("given: valid task, when: task is created, then task is created with those 
     //then:
     expect(addTasktoAllTasksMock).toHaveBeenCalledTimes(1);
     // expect(addTasktoAllTasksMock).toHaveBeenCalledWith(
-    //     new Task({description,sidenote,startDate,endDate:null,status,deadline,priority,userId})
+    //     new Task({description,sidenote,startDate,endDate:null,status: true,deadline,priority,userId})
     // );
 })
+
+test("given no userId, when: task is created, then an error is thrown", () => {
+    userDb.getUserById = mockUserDbGetUserById.mockReturnValue(user);
+    priorityDb.getPriorityByName = mockPriorityDbGetPriorityByName.mockReturnValue(priority);
+    userDb.addTasktoUser = mockUserDbAddTaskToUser;
+    taskDb.addTasktoAllTasks = addTasktoAllTasksMock;
+    //when:
+    const createTask = () => {
+        taskService.createTask({
+            description,sidenote,deadline,priority:priorityInput,userId: 0
+        });
+    };
+    //then:
+    expect(createTask).toThrow("userId is required.")
+
+});
+test("given no description, when: task is created, then an error is thrown", () => {
+    userDb.getUserById = mockUserDbGetUserById.mockReturnValue(user);
+    priorityDb.getPriorityByName = mockPriorityDbGetPriorityByName.mockReturnValue(priority);
+    userDb.addTasktoUser = mockUserDbAddTaskToUser;
+    taskDb.addTasktoAllTasks = addTasktoAllTasksMock;
+    //when:
+    const createTask = () => {
+        taskService.createTask({
+            description:"",sidenote,deadline,priority:priorityInput,userId: id
+        });
+    };
+    //then:
+    expect(createTask).toThrow("Description is required.")
+
+});
+
+test("given no user, when: task is created, then an error is thrown", () => {
+    userDb.getUserById = mockUserDbGetUserById.mockReturnValue(null);
+    priorityDb.getPriorityByName = mockPriorityDbGetPriorityByName.mockReturnValue(priority);
+    userDb.addTasktoUser = mockUserDbAddTaskToUser;
+    taskDb.addTasktoAllTasks = addTasktoAllTasksMock;
+    id=404
+    //when:
+    const createTask = () => {
+        taskService.createTask({
+            description,sidenote,deadline,priority:priorityInput,userId: id
+        });
+    };
+    //then:
+    expect(createTask).toThrow(`User not found with given userId: ${id}.`)
+});
+test("given no priority, when: task is created, then an error is thrown", () => {
+    userDb.getUserById = mockUserDbGetUserById.mockReturnValue(user);
+    priorityDb.getPriorityByName = mockPriorityDbGetPriorityByName.mockReturnValue(null);
+    userDb.addTasktoUser = mockUserDbAddTaskToUser;
+    taskDb.addTasktoAllTasks = addTasktoAllTasksMock;
+    //when:
+    const createTask = () => {
+        taskService.createTask({
+            description,sidenote,deadline,priority:priorityInput,userId
+        });
+    };
+    //then:
+    expect(createTask).toThrow("Priority does not exist.")
+});
+
+
 
 
 

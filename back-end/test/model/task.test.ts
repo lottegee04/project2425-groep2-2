@@ -25,13 +25,22 @@ test("given: valid task parameters; when: creating a task;then: a task with the 
     expect(task.getStatus()).toBeTruthy();
     expect(task.getPriority()).toEqual(priority);
     expect(task.getUserId()).toEqual(1);
-}) 
+});
 
 test("given: no description; when: creating a task; then: an error is thrown ", () => {
     //when:
     const task = () => {
-        const task = new Task({id,description:"",sidenote,startDate, endDate: null,deadline, status:true, priority,userId:1})
+        new Task({id,description:"",sidenote,startDate, endDate: null,deadline, status:true, priority,userId:1})
     };
     //then
     expect(task).toThrow("Description is required.");
-})
+});
+
+test("given: no userId; when: creating a task; then: an error is thrown ", () => {
+    //when:
+    const task = () => {
+        new Task({id,description,sidenote,startDate, endDate: null,deadline, status:true, priority,userId:0})
+    };
+    //then
+    expect(task).toThrow("UserId is required.");
+});
