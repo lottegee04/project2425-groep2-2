@@ -92,8 +92,13 @@ const taskRouter = express.Router();
  *                  $ref: '#/components/schemas/Task'
  */
 taskRouter.get('/', async ( requ: Request, res:Response, next: NextFunction) => {
-    const tasks = await taskService.getAllTasks();
-    res.status(200).json(tasks);
+    try {
+        const tasks = await taskService.getAllTasks();
+        res.status(200).json(tasks);
+    } catch (error) {
+        next(error)
+    }
+    
 });
 
 /**
@@ -115,10 +120,15 @@ taskRouter.get('/', async ( requ: Request, res:Response, next: NextFunction) => 
  *                schema:
  *                  $ref: '#/components/schemas/Task'
  */
-taskRouter.post("/",async(req:Request, res:Response) => {
-    const task = <TaskInput>req.body;
-    const result = await taskService.createTask(task);
-    res.status(200).json(result);
+taskRouter.post("/",async(req:Request, res:Response,next:NextFunction) => {
+    try {
+        const task = <TaskInput>req.body;
+        const result = await taskService.createTask(task);
+        res.status(200).json(result);
+    } catch (error) {
+        next(error)
+    }
+
 }) ;
 
 export {taskRouter}
