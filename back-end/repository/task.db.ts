@@ -11,7 +11,7 @@ const allTasks = [
         endDate: null,
         deadline: addDays(new Date(),1),
         status: true,
-        priority: new Priority({levelName:"basic", colour:"green"}),
+        priority: new Priority({levelName:"basic", colour:"success"}),
         userId: 1
     }),
     new Task({
@@ -22,7 +22,7 @@ const allTasks = [
         endDate: null,
         deadline: addDays(new Date(),4),
         status: true,
-        priority: new Priority({levelName:"basic", colour:"green"}),
+        priority: new Priority({levelName:"basic", colour:"success"}),
         userId: 2
     })
 ]

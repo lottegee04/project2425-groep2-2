@@ -6,6 +6,7 @@ import { Task } from '../../types';
 import TaskService from '../../services/TaskService';
 import Header from '../../components/header';
 import TaskOverview from '../../components/tasks/TaskOverview';
+import Link from 'next/link';
 
 
 
@@ -33,6 +34,7 @@ const Tasks: React.FC = () => {
     <h1 className='align-self-center'>Tasks</h1>
     <section className='align-self-center d-flex flex-row p-2 '>
     <TaskOverview tasks={tasks}></TaskOverview>
+    <Link href='/tasks/addTask'><button>+</button></Link>
     </section>
     </main>
     </>
