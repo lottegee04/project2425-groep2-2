@@ -1,4 +1,4 @@
-import { Task } from "@/types"
+import { Task } from "../../types"
 import { table } from "console"
 import React from "react"
 
