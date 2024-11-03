@@ -14,3 +14,9 @@ export type Task = {
     status: boolean;
     priority: Priority
   };
+
+export type User = {
+    id: number;
+    username: string;
+    tasks: Task[];
+}
