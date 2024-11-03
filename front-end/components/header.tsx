@@ -18,6 +18,9 @@ const Header: React.FC = () => {
         <Link href="/tasks" className="nav-link px-4 fs-5 text-dark">
           All tasks
         </Link>
+        <Link href="/tasks/addTask" className="nav-link px-4 fs-5 text-dark">
+          Add Task
+        </Link>
       </nav>
     </header>
     </>

@@ -14,7 +14,7 @@ type TaskInput = {
 
 type PriorityInput = {
     levelName: string;
-    colour: string;
+    colour?: string;
 }
 
 export {
