@@ -54,6 +54,35 @@ userRouter.get("/", async (req: Request, res: Response, next:NextFunction ) => {
         next(error)
     }
 });
+/**
+ * @swagger
+ * /users/{id}:
+ *  get:
+ *      summary: Get a user by id.
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            schema:
+ *              type: integer
+ *              required: true
+ *              description: The user id.
+ *      responses:
+ *          200:
+ *              description: A user object.
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/User'
+ */
+
+userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try{
+        const user= await userService.getUserById(Number(req.params.id));
+        res.status(200).json(user)
+    } catch (error) {
+        next(error);
+    }
+});
 
 export { userRouter}
 
