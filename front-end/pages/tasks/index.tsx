@@ -1,10 +1,13 @@
+
 import Head from 'next/head';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-import Header from '@/components/header';
-import { Task } from '@/types';
-import TaskService from '@/services/TaskService';
-import TaskOverview from '@/components/tasks/TaskOverview';
+import { Task } from '../../types';
+import TaskService from '../../services/TaskService';
+import Header from '../../components/header';
+import TaskOverview from '../../components/tasks/TaskOverview';
+
+
 
 const Tasks: React.FC = () => {
     const [tasks,setTasks] = useState<Array<Task>>();
