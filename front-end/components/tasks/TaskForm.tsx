@@ -77,7 +77,6 @@ const getPriorityColor = (level: string) => {
           name="sidenote"
           value={sidenote}
           onChange={(e) => setSidenote(e.target.value)}
-          required
         />
       </div>
       <div className='align-self-center d-flex flex-column p-2'>
