@@ -1,4 +1,5 @@
 import { Priority } from "./priority";
+import { User } from "./user";
 
 export class Task{
     private id?: number;
@@ -8,9 +9,10 @@ export class Task{
     private endDate: Date | null;
     private deadline: Date;
     private status: boolean;
-    private priority: Priority | null;
+    private priority: Priority;
+    private userId: number;
 
-    constructor(task : {id?:number, description: string, sidenote?: string, startDate: Date, endDate: Date | null, deadline: Date, status: boolean, priority: Priority | null}) {
+    constructor(task : {id?:number, description: string, sidenote?: string, startDate: Date, endDate: Date | null, deadline: Date, status: boolean, priority: Priority,userId:number}) {
         this.validate(task)
         this.id = task.id;
         this.description = task.description;
@@ -19,15 +21,22 @@ export class Task{
         this.endDate = null;
         this.deadline = task.deadline;
         this.status = true;
-        this.priority = null;
+        this.priority = task.priority;
+        this.userId = task.userId;
     }
 
-    validate(task: { description: string, deadline: Date}) {
+    validate(task: { startDate: Date, description: string, deadline: Date, userId:number}) {
         if (!task.description) {
             throw new Error("Description is required.")
         }
         if (!task.deadline) {
             throw new Error("Deadline is required.")
+        }
+        if (task.startDate > task.deadline ) {
+            throw new Error("Deadline has to be after startDate.")
+        }
+        if (!task.userId) {
+            throw new Error("UserId is required.")
         }
     }
 
@@ -52,8 +61,10 @@ export class Task{
     getStatus(): boolean {
         return this.status;
     }
-    getPriority() : Priority | null {
+    getPriority() : Priority {
         return this.priority;
     }
-
+    getUserId() : number {
+        return this.userId;
+    }
 }

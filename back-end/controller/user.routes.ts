@@ -47,8 +47,12 @@ const userRouter = express.Router();
  *                  $ref: '#/components/schemas/User'
  */
 userRouter.get("/", async (req: Request, res: Response, next:NextFunction ) => {
-    const users = await userService.getAllUsers();
-    res.status(200).json(users);
+    try {
+        const users = await userService.getAllUsers();
+        res.status(200).json(users);
+    } catch (error) {
+        next(error)
+    }
 });
 
 export { userRouter}
