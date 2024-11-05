@@ -7,7 +7,7 @@ import TaskService from '../../services/TaskService';
 import Header from '../../components/header';
 import TaskOverview from '../../components/tasks/TaskOverview';
 import Link from 'next/link';
-import Nav from '../../components/nav';
+
 
 
 
