@@ -16,4 +16,11 @@ export class TaskHistory {
     getFinishedTasks(): Task[] {
         return this.finishedTasks;
     }
+    addFinishedTask(task: Task): void {
+        if (task.getDone() === false) {
+            throw new Error('Task is not done.');
+        } else {
+            this.finishedTasks.push(task);
+        }
+    }
 }

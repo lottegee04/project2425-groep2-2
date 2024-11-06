@@ -77,4 +77,7 @@ export class Task {
     getUserId(): number {
         return this.userId;
     }
+    finishTask(): void {
+        this.done = true;
+    }
 }

@@ -31,6 +31,14 @@ const getAllTasks = (): Task[] => {
     return allTasks;
 };
 
+const getTaskById = (id: number): Task => {
+    const result = allTasks.find((task) => task.getId() === id) || null;
+    if (!result) {
+        throw new Error(`No Task found with id ${id}.`);
+    }
+    return result;
+};
+
 const addTasktoAllTasks = (newTask: Task): Task => {
     allTasks.push(newTask);
     return newTask;
@@ -39,4 +47,5 @@ const addTasktoAllTasks = (newTask: Task): Task => {
 export default {
     getAllTasks,
     addTasktoAllTasks,
+    getTaskById,
 };

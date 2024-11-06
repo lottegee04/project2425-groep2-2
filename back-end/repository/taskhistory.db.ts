@@ -7,8 +7,12 @@ const taskHistories = [new TaskHistory({ userId: 1, finishedTasks: [] })];
 const getAllTaskHistories = (): TaskHistory[] => {
     return taskHistories;
 };
-const getTaskHistoryByUser = ({ userId }: { userId: number }): TaskHistory | null => {
-    return taskHistories.find((history) => history.getUserId() === userId) || null;
+const getTaskHistoryByUser = (userId: number): TaskHistory => {
+    const result = taskHistories.find((history) => history.getUserId() === userId) || null;
+    if (!result) {
+        throw new Error(`No taskhistory found for user with id ${userId}`);
+    }
+    return result;
 };
 
 export default {

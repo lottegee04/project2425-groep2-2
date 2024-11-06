@@ -1,17 +1,36 @@
-import { Task } from "../../model/task";
-import { TaskHistory } from "../../model/taskhistory";
-import { User } from "../../model/user";
+import { addDays } from 'date-fns';
+import { Task } from '../../model/task';
+import { TaskHistory } from '../../model/taskhistory';
+import { User } from '../../model/user';
+import { Priority } from '../../model/priority';
+import { finished } from 'stream';
 
-//given user
-const id = 1;
-const username = 'JohnDoe';
-const password ="password1234"
-const tasks:Task[] = [];
-const user = new User({id,username,password,tasks});
-test("given valid history parameters; when: creating a new history; then: a history is created with the right parameters;", () => {
+test('given valid history parameters; when: creating a new history; then: a history is created with the right parameters;', () => {
     //when:
-    const history = new TaskHistory({user});
+    const history = new TaskHistory({ userId: 1, finishedTasks: [] });
     //then:
-    expect(history.getUser()).toEqual(user);
-    expect(history.getFinishedTasks()).toEqual(tasks);
-})
+    expect(history.getUserId()).toEqual(1);
+    expect(history.getFinishedTasks()).toEqual([]);
+});
+
+test('given: valid finished task, when adding task to taskHistory, then task is added to finishedTasks list', () => {
+    //given:
+    const history = new TaskHistory({ userId: 1, finishedTasks: [] });
+    const finishedTask = new Task({
+        id: 3,
+        description: 'walking',
+        sidenote: 'walking the dog.',
+        startDate: new Date(),
+        endDate: null,
+        deadline: addDays(new Date(), 1),
+        done: true,
+        priority: new Priority({ levelName: 'basic', colour: 'success' }),
+        userId: 1,
+    });
+    finishedTask.finishTask();
+    //when:
+    history.addFinishedTask(finishedTask);
+    //then:
+    expect(history.getFinishedTasks().length).toEqual(1);
+    expect(history.getFinishedTasks()).toContain(finishedTask);
+});
