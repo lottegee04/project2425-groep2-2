@@ -23,7 +23,7 @@ const createTask = ({
     if (!userId) {
         throw new Error('userId is required.');
     }
-    const user = userDb.getUserById({ id: userId });
+    const user = userDb.getUserById(userId);
     if (!user) {
         throw new Error(`User not found with given userId: ${userId}.`);
     }

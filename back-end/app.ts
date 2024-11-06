@@ -6,16 +6,18 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { userRouter } from './controller/user.routes';
 import { taskRouter } from './controller/task.routes';
+import { taskhistoryRouter } from './controller/taskhistory.routes';
 
 const app = express();
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
 
-app.use(cors({origin:'http://localhost:8080'}));
+app.use(cors({ origin: 'http://localhost:8080' }));
 app.use(bodyParser.json());
 //routes
 app.use('/users', userRouter);
-app.use("/tasks", taskRouter);
+app.use('/tasks', taskRouter);
+app.use('/taskhistory', taskhistoryRouter);
 
 app.get('/status', (req, res) => {
     res.json({ message: 'Back-end is running...' });
