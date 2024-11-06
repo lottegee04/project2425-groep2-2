@@ -36,6 +36,9 @@ const addFinishedTaskToHistoryByUser = (userId: number, taskId: number): Task =>
     if (!finishedTask) {
         throw new Error(`No task found with id ${taskId}.`);
     }
+    if (finishedTask.getUserId() != userId) {
+        throw new Error(`The task is not from owner with id ${userId}.`);
+    }
     finishedTask.finishTask();
     taskhistory.addFinishedTask(finishedTask);
     return finishedTask;

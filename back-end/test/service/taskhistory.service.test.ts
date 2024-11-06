@@ -8,10 +8,8 @@ import { TaskHistory } from '../../model/taskhistory';
 import taskhistoryService from '../../service/taskhistory.service';
 import taskDb from '../../repository/task.db';
 
-let userId = 1;
-let taskId = 4;
 const task = new Task({
-    id: taskId,
+    id: 4,
     description: 'walking',
     sidenote: 'walking the dog.',
     startDate: new Date(),
@@ -22,7 +20,7 @@ const task = new Task({
     userId: 1,
 });
 const user = new User({
-    id: userId,
+    id: 1,
     username: 'johnDoe',
     password: 'password1234',
     tasks: [task],
@@ -56,7 +54,6 @@ afterEach(() => {
 
 test("given valid task and user; when getting finished tasks from user's taskhistory; then finished tasks are returned", () => {
     //given:
-    finishedTask.finishTask();
     userDb.getUserById = mockUserDbgetUserById.mockReturnValue(user);
     taskhistoryDb.getTaskHistoryByUser =
         mockTaskHistoryDbGetTaskHistoryByUser.mockReturnValue(taskHistory);
@@ -94,7 +91,6 @@ test('given user without history; when getting finished tasks from taskhistory, 
 });
 
 test('given valid user and task; when adding task to taskhistory; then task is pushed to taskhistory and returned', () => {
-    finishedTask.finishTask();
     userDb.getUserById = mockUserDbgetUserById.mockReturnValue(user);
     taskhistoryDb.getTaskHistoryByUser =
         mockTaskHistoryDbGetTaskHistoryByUser.mockReturnValue(taskHistory);
@@ -130,7 +126,6 @@ test('given unknkown userid; when when adding task to history; then error is thr
 });
 test('given unknkown taskid; when when adding task to history; then error is thrown', () => {
     //given:
-    taskId = 505;
     userDb.getUserById = mockUserDbgetUserById.mockReturnValue(user);
     taskhistoryDb.getTaskHistoryByUser =
         mockTaskHistoryDbGetTaskHistoryByUser.mockReturnValue(taskHistory);
@@ -139,4 +134,26 @@ test('given unknkown taskid; when when adding task to history; then error is thr
     const testing = () => taskhistoryService.addFinishedTaskToHistoryByUser(1, 505);
     //then:
     expect(testing).toThrow(`No task found with id 505.`);
+});
+
+test('given task that is not from user; when adding task to taskhistory; then task is pushed to taskhistory and returned', () => {
+    const user2Task = new Task({
+        id: 5,
+        description: 'walking',
+        sidenote: 'walking the dog.',
+        startDate: new Date(),
+        endDate: null,
+        deadline: addDays(new Date(), 1),
+        done: false,
+        priority: new Priority({ levelName: 'basic', colour: 'success' }),
+        userId: 2,
+    });
+    userDb.getUserById = mockUserDbgetUserById.mockReturnValue(user);
+    taskhistoryDb.getTaskHistoryByUser =
+        mockTaskHistoryDbGetTaskHistoryByUser.mockReturnValue(taskHistory);
+    taskDb.getTaskById = mockTaskDbGetTaskById.mockReturnValue(user2Task);
+    //when:
+    const testing = () => taskhistoryService.addFinishedTaskToHistoryByUser(1, 4);
+    //then
+    expect(testing).toThrow('The task is not from owner with id 1.');
 });
