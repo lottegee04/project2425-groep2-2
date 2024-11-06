@@ -79,5 +79,6 @@ export class Task {
     }
     finishTask(): void {
         this.done = true;
+        this.endDate = new Date();
     }
 }

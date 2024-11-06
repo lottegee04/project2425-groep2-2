@@ -1,4 +1,5 @@
 import { Priority } from '../model/priority';
+import { Task } from '../model/task';
 
 type TaskInput = {
     id?: number;
@@ -17,4 +18,11 @@ type PriorityInput = {
     colour: string;
 };
 
-export { TaskInput, PriorityInput };
+type UserInput = {
+    id?: number;
+    username: string;
+    password: string;
+    tasks?: Task[];
+};
+
+export { TaskInput, PriorityInput, UserInput };

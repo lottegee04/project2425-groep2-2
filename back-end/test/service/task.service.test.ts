@@ -10,7 +10,7 @@ import { addDays } from 'date-fns';
 
 const priorityInput: PriorityInput = {
     levelName: 'basic',
-    colour: 'green',
+    colour: 'succes',
 };
 
 const priority = new Priority({
@@ -62,9 +62,9 @@ test('given: valid task, when: task is created, then task is created with those 
     });
     //then:
     expect(addTasktoAllTasksMock).toHaveBeenCalledTimes(1);
-    // expect(addTasktoAllTasksMock).toHaveBeenCalledWith(
-    //     new Task({description,sidenote,startDate,endDate:null,status: true,deadline,priority,userId})
-    // );
+    expect(mockPriorityDbGetPriorityByName).toHaveBeenCalledTimes(1);
+    expect(mockUserDbAddTaskToUser).toHaveBeenCalledTimes(1);
+    expect(addTasktoAllTasksMock).toHaveBeenCalledTimes(1);
 });
 
 test('given no userId, when: task is created, then an error is thrown', () => {
@@ -121,7 +121,7 @@ test('given no user, when: task is created, then an error is thrown', () => {
         });
     };
     //then:
-    expect(createTask).toThrow(`User not found with given userId: ${id}.`);
+    expect(createTask).toThrow(`User not found with given userId: 404.`);
 });
 test('given no priority, when: task is created, then an error is thrown', () => {
     userDb.getUserById = mockUserDbGetUserById.mockReturnValue(user);

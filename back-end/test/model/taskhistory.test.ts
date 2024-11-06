@@ -34,3 +34,25 @@ test('given: valid finished task, when adding task to taskHistory, then task is 
     expect(history.getFinishedTasks().length).toEqual(1);
     expect(history.getFinishedTasks()).toContain(finishedTask);
 });
+test('given not finished task, when adding task to taskHistory, then an error should be thrown;', () => {
+    //given:
+    const history = new TaskHistory({ userId: 1, finishedTasks: [] });
+    const finishedTask = new Task({
+        id: 3,
+        description: 'walking',
+        sidenote: 'walking the dog.',
+        startDate: new Date(),
+        endDate: null,
+        deadline: addDays(new Date(), 1),
+        done: false,
+        priority: new Priority({ levelName: 'basic', colour: 'success' }),
+        userId: 1,
+    });
+    //when:
+    const addTaskToHistory = () => {
+        return history.addFinishedTask(finishedTask);
+    };
+    //then:
+    expect(addTaskToHistory).toThrow('Task is not done.');
+    expect(history.getFinishedTasks().length).toEqual(0);
+});

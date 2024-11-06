@@ -22,17 +22,20 @@ const addFinishedTaskToHistoryByUser = (userId: number, taskId: number): Task =>
         throw new Error('Userid is required.');
     }
     if (!userDb.getUserById(userId)) {
-        throw new Error('no user found with given id.');
+        throw new Error(`No user found with id ${userId}.`);
     }
     if (!taskId) {
         throw new Error('TaskId is required.');
     }
-    if (!taskhistoryDb.getTaskHistoryByUser(userId)) {
+    const taskhistory = taskhistoryDb.getTaskHistoryByUser(userId);
+    if (!taskhistory) {
         throw new Error('No History found for this User.');
     }
 
-    const taskhistory = taskhistoryDb.getTaskHistoryByUser(userId);
     const finishedTask = taskDb.getTaskById(taskId);
+    if (!finishedTask) {
+        throw new Error(`No task found with id ${taskId}.`);
+    }
     finishedTask.finishTask();
     taskhistory.addFinishedTask(finishedTask);
     return finishedTask;
