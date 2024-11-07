@@ -41,7 +41,7 @@ const addFinishedTaskToHistoryByUser = (userId: number, taskId: number): Task =>
     }
     finishedTask.finishTask();
     taskhistory.addFinishedTask(finishedTask);
-    taskDb.deleteTask(finishedTask);
+    // taskDb.deleteTask(finishedTask);
     return finishedTask;
 };
 export default { getAllFinishedTasksByUser, addFinishedTaskToHistoryByUser };
