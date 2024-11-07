@@ -41,11 +41,13 @@ const taskHistory = new TaskHistory({ userId: 1, finishedTasks: [finishedTask] }
 let mockUserDbgetUserById: jest.Mock;
 let mockTaskHistoryDbGetTaskHistoryByUser: jest.Mock;
 let mockTaskDbGetTaskById: jest.Mock;
+let mockTaskDbDeleteTask: jest.Mock;
 
 beforeEach(() => {
     mockUserDbgetUserById = jest.fn();
     mockTaskHistoryDbGetTaskHistoryByUser = jest.fn();
     mockTaskDbGetTaskById = jest.fn();
+    mockTaskDbDeleteTask = jest.fn();
 });
 
 afterEach(() => {
@@ -95,7 +97,7 @@ test('given valid user and task; when adding task to taskhistory; then task is p
     taskhistoryDb.getTaskHistoryByUser =
         mockTaskHistoryDbGetTaskHistoryByUser.mockReturnValue(taskHistory);
     taskDb.getTaskById = mockTaskDbGetTaskById.mockReturnValue(task);
-    task.finishTask();
+    taskDb.deleteTask = mockTaskDbDeleteTask;
     //when:
     taskhistoryService.addFinishedTaskToHistoryByUser(1, 4);
     //then

@@ -44,8 +44,14 @@ const addTasktoAllTasks = (newTask: Task): Task => {
     return newTask;
 };
 
+const deleteTask = (task: Task): void => {
+    const index = allTasks.indexOf(task);
+    allTasks.splice(index, 1);
+};
+
 export default {
     getAllTasks,
     addTasktoAllTasks,
     getTaskById,
+    deleteTask,
 };
