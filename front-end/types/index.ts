@@ -11,7 +11,7 @@ export type Task = {
     startDate: Date;
     endDate: Date;
     deadline: Date;
-    status: boolean;
+    done: boolean;
     priority: Priority
   };
 

@@ -37,6 +37,9 @@ const Tasks: React.FC = () => {
     <TaskOverview tasks={tasks}></TaskOverview>
     <Link href='/tasks/addTask'><button>+</button></Link>
     </section>
+    <section>
+      <Link href='/taskhistory'><button>History</button></Link>
+    </section>
     </main>
     </>
   );
