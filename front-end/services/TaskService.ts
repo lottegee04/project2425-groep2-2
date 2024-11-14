@@ -22,10 +22,31 @@ const createTask = async (task: { description: string; sidenote: string; deadlin
       return response.json();
    };
 
+const finishTask = async (id: { taskId: number; userId:number }) => {
+    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/taskhistory/finishTask/${id.userId}/${id.taskId}` , {
+        method:'GET',
+        headers: {
+            'Content-type':'application/json',
+        }
+    })
+    return response.json()
+}
+
+const getAllFinishedTasksByUser = async (userId: number) => {
+    const response =  await fetch(process.env.NEXT_PUBLIC_API_URL + `/taskhistory/${userId}`,{
+        method:'GET',
+        headers: {
+            'Content-type':'application/json',
+        }   
+    })
+    return response.json()
+}
 
 const TaskService = {
     getAllTasks,
-    createTask
+    createTask,
+    finishTask,
+    getAllFinishedTasksByUser,
 }
 
 
