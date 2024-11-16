@@ -214,11 +214,11 @@ test('given active tasks, when:getting all active tasks, then all active tasks a
 
 test('given active tasks, when:getting all active tasks, then all active tasks are returned', () => {
     //given:
-    taskDb.getActiveTasks = mockTaskDbGetActiveTasks.mockReturnValue(null);
+    taskDb.getActiveTasks = mockTaskDbGetActiveTasks.mockReturnValue([]);
 
     //when:
     const result = taskService.getActiveTasks();
     //then:
     expect(mockTaskDbGetActiveTasks).toHaveBeenCalledTimes(1);
-    expect(result).toEqual("There are at this moment no new active tasks.");
+    expect(result).toEqual([]);
 })

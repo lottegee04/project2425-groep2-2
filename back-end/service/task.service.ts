@@ -7,11 +7,7 @@ import { TaskInput } from '../types';
 const getAllTasks = (): Task[] => taskDb.getAllTasks();
 
 const getActiveTasks = (): Task[] | string  => {
-   const activeTasks = taskDb.getActiveTasks();
-   if (!activeTasks) {
-    return "There are at this moment no new active tasks."
-   }
-   return activeTasks;
+  return taskDb.getActiveTasks();
 }
 
 const createTask = ({
