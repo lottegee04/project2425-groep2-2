@@ -16,7 +16,7 @@ const Tasks: React.FC = () => {
 
 
     const getTasks = async () =>{
-        const res = await TaskService.getAllTasks()
+        const res = await TaskService.getActiveTasks()
         const taskss = await res.json()
         setTasks(taskss)
     }

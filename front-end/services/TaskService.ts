@@ -8,6 +8,14 @@ const getAllTasks = async () => {
         }
     })
 }
+const getActiveTasks = async () => {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + "/tasks/active",{
+        method:'GET',
+        headers: {
+            'Content-type':'application/json',
+        }
+    })
+}
 const createTask = async (task: { description: string; sidenote: string; deadline: Date; priority: Priority; userId: number}) => {
     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/tasks", {
        method: "POST",
@@ -44,6 +52,7 @@ const getAllFinishedTasksByUser = async (userId: number) => {
 
 const TaskService = {
     getAllTasks,
+    getActiveTasks,
     createTask,
     finishTask,
     getAllFinishedTasksByUser,

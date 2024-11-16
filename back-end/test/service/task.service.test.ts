@@ -35,17 +35,53 @@ let addTasktoAllTasksMock: jest.Mock;
 let mockUserDbGetUserById: jest.Mock;
 let mockPriorityDbGetPriorityByName: jest.Mock;
 let mockUserDbAddTaskToUser: jest.Mock;
+let mockTaskDbGetActiveTasks: jest.Mock;
+let mockTaskDbGetAllTasks: jest.Mock;
 
 beforeEach(() => {
     mockUserDbGetUserById = jest.fn();
     mockPriorityDbGetPriorityByName = jest.fn();
     addTasktoAllTasksMock = jest.fn();
     mockUserDbAddTaskToUser = jest.fn();
+    mockTaskDbGetActiveTasks = jest.fn();
+    mockTaskDbGetAllTasks = jest.fn();
 });
 afterEach(() => {
     jest.clearAllMocks();
 });
+test('given all tasks, when:getting all tasks, then all tasks are returned', () => {
+    //given:
+    const tasks = [ new Task({
+        id: 1,
+        description: 'shopping',
+        sidenote: 'need to do shopping for food.',
+        startDate: new Date(),
+        endDate: null,
+        deadline: addDays(new Date(), 1),
+        done: true,
+        priority: new Priority({ levelName: 'basic', colour: 'success' }),
+        userId: 1,
+    }),
+    new Task({
+        id: 2,
+        description: 'uploading paper',
+        sidenote: 'uploading a paper for a certain course',
+        startDate: new Date(),
+        endDate: null,
+        deadline: addDays(new Date(), 4),
+        done: false,
+        priority: new Priority({ levelName: 'basic', colour: 'success' }),
+        userId: 2,
+    })]
+    taskDb.getAllTasks = mockTaskDbGetAllTasks.mockReturnValue(tasks);
 
+    //when:
+    const result = taskService.getAllTasks();
+    //then:
+    expect(mockTaskDbGetAllTasks).toHaveBeenCalledTimes(1);
+    expect(result).toHaveLength(2);
+    expect(result).toEqual(tasks);
+})
 test('given: valid task, when: task is created, then task is created with those values', () => {
     //given:
     userDb.getUserById = mockUserDbGetUserById.mockReturnValue(user);
@@ -141,3 +177,48 @@ test('given no priority, when: task is created, then an error is thrown', () => 
     //then:
     expect(createTask).toThrow('Priority does not exist.');
 });
+
+test('given active tasks, when:getting all active tasks, then all active tasks are returned', () => {
+    //given:
+    const activeTasks = [ new Task({
+        id: 1,
+        description: 'shopping',
+        sidenote: 'need to do shopping for food.',
+        startDate: new Date(),
+        endDate: null,
+        deadline: addDays(new Date(), 1),
+        done: false,
+        priority: new Priority({ levelName: 'basic', colour: 'success' }),
+        userId: 1,
+    }),
+    new Task({
+        id: 2,
+        description: 'uploading paper',
+        sidenote: 'uploading a paper for a certain course',
+        startDate: new Date(),
+        endDate: null,
+        deadline: addDays(new Date(), 4),
+        done: false,
+        priority: new Priority({ levelName: 'basic', colour: 'success' }),
+        userId: 2,
+    })]
+    taskDb.getActiveTasks = mockTaskDbGetActiveTasks.mockReturnValue(activeTasks);
+
+    //when:
+    const result = taskService.getActiveTasks();
+    //then:
+    expect(mockTaskDbGetActiveTasks).toHaveBeenCalledTimes(1);
+    expect(result).toHaveLength(2);
+    expect(result).toEqual(activeTasks);
+})
+
+test('given active tasks, when:getting all active tasks, then all active tasks are returned', () => {
+    //given:
+    taskDb.getActiveTasks = mockTaskDbGetActiveTasks.mockReturnValue(null);
+
+    //when:
+    const result = taskService.getActiveTasks();
+    //then:
+    expect(mockTaskDbGetActiveTasks).toHaveBeenCalledTimes(1);
+    expect(result).toEqual("There are at this moment no new active tasks.");
+})

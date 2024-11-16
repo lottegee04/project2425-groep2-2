@@ -31,6 +31,11 @@ const getAllTasks = (): Task[] => {
     return allTasks;
 };
 
+const getActiveTasks = (): Task[] => {
+   const activeTasks = allTasks.filter((task) => task.getDone() === false);
+   return activeTasks;
+}
+
 const getTaskById = (id: number): Task => {
     const result = allTasks.find((task) => task.getId() === id) || null;
     if (!result) {
@@ -54,4 +59,5 @@ export default {
     addTasktoAllTasks,
     getTaskById,
     deleteTask,
+    getActiveTasks
 };
