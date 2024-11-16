@@ -213,7 +213,7 @@ test('given active tasks, when:getting all active tasks, then all active tasks a
     expect(mockTaskDbGetActiveTasks).toHaveBeenCalledTimes(1);
     expect(result).toHaveLength(2);
     expect(result).toEqual(activeTasks);
-})
+});
 
 test('given active tasks, when:getting all active tasks, then all active tasks are returned', () => {
     //given:
@@ -224,7 +224,7 @@ test('given active tasks, when:getting all active tasks, then all active tasks a
     //then:
     expect(mockTaskDbGetActiveTasks).toHaveBeenCalledTimes(1);
     expect(result).toEqual([]);
-})
+});
 
 test("given valid levelName, when: getting Tasks By Priority, then those tasks are returned", () => {
     //given:
@@ -237,7 +237,7 @@ test("given valid levelName, when: getting Tasks By Priority, then those tasks a
     expect(mockTaskDbGetTasksByPriority).toHaveBeenCalledTimes(1);
     expect(result).toHaveLength(2);
     expect(result).toEqual(tasks);
-})
+});
 test("given valid levelName with no tasks, when: getting Tasks By Priority, then empty list is returned", () => {
     //given:
     priorityDb.getPriorityByName = mockPriorityDbGetPriorityByName.mockReturnValue(priority);
@@ -249,7 +249,7 @@ test("given valid levelName with no tasks, when: getting Tasks By Priority, then
     expect(mockTaskDbGetTasksByPriority).toHaveBeenCalledTimes(1);
     expect(result).toHaveLength(0);
     expect(result).toEqual([]);
-})
+});
 test("given unknown levelName, when: getting Tasks By Priority, then an error is thrown", () => {
     //given:
     priorityDb.getPriorityByName = mockPriorityDbGetPriorityByName.mockReturnValue(null);
@@ -257,4 +257,4 @@ test("given unknown levelName, when: getting Tasks By Priority, then an error is
     const result = () =>  taskService.getTasksByPriority("notALevel");
     //then:
     expect(result).toThrow("No Priority found with levelName: notALevel.")
-})
+});
