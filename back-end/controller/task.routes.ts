@@ -153,5 +153,35 @@ taskRouter.post("/",async(req:Request, res:Response,next:NextFunction) => {
     }
 
 }) ;
+/**
+ * @swagger
+ * /tasks/priority/{levelName}:
+ *  get:
+ *      summary: Get Tasks by Priority.
+ *      parameters:
+ *          - in: path
+ *            name: levelName
+ *            schema:
+ *              type: string
+ *              required: true
+ *              description: The level name of the priority.
+ *      responses:
+ *       200:
+ *         description: A list of Tasks with the given priority.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                  $ref: '#/components/schemas/Task'
+ */
+taskRouter.get("/priority/:levelName",async ( req: Request, res: Response, next: NextFunction) => {
+    try {
+        const tasks = await taskService.getTasksByPriority(String(req.params.levelName));
+        res.status(200).json(tasks);
+    } catch (error) {
+        next(error)
+    }
+})
 
 export {taskRouter}

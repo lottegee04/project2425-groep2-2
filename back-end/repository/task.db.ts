@@ -43,7 +43,10 @@ const getTaskById = (id: number): Task => {
     }
     return result;
 };
-
+const getTaskByPriority = (levelName: string): Task[] => {
+    const result = allTasks.filter((task) => task.getPriority().getLevelName() === levelName);
+    return result;
+}
 const addTasktoAllTasks = (newTask: Task): Task => {
     allTasks.push(newTask);
     return newTask;
@@ -59,5 +62,6 @@ export default {
     addTasktoAllTasks,
     getTaskById,
     deleteTask,
-    getActiveTasks
+    getActiveTasks,
+    getTaskByPriority
 };
