@@ -55,4 +55,12 @@ const createTask = ({
     return taskDb.addTasktoAllTasks(task);
 };
 
-export default { getAllTasks, getActiveTasks, createTask };
+const getTasksByPriority = (levelName: string): Task[] => {
+    const priority = priorityDb.getPriorityByName({levelName});
+    if (!priority) {
+        throw new Error(`No Priority found with levelName: ${levelName}.`)
+    }
+    return taskDb.getTaskByPriority(priority.getLevelName());
+}
+
+export default { getAllTasks, getActiveTasks, createTask, getTasksByPriority };
