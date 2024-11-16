@@ -31,12 +31,36 @@ const startDate = new Date();
 const done = false;
 const userId = 1;
 
+const tasks = [ new Task({
+    id: 1,
+    description: 'shopping',
+    sidenote: 'need to do shopping for food.',
+    startDate: new Date(),
+    endDate: null,
+    deadline: addDays(new Date(), 1),
+    done: true,
+    priority: new Priority({ levelName: 'basic', colour: 'success' }),
+    userId: 1,
+}),
+new Task({
+    id: 2,
+    description: 'uploading paper',
+    sidenote: 'uploading a paper for a certain course',
+    startDate: new Date(),
+    endDate: null,
+    deadline: addDays(new Date(), 4),
+    done: false,
+    priority: new Priority({ levelName: 'basic', colour: 'success' }),
+    userId: 2,
+})]
+
 let addTasktoAllTasksMock: jest.Mock;
 let mockUserDbGetUserById: jest.Mock;
 let mockPriorityDbGetPriorityByName: jest.Mock;
 let mockUserDbAddTaskToUser: jest.Mock;
 let mockTaskDbGetActiveTasks: jest.Mock;
 let mockTaskDbGetAllTasks: jest.Mock;
+let mockTaskDbGetTasksByPriority: jest.Mock;
 
 beforeEach(() => {
     mockUserDbGetUserById = jest.fn();
@@ -45,34 +69,13 @@ beforeEach(() => {
     mockUserDbAddTaskToUser = jest.fn();
     mockTaskDbGetActiveTasks = jest.fn();
     mockTaskDbGetAllTasks = jest.fn();
+    mockTaskDbGetTasksByPriority = jest.fn();
 });
 afterEach(() => {
     jest.clearAllMocks();
 });
 test('given all tasks, when:getting all tasks, then all tasks are returned', () => {
     //given:
-    const tasks = [ new Task({
-        id: 1,
-        description: 'shopping',
-        sidenote: 'need to do shopping for food.',
-        startDate: new Date(),
-        endDate: null,
-        deadline: addDays(new Date(), 1),
-        done: true,
-        priority: new Priority({ levelName: 'basic', colour: 'success' }),
-        userId: 1,
-    }),
-    new Task({
-        id: 2,
-        description: 'uploading paper',
-        sidenote: 'uploading a paper for a certain course',
-        startDate: new Date(),
-        endDate: null,
-        deadline: addDays(new Date(), 4),
-        done: false,
-        priority: new Priority({ levelName: 'basic', colour: 'success' }),
-        userId: 2,
-    })]
     taskDb.getAllTasks = mockTaskDbGetAllTasks.mockReturnValue(tasks);
 
     //when:
@@ -221,4 +224,37 @@ test('given active tasks, when:getting all active tasks, then all active tasks a
     //then:
     expect(mockTaskDbGetActiveTasks).toHaveBeenCalledTimes(1);
     expect(result).toEqual([]);
+})
+
+test("given valid levelName, when: getting Tasks By Priority, then those tasks are returned", () => {
+    //given:
+    priorityDb.getPriorityByName = mockPriorityDbGetPriorityByName.mockReturnValue(priority);
+    taskDb.getTaskByPriority = mockTaskDbGetTasksByPriority.mockReturnValue(tasks)
+    //when:
+    const result = taskService.getTasksByPriority("basic");
+    //then:
+    expect(mockPriorityDbGetPriorityByName).toHaveBeenCalledTimes(1);
+    expect(mockTaskDbGetTasksByPriority).toHaveBeenCalledTimes(1);
+    expect(result).toHaveLength(2);
+    expect(result).toEqual(tasks);
+})
+test("given valid levelName with no tasks, when: getting Tasks By Priority, then empty list is returned", () => {
+    //given:
+    priorityDb.getPriorityByName = mockPriorityDbGetPriorityByName.mockReturnValue(priority);
+    taskDb.getTaskByPriority = mockTaskDbGetTasksByPriority.mockReturnValue([])
+    //when:
+    const result = taskService.getTasksByPriority("urgent");
+    //then:
+    expect(mockPriorityDbGetPriorityByName).toHaveBeenCalledTimes(1);
+    expect(mockTaskDbGetTasksByPriority).toHaveBeenCalledTimes(1);
+    expect(result).toHaveLength(0);
+    expect(result).toEqual([]);
+})
+test("given unknown levelName, when: getting Tasks By Priority, then an error is thrown", () => {
+    //given:
+    priorityDb.getPriorityByName = mockPriorityDbGetPriorityByName.mockReturnValue(null);
+    //when:
+    const result = () =>  taskService.getTasksByPriority("notALevel");
+    //then:
+    expect(result).toThrow("No Priority found with levelName: notALevel.")
 })
