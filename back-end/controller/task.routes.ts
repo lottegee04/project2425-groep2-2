@@ -91,7 +91,7 @@ const taskRouter = express.Router();
  *               items:
  *                  $ref: '#/components/schemas/Task'
  */
-taskRouter.get('/', async ( requ: Request, res:Response, next: NextFunction) => {
+taskRouter.get('/', async ( req: Request, res:Response, next: NextFunction) => {
     try {
         const tasks = await taskService.getAllTasks();
         res.status(200).json(tasks);
@@ -100,6 +100,29 @@ taskRouter.get('/', async ( requ: Request, res:Response, next: NextFunction) => 
     }
     
 });
+/**
+ * @swagger
+ * /tasks/active:
+ *   get:
+ *     summary: Get a list of all tasks which are not finished/active.
+ *     responses:
+ *       200:
+ *         description: A list of Active Tasks.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                  $ref: '#/components/schemas/Task'
+ */
+taskRouter.get("/active",async ( req: Request, res: Response, next: NextFunction) => {
+    try {
+        const activeTasks = await taskService.getActiveTasks();
+        res.status(200).json(activeTasks);
+    } catch (error) {
+        next(error)
+    }
+})
 
 /**
  * @swagger
