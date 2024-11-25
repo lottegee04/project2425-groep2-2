@@ -2,25 +2,19 @@ import { Task } from './task';
 import { User } from './user';
 
 export class TaskHistory {
-    private userId: number;
+    private user: User;
     private finishedTasks: Task[];
 
-    constructor(task: { userId: number; finishedTasks: Task[] }) {
-        this.userId = task.userId;
+    constructor(task: { user: User; finishedTasks: Task[] }) {
+        this.user = task.user;
         this.finishedTasks = task.finishedTasks;
     }
 
-    getUserId(): number {
-        return this.userId;
+    getUser(): User {
+        return this.user;
     }
     getFinishedTasks(): Task[] {
         return this.finishedTasks;
     }
-    addFinishedTask(task: Task): void {
-        if (task.getDone() === false) {
-            throw new Error('Task is not done.');
-        } else {
-            this.finishedTasks.push(task);
-        }
-    }
+    
 }
