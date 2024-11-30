@@ -1,23 +1,24 @@
+import { Priority } from '../model/priority';
 import { Task } from '../model/task';
 import priorityDb from '../repository/priority.db';
 import taskDb from '../repository/task.db';
 import userDb from '../repository/user.db';
 import { TaskInput } from '../types';
 
-const getAllTasks = (): Task[] => taskDb.getAllTasks();
+const getAllTasks = async (): Promise<Task[]>=> await taskDb.getAllTasks();
 
-const getActiveTasks = (): Task[] | string  => {
-  return taskDb.getActiveTasks();
+const getActiveTasks = async (): Promise<Task[]>  => {
+  return await taskDb.getActiveTasks();
 }
 
-const createTask = ({
+const createTask = async ({
     id,
     description,
     sidenote,
     deadline,
     priority: priorityInput,
     userId,
-}: TaskInput): Task => {
+}: TaskInput): Promise<Task> => {
     // if (!description) {
     //     throw new Error('Description is required.');
     // }
@@ -27,14 +28,12 @@ const createTask = ({
     // if (!userId) {
     //     throw new Error('userId is required.');
     // }
-    const user = userDb.getUserById(userId);
+    const user = await userDb.getUserById(userId);
     if (!user) {
         throw new Error(`User not found with given userId: ${userId}.`);
     }
-    const priority = priorityDb.getPriorityByName({ levelName: priorityInput.levelName });
-    if (!priority) {
-        throw new Error('Priority does not exist.');
-    }
+    const priority = new Priority(priorityInput);
+    const createPriority = await priorityDb.createPriority(priority);
     const startDate = new Date();
     const task = new Task({
         id,
@@ -45,18 +44,17 @@ const createTask = ({
         done: false,
         deadline,
         priority,
-        userId,
+        user,
     });
-    userDb.addTasktoUser({ user }, { task });
-    return taskDb.addTasktoAllTasks(task);
+    return taskDb.createTask(task);
 };
 
-const getTasksByPriority = (levelName: string): Task[] => {
-    const priority = priorityDb.getPriorityByName({levelName});
+const getTasksByPriority = async(levelName: string): Promise<Task[]> => {
+    const priority = await priorityDb.getPriorityByName({levelName});
     if (!priority) {
         throw new Error(`No Priority found with levelName: ${levelName}.`)
     }
-    return taskDb.getTaskByPriority(priority.getLevelName());
+    return taskDb.getTasksByPriority(levelName);
 }
 
 export default { getAllTasks, getActiveTasks, createTask, getTasksByPriority };

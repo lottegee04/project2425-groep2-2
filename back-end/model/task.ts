@@ -1,5 +1,8 @@
 import { Priority } from './priority';
 import { User } from './user';
+import { Task as TaskPrisma,
+     Priority as PriorityPrisma,
+    User as UserPrisma  } from '@prisma/client';
 
 export class Task {
     private id?: number;
@@ -80,5 +83,19 @@ export class Task {
     finishTask(): void {
         this.done = true;
         this.endDate = new Date();
+    }
+
+    static from({ id, description, sidenote, startDate, endDate, deadline, done, priority, user }: TaskPrisma & {priority: PriorityPrisma, user: UserPrisma}) {
+        return new Task({
+            id,
+            description,
+            sidenote: sidenote || undefined,
+            startDate,
+            endDate,
+            deadline,
+            done,
+            priority: Priority.from(priority),
+            user: User.from(user),
+        });
     }
 }

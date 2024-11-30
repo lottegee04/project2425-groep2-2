@@ -3,21 +3,21 @@ import taskDb from '../repository/task.db';
 import taskhistoryDb from '../repository/taskhistory.db';
 import userDb from '../repository/user.db';
 
-const getAllFinishedTasksByUser = (userId: number): Task[] => {
+const getAllFinishedTasksByUser = async (userId: number): Promise<Task[]> => {
     if (!userId) {
         throw new Error('Userid is required.');
     }
     if (!userDb.getUserById(userId)) {
         throw new Error(`No user found with id ${userId}.`);
     }
-    const historyByUser = taskhistoryDb.getTaskHistoryByUser(userId);
+    const historyByUser =  await taskhistoryDb.getTaskHistoryByUser(userId);
     if (!historyByUser) {
         throw new Error('No history found by user.');
     }
     return historyByUser.getFinishedTasks();
 };
 
-const addFinishedTaskToHistoryByUser = (userId: number, taskId: number): Task => {
+const addFinishedTaskToHistoryByUser = async (userId: number, taskId: number): Promise<Task> => {
     if (!userId) {
         throw new Error('Userid is required.');
     }
@@ -27,16 +27,16 @@ const addFinishedTaskToHistoryByUser = (userId: number, taskId: number): Task =>
     if (!taskId) {
         throw new Error('TaskId is required.');
     }
-    const taskhistory = taskhistoryDb.getTaskHistoryByUser(userId);
+    const taskhistory = await taskhistoryDb.getTaskHistoryByUser(userId);
     if (!taskhistory) {
         throw new Error('No History found for this User.');
     }
 
-    const finishedTask = taskDb.getTaskById(taskId);
+    const finishedTask = await taskDb.getTaskById(taskId);
     if (!finishedTask) {
         throw new Error(`No task found with id ${taskId}.`);
     }
-    if (finishedTask.getUserId() != userId) {
+    if (finishedTask.getUser().getId() != userId) {
         throw new Error(`The task is not from owner with id ${userId}.`);
     }
     finishedTask.finishTask();
