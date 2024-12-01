@@ -7,7 +7,7 @@ const Header: React.FC = () => {
   return (
     <>
     <header className="p-3 mb-3 ">
-      <a className="fs-2 d-flex justify-content-center border border-4 border-dark text-dark text-decoration-none ">
+      <a className="fs-2 d-flex justify-content-center border-4 border-dark text-dark text-decoration-none ">
         {' '}
         DoneDeal
       </a>
