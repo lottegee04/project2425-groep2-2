@@ -17,7 +17,7 @@ const createTask = async ({
     sidenote,
     deadline,
     priority: priorityInput,
-    userId,
+    user: userInput,
 }: TaskInput): Promise<Task> => {
     // if (!description) {
     //     throw new Error('Description is required.');
@@ -25,12 +25,12 @@ const createTask = async ({
     // if (!deadline) {
     //     throw new Error('Deadline is required.');
     // }
-    // if (!userId) {
-    //     throw new Error('userId is required.');
-    // }
-    const user = await userDb.getUserById(userId);
+    if (!userInput.id) {
+        throw new Error('userId is required.');
+    }
+    const user = await userDb.getUserById(userInput.id);
     if (!user) {
-        throw new Error(`User not found with given userId: ${userId}.`);
+        throw new Error(`User not found with given userId: ${userInput.id}.`);
     }
     const priority = new Priority(priorityInput);
     const createPriority = await priorityDb.createPriority(priority);

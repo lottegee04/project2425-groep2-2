@@ -31,6 +31,9 @@ export class User {
     getPassword() : string {
         return this.password;
     }
+    equals(user: User): boolean {
+        return this.username === user.getUsername() && this.password === user.getPassword();
+    }
 
 
 

@@ -7,7 +7,7 @@ const getAllFinishedTasksByUser = async (userId: number): Promise<Task[]> => {
     if (!userId) {
         throw new Error('Userid is required.');
     }
-    if (!userDb.getUserById(userId)) {
+    if (!await userDb.getUserById(userId)) {
         throw new Error(`No user found with id ${userId}.`);
     }
     const historyByUser =  await taskhistoryDb.getTaskHistoryByUser(userId);
@@ -21,7 +21,7 @@ const addFinishedTaskToHistoryByUser = async (userId: number, taskId: number): P
     if (!userId) {
         throw new Error('Userid is required.');
     }
-    if (!userDb.getUserById(userId)) {
+    if (!await userDb.getUserById(userId)) {
         throw new Error(`No user found with id ${userId}.`);
     }
     if (!taskId) {

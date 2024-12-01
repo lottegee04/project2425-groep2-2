@@ -23,7 +23,15 @@ export class TaskHistory {
     }
 
     addFinishedTask(task: Task): void {
-        this.finishedTasks.push(task);
+        if (!task.getDone()) {
+            throw new Error('Task is not done.');
+        }else{
+            this.finishedTasks.push(task);
+        }
+        
+    }
+    equals(taskHistory: TaskHistory): boolean {
+        return this.user.equals(taskHistory.getUser()) && this.finishedTasks.every(task => taskHistory.getFinishedTasks().some(taskHistoryTask => task.equals(taskHistoryTask)));
     }
 
     static from({ user, finishedTasks }: TaskHistoryPrisma & { user: UserPrisma; finishedTasks: (TaskPrisma & { priority: PriorityPrisma; user: UserPrisma})[] }) {

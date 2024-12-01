@@ -19,6 +19,9 @@ export class Priority{
     getId(): number | undefined {
         return this.id;
     }
+    equals(priority: Priority): boolean {
+        return this.levelName === priority.getLevelName() && this.colour === priority.getColour();
+    }
 
     static from({levelName, colour}: PriorityPrisma){
         return new Priority({levelName, colour});
