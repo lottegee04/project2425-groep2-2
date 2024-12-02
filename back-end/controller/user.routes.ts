@@ -26,7 +26,7 @@
  *              description: user's list of active tasks.
  */
 
-import express, {NextFunction, Request, Response} from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service';
 
 const userRouter = express.Router();
@@ -46,12 +46,12 @@ const userRouter = express.Router();
  *               items:
  *                  $ref: '#/components/schemas/User'
  */
-userRouter.get("/", async (req: Request, res: Response, next:NextFunction ) => {
+userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const users = await userService.getAllUsers();
         res.status(200).json(users);
     } catch (error) {
-        next(error)
+        next(error);
     }
 });
 /**
@@ -76,13 +76,12 @@ userRouter.get("/", async (req: Request, res: Response, next:NextFunction ) => {
  */
 
 userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
-    try{
-        const user= await userService.getUserById(Number(req.params.id));
-        res.status(200).json(user)
+    try {
+        const user = await userService.getUserById(Number(req.params.id));
+        res.status(200).json(user);
     } catch (error) {
         next(error);
     }
 });
 
-export { userRouter}
-
+export { userRouter };

@@ -7,7 +7,7 @@ import TaskService from '../../services/TaskService';
 import Header from '../../components/header';
 import TaskOverview from '../../components/tasks/TaskOverview';
 import Link from 'next/link';
-import Nav from '../../components/nav';
+
 
 
 
@@ -16,7 +16,7 @@ const Tasks: React.FC = () => {
 
 
     const getTasks = async () =>{
-        const res = await TaskService.getAllTasks()
+        const res = await TaskService.getActiveTasks()
         const taskss = await res.json()
         setTasks(taskss)
     }
@@ -36,6 +36,9 @@ const Tasks: React.FC = () => {
     <section className='align-self-center d-flex flex-row p-2 '>
     <TaskOverview tasks={tasks}></TaskOverview>
     <Link href='/tasks/addTask'><button>+</button></Link>
+    </section>
+    <section>
+      <Link href='/taskhistory'><button>History</button></Link>
     </section>
     </main>
     </>

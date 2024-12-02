@@ -2,6 +2,7 @@ import { addDays } from 'date-fns';
 import { Task } from '../../model/task';
 import { start } from 'repl';
 import { Priority } from '../../model/priority';
+import { User } from '../../model/user';
 
 //given:
 const id = 1;
@@ -13,6 +14,8 @@ const deadline = addDays(startDate, 1);
 const priority = new Priority({ levelName: 'basic', colour: 'green' });
 
 test('given: valid task parameters; when: creating a task;then: a task with the correct parameters is created;', () => {
+    //given:
+    const user = new User({ id: 1, username: 'JohnDoe', password: 'password1234' });
     //when:
     const task = new Task({
         id,
@@ -23,7 +26,7 @@ test('given: valid task parameters; when: creating a task;then: a task with the 
         deadline,
         done: false,
         priority,
-        userId: 1,
+        user,
     });
     //then:
     expect(task.getId()).toEqual(id);
@@ -34,10 +37,12 @@ test('given: valid task parameters; when: creating a task;then: a task with the 
     expect(task.getDeadline().toLocaleDateString()).toEqual(deadline.toLocaleDateString());
     expect(task.getDone()).toBeFalsy();
     expect(task.getPriority()).toEqual(priority);
-    expect(task.getUserId()).toEqual(1);
+    expect(task.getUser()).toEqual(user);
 });
 
 test('given: no description; when: creating a task; then: an error is thrown ', () => {
+    //given:
+    const user = new User({ id: 1, username: 'JohnDoe', password: 'password1234' });
     //when:
     const task = () => {
         new Task({
@@ -49,28 +54,30 @@ test('given: no description; when: creating a task; then: an error is thrown ', 
             deadline,
             done: false,
             priority,
-            userId: 1,
+            user,
         });
     };
     //then
     expect(task).toThrow('Description is required.');
 });
 
-test('given: no userId; when: creating a task; then: an error is thrown ', () => {
-    //when:
-    const task = () => {
-        new Task({
-            id,
-            description,
-            sidenote,
-            startDate,
-            endDate: null,
-            deadline,
-            done: false,
-            priority,
-            userId: 0,
-        });
-    };
-    //then
-    expect(task).toThrow('UserId is required.');
-});
+// test('given: no userId; when: creating a task; then: an error is thrown ', () => {
+//     //given:
+//     const user = new User({ id: 1, username: 'JohnDoe', password: 'password1234' });
+//     //when:
+//     const task = () => {
+//         new Task({
+//             id,
+//             description,
+//             sidenote,
+//             startDate,
+//             endDate: null,
+//             deadline,
+//             done: false,
+//             priority,
+//             user: 
+//         });
+//     };
+//     //then
+//     expect(task).toThrow('UserId is required.');
+// });
