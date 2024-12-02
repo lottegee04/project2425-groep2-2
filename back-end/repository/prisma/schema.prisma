@@ -26,8 +26,9 @@ model Task {
     priorityId  Int     @unique
     user        User    @relation(fields: [userId], references: [id])
     userId      Int   @unique
-    taskHistory TaskHistory @relation(fields: [taskHistoryId], references: [id])
-    taskHistoryId Int @unique
+    // taskHistory TaskHistory @relation(fields: [taskHistoryId], references: [id])
+    // taskHistoryId Int @unique
+    histories TaskHistory[]
 }
 
 model TaskHistory {
@@ -44,3 +45,4 @@ model User {
     tasks    Task[]
     taskHistory TaskHistory?
 }
+
