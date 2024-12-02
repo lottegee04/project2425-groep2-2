@@ -1,16 +1,18 @@
 import {Task} from './task';
+import { User as UserPrisma, 
+    Task as TaskPrisma
+} from '@prisma/client';
 export class User {
     private id?: number;
     private username: string;
     private password: string;
-    private tasks : Task[]
 
-    constructor(user : { id?: number; username: string; password: string; tasks: Task[]}) {
+
+    constructor(user : { id?: number; username: string; password: string; }) {
         this.validate(user);
         this.id = user.id;
         this.username = user.username;
         this.password = user.password;
-        this.tasks = user.tasks;
     }
     validate(user: {username: string, password: string}) {
         if (!user.username) {
@@ -29,11 +31,14 @@ export class User {
     getPassword() : string {
         return this.password;
     }
-    getTasks() : Task[] {
-        return this.tasks;
+    equals(user: User): boolean {
+        return this.username === user.getUsername() && this.password === user.getPassword();
     }
 
-    addTask(task: Task) {
-        this.tasks.push(task);
+
+
+
+    static from({id, username,password}: UserPrisma){
+        return new User({id, username, password});
     }
 }
