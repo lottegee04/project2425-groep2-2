@@ -6,16 +6,19 @@ import { Priority } from '../../model/priority';
 import { finished } from 'stream';
 
 test('given valid history parameters; when: creating a new history; then: a history is created with the right parameters;', () => {
+    //given:
+    const user = new User({ id: 1, username: 'JohnDoe', password: 'password1234' });
     //when:
-    const history = new TaskHistory({ userId: 1, finishedTasks: [] });
+    const history = new TaskHistory({ user, finishedTasks: [] });
     //then:
-    expect(history.getUserId()).toEqual(1);
+    expect(history.getUser()).toEqual(user);
     expect(history.getFinishedTasks()).toEqual([]);
 });
 
 test('given: valid finished task, when adding task to taskHistory, then task is added to finishedTasks list', () => {
     //given:
-    const history = new TaskHistory({ userId: 1, finishedTasks: [] });
+    const user = new User({ id: 1, username: 'JohnDoe', password: 'password1234' });
+    const history = new TaskHistory({ user, finishedTasks: [] });
     const finishedTask = new Task({
         id: 3,
         description: 'walking',
@@ -25,7 +28,7 @@ test('given: valid finished task, when adding task to taskHistory, then task is 
         deadline: addDays(new Date(), 1),
         done: true,
         priority: new Priority({ levelName: 'basic', colour: 'success' }),
-        userId: 1,
+        user,
     });
     finishedTask.finishTask();
     //when:
@@ -36,7 +39,8 @@ test('given: valid finished task, when adding task to taskHistory, then task is 
 });
 test('given not finished task, when adding task to taskHistory, then an error should be thrown;', () => {
     //given:
-    const history = new TaskHistory({ userId: 1, finishedTasks: [] });
+    const user = new User({ id: 1, username: 'JohnDoe', password: 'password1234' });
+    const history = new TaskHistory({ user, finishedTasks: [] });
     const finishedTask = new Task({
         id: 3,
         description: 'walking',
@@ -46,7 +50,7 @@ test('given not finished task, when adding task to taskHistory, then an error sh
         deadline: addDays(new Date(), 1),
         done: false,
         priority: new Priority({ levelName: 'basic', colour: 'success' }),
-        userId: 1,
+        user,
     });
     //when:
     const addTaskToHistory = () => {

@@ -10,7 +10,7 @@ type TaskInput = {
     endDate?: Date;
     priority: PriorityInput;
     done?: boolean;
-    userId: number;
+    user: UserInput;
 };
 
 type PriorityInput = {
@@ -22,7 +22,6 @@ type UserInput = {
     id?: number;
     username: string;
     password: string;
-    tasks?: Task[];
 };
 
 export { TaskInput, PriorityInput, UserInput };
