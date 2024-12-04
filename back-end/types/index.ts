@@ -1,5 +1,5 @@
-import { Priority } from '../model/priority';
-import { Task } from '../model/task';
+
+type Role = 'admin' | 'user' | 'guest';
 
 type TaskInput = {
     id?: number;
@@ -22,10 +22,13 @@ type UserInput = {
     id?: number;
     username: string;
     password: string;
+    role: Role;
 };
 type AuthenticationResponse = {
     token: string;
     username: string;
 };
 
-export { TaskInput, PriorityInput, UserInput, AuthenticationResponse };
+
+
+export { TaskInput, PriorityInput, UserInput, AuthenticationResponse, Role };

@@ -23,12 +23,14 @@ const user = new User({
     id: id,
     username: 'johnDoe',
     password: 'password1234',
+    role: "user"
 });
 
 const userInput: UserInput =  {
     id: id,
     username: 'johnDoe',
     password: 'password1234',
+    role:"user"
 };
 
 const description = 'shopping 2.0';
@@ -167,6 +169,7 @@ test('given no user, when: task is created, then an error is thrown', async () =
         id,
         username: 'johnDoe',
         password: 'password1234',
+        role:'user'
     }
     //when:
     const createTask = async () => {

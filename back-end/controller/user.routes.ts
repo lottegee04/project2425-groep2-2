@@ -40,6 +40,8 @@
  *            password:
  *              type: string
  *              description: user's password.
+ *            role:
+ *               $ref: '#/components/schemas/Role'
  *            tasks:
  *              type: array
  *              items:
@@ -54,6 +56,11 @@
  *            password:
  *              type: string
  *              description: User password.
+  *            role:
+ *               $ref: '#/components/schemas/Role'
+  *      Role:
+ *          type: string
+ *          enum: [admin,user,guest]
  */
 
 import express, { NextFunction, Request, Response } from 'express';

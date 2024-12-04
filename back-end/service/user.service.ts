@@ -12,13 +12,13 @@ const getUserById = async (id: number): Promise<User> => {
     return user;
 };
 
-const createUser = async ({ username, password }: UserInput): Promise<User> => {
+const createUser = async ({ username, password,role }: UserInput): Promise<User> => {
     const existingUser = await userDb.getUserByUserName(username);
     if (existingUser) {
         throw new Error(`User with username ${username} is already registered.`);
     }
     const hashedPassword = await bcrypt.hash(password, 12);
-    const user = new User({ username, password: hashedPassword });
+    const user = new User({ username, password: hashedPassword, role });
     const newUser = await userDb.createUser(user);
     return newUser;
 };

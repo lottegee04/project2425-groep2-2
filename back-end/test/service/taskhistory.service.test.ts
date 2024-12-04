@@ -12,6 +12,7 @@ const user = new User({
     id: 1,
     username: 'johnDoe',
     password: 'password1234',
+    role:'user'
 });
 const task = new Task({
     id: 4,
@@ -142,7 +143,7 @@ test('given unknkown taskid; when when adding task to history; then error is thr
 });
 
 test('given task that is not from user; when adding task to taskhistory; then task is pushed to taskhistory and returned', async () => {
-    const user2 = new User({id: 2, username: 'janeDoe', password: 'password1234'});
+    const user2 = new User({id: 2, username: 'janeDoe', password: 'password1234',role:"user"});
     const user2Task = new Task({
         id: 5,
         description: 'walking',
