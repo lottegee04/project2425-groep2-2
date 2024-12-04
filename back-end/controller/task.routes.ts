@@ -72,7 +72,7 @@
  */
 import express, {NextFunction, Request, Response} from 'express';
 import taskService from '../service/task.service';
-import { TaskInput } from '../types';
+import { Role, TaskInput } from '../types';
 
 const taskRouter = express.Router();
 
@@ -80,6 +80,8 @@ const taskRouter = express.Router();
  * @swagger
  * /tasks:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get a list of all Tasks.
  *     responses:
  *       200:
@@ -91,14 +93,15 @@ const taskRouter = express.Router();
  *               items:
  *                  $ref: '#/components/schemas/Task'
  */
-taskRouter.get('/', async ( req: Request, res:Response, next: NextFunction) => {
+taskRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const tasks = await taskService.getAllTasks();
+        const request = req as Request & { auth: { username: string; role: Role } };
+        const { username, role } = request.auth;
+        const tasks = await taskService.getTasks({ username, role });
         res.status(200).json(tasks);
     } catch (error) {
-        next(error)
+        next(error);
     }
-    
 });
 /**
  * @swagger

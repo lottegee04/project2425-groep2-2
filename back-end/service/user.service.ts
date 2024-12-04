@@ -3,7 +3,21 @@ import userDb from '../repository/user.db';
 import { AuthenticationResponse, UserInput } from '../types';
 import bcrypt from 'bcrypt';
 import { generateJwtToken } from '../util/jwt';
+import { UnauthorizedError } from 'express-jwt';
 
+const getUsers = async ({username,role}:any): Promise<User[]> => {
+    if (role === 'admin') {
+        return await userDb.getAllUsers();
+    }  else if (role === "user") {
+        const user = await userDb.getUserByUserName(username);
+        if (!user) {
+            throw new Error(`no User found with username: ${username}.`)
+        }
+        return [user];
+    } else {
+        throw new UnauthorizedError('credentials_required', {message: 'you are not authorized to access this resource.',});
+    }
+}
 const getAllUsers = async (): Promise<User[]> => await userDb.getAllUsers();
 
 const getUserById = async (id: number): Promise<User> => {
@@ -33,9 +47,10 @@ const authenticate = async ({username,password}:UserInput):Promise<Authenticatio
         throw new Error("Incorrect username or password");
     }
     return {
-        token: generateJwtToken({username}),
+        token: generateJwtToken({username,role: user.getRole().toString()}),
         username: username,
+        role: user.getRole().toString()
     }
 }
 
-export default { getAllUsers, getUserById, createUser,authenticate };
+export default { getUsers, getAllUsers, getUserById, createUser,authenticate };

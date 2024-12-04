@@ -65,7 +65,7 @@
 
 import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service';
-import { UserInput } from '../types';
+import { Role, UserInput } from '../types';
 
 const userRouter = express.Router();
 
@@ -73,6 +73,8 @@ const userRouter = express.Router();
  * @swagger
  * /users:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get a list of all users.
  *     responses:
  *       200:
@@ -86,7 +88,9 @@ const userRouter = express.Router();
  */
 userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const users = await userService.getAllUsers();
+        const request = req as Request & { auth: { username: string; role: Role } };
+        const { username, role } = request.auth;
+        const users = await userService.getUsers({username,role});
         res.status(200).json(users);
     } catch (error) {
         next(error);

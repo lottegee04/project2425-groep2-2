@@ -1,3 +1,4 @@
+import { UnauthorizedError } from 'express-jwt';
 import { Priority } from '../model/priority';
 import { Task } from '../model/task';
 import priorityDb from '../repository/priority.db';
@@ -10,6 +11,20 @@ const getAllTasks = async (): Promise<Task[]>=> await taskDb.getAllTasks();
 const getActiveTasks = async (): Promise<Task[]>  => {
   return await taskDb.getActiveTasks();
 }
+
+const getTasks = async ({username,role}:any) : Promise<Task[]> =>  {
+    if (role === "admin") {
+        return taskDb.getActiveTasks();
+    } else if (role === "user" || role === "guest") {
+        const user = await userDb.getUserByUserName(username);
+        if (!user) {
+            throw new Error(`no User found with username: ${username}.`)
+        }
+        return await taskDb.getActiveTasksByUser(user);
+    } else {
+        throw new UnauthorizedError('credentials_required', {message: 'you are not authorized to access this resource.',});
+    }
+} 
 
 const createTask = async ({
     id,
@@ -57,4 +72,4 @@ const getTasksByPriority = async(levelName: string): Promise<Task[]> => {
     return taskDb.getTasksByPriority(levelName);
 }
 
-export default { getAllTasks, getActiveTasks, createTask, getTasksByPriority };
+export default { getAllTasks, getActiveTasks, createTask, getTasksByPriority , getTasks};
