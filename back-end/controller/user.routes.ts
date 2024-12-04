@@ -7,6 +7,27 @@
  *      scheme: bearer
  *      bearerFormat: JWT
  *    schemas:
+ *      AuthenticationResponse:
+ *          type: object
+ *          properties:
+ *            message:
+ *              type: string
+ *              description: Authentication response.
+ *            token:
+ *              type: string
+ *              description: JWT access token.
+ *            username:
+ *              type: string
+ *              description: User name.
+ *      AuthenticationRequest:
+ *          type: object
+ *          properties:
+ *            username:
+ *              type: string
+ *              description: User name.
+ *            password:
+ *              type: string
+ *              description: User password.
  *      User:
  *          type: object
  *          properties:
@@ -24,10 +45,20 @@
  *              items:
  *                  $ref: '#/components/schemas/Task'
  *              description: user's list of active tasks.
+ *      UserInput:
+ *          type: object
+ *          properties:
+ *            username:
+ *              type: string
+ *              description: User name.
+ *            password:
+ *              type: string
+ *              description: User password.
  */
 
 import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service';
+import { UserInput } from '../types';
 
 const userRouter = express.Router();
 
@@ -83,5 +114,33 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
         next(error);
     }
 });
+/**
+ * @swagger
+ * /users/signup:
+ *   post:
+ *      summary: Create a new user.
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/UserInput'
+ *      responses:
+ *         200:
+ *            description: The created user.
+ *            content:
+ *              application/json:
+ *                schema:
+ *                  $ref: '#/components/schemas/User'
+ */
+userRouter.post("/signup", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user = <UserInput>req.body;
+        const result = await userService.createUser(user);
+        res.status(200).json(result)
+    } catch (error) {
+        next(error);
+    }
+})
 
 export { userRouter };

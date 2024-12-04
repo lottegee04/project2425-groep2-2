@@ -15,10 +15,10 @@ export class User {
         this.password = user.password;
     }
     validate(user: {username: string, password: string}) {
-        if (!user.username) {
+        if (!user.username?.trim()) {
             throw new Error('Username is required.')
         }
-        if (!user.password) {
+        if (!user.password?.trim()) {
             throw new Error("Password is required.")
         }
     }
