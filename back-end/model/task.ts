@@ -1,5 +1,8 @@
 import { Priority } from './priority';
 import { User } from './user';
+import { Task as TaskPrisma,
+     Priority as PriorityPrisma,
+    User as UserPrisma  } from '@prisma/client';
 
 export class Task {
     private id?: number;
@@ -10,7 +13,7 @@ export class Task {
     private deadline: Date;
     private done: boolean;
     private priority: Priority;
-    private userId: number;
+    private user: User;
 
     constructor(task: {
         id?: number;
@@ -21,7 +24,7 @@ export class Task {
         deadline: Date;
         done: boolean;
         priority: Priority;
-        userId: number;
+        user: User;
     }) {
         this.validate(task);
         this.id = task.id;
@@ -30,12 +33,12 @@ export class Task {
         this.startDate = task.startDate;
         this.endDate = null;
         this.deadline = task.deadline;
-        this.done = false;
+        this.done = task.done;
         this.priority = task.priority;
-        this.userId = task.userId;
+        this.user = task.user;
     }
 
-    validate(task: { startDate: Date; description: string; deadline: Date; userId: number }) {
+    validate(task: { startDate: Date; description: string; deadline: Date; user: User }) {
         if (!task.description) {
             throw new Error('Description is required.');
         }
@@ -45,8 +48,8 @@ export class Task {
         if (task.startDate > task.deadline) {
             throw new Error('Deadline has to be after startDate.');
         }
-        if (!task.userId) {
-            throw new Error('UserId is required.');
+        if (!task.user) {
+            throw new Error('User is required.');
         }
     }
 
@@ -74,7 +77,37 @@ export class Task {
     getPriority(): Priority {
         return this.priority;
     }
-    getUserId(): number {
-        return this.userId;
+    getUser(): User {
+        return this.user;
+    }
+    finishTask(): void {
+        this.done = true;
+        this.endDate = new Date();
+    }
+
+    equals(task: Task): boolean {
+        return this.id === task.getId() &&
+        this.description === task.getDescription() &&
+        this.sidenote === task.getSidenote() &&
+        this.startDate === task.getStartDate() &&
+        this.endDate === task.getEndDate() &&
+        this.deadline === task.getDeadline() &&
+        this.done === task.getDone() &&
+        this.priority.equals(task.getPriority()) &&
+        this.user.equals(task.getUser());
+    }
+
+    static from({ id, description, sidenote, startDate, endDate, deadline, done, priority, user }: TaskPrisma & {priority: PriorityPrisma, user: UserPrisma}) {
+        return new Task({
+            id,
+            description,
+            sidenote: sidenote || undefined,
+            startDate,
+            endDate,
+            deadline,
+            done,
+            priority: Priority.from(priority),
+            user: User.from(user),
+        });
     }
 }

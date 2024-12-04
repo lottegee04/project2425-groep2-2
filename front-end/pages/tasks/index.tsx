@@ -1,13 +1,15 @@
-import Head from "next/head";
-import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import { Task } from "../../types";
-import TaskService from "../../services/TaskService";
-import Header from "../../components/header";
-import TaskOverview from "../../components/tasks/TaskOverview";
-import Link from "next/link";
-import Nav from "../../components/nav";
-import TaskNav from "../../components/tasks/TaskNav";
+
+import Head from 'next/head';
+import Image from 'next/image';
+import React, { useEffect, useState } from 'react';
+import { Task } from '../../types';
+import TaskService from '../../services/TaskService';
+import Header from '../../components/header';
+import TaskOverview from '../../components/tasks/TaskOverview';
+import Link from 'next/link';
+
+
+
 
 const Tasks: React.FC = () => {
   const [tasks, setTasks] = useState<Array<Task>>();
@@ -42,6 +44,9 @@ const Tasks: React.FC = () => {
             <button>+</button>
           </Link>
         </section>
+    <section>
+      <Link href='/taskhistory'><button>History</button></Link>
+    </section>
       </main>
     </>
   );

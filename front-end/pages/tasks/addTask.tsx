@@ -3,7 +3,7 @@ import { Task } from "../../types";
 import Head from "next/head";
 import Header from "../../components/header";
 import TaskForm from "../../components/tasks/TaskForm";
-import Nav from "../../components/nav";
+
 
 
 const addTask: React.FC = () => {

@@ -1,4 +1,5 @@
 import { Priority } from '../model/priority';
+import { Task } from '../model/task';
 
 type TaskInput = {
     id?: number;
@@ -9,7 +10,7 @@ type TaskInput = {
     endDate?: Date;
     priority: PriorityInput;
     done?: boolean;
-    userId: number;
+    user: UserInput;
 };
 
 type PriorityInput = {
@@ -17,4 +18,10 @@ type PriorityInput = {
     colour: string;
 };
 
-export { TaskInput, PriorityInput };
+type UserInput = {
+    id?: number;
+    username: string;
+    password: string;
+};
+
+export { TaskInput, PriorityInput, UserInput };
