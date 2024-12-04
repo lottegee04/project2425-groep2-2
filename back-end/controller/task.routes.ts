@@ -164,6 +164,8 @@ taskRouter.post("/",async(req:Request, res:Response,next:NextFunction) => {
  * @swagger
  * /tasks/priority/{levelName}:
  *  get:
+ *      security:
+ *       - bearerAuth: []
  *      summary: Get Tasks by Priority.
  *      parameters:
  *          - in: path
@@ -184,7 +186,9 @@ taskRouter.post("/",async(req:Request, res:Response,next:NextFunction) => {
  */
 taskRouter.get("/priority/:levelName",async ( req: Request, res: Response, next: NextFunction) => {
     try {
-        const tasks = await taskService.getTasksByPriority(String(req.params.levelName));
+        const request = req as Request & { auth: { username: string; role: Role } };
+        const { username, role } = request.auth;
+        const tasks = await taskService.getTasksByPriority(String(req.params.levelName),{username,role});
         res.status(200).json(tasks);
     } catch (error) {
         next(error)

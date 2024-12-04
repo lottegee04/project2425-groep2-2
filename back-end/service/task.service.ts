@@ -60,12 +60,16 @@ const createTask = async ({
     
 };
 
-const getTasksByPriority = async(levelName: string): Promise<Task[]> => {
+const getTasksByPriority = async(levelName: string, {username,role}:any): Promise<Task[]> => {
     const priority = await priorityDb.getPriorityByName({levelName});
     if (!priority) {
         throw new Error(`No Priority found with levelName: ${levelName}.`)
     }
-    return taskDb.getTasksByPriority(levelName);
+    if (role === "guest") {
+        throw new UnauthorizedError('credentials_required', {message: 'you are not authorized to access this resource.',});
+    } else {
+        return taskDb.getTasksByPriority(levelName);
+    }
 }
 
 export default { getAllTasks, getActiveTasks, createTask, getTasksByPriority , getTasks};
