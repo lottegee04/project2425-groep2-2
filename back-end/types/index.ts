@@ -23,5 +23,9 @@ type UserInput = {
     username: string;
     password: string;
 };
+type AuthenticationResponse = {
+    token: string;
+    username: string;
+};
 
-export { TaskInput, PriorityInput, UserInput };
+export { TaskInput, PriorityInput, UserInput, AuthenticationResponse };

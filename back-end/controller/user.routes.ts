@@ -141,6 +141,36 @@ userRouter.post("/signup", async (req: Request, res: Response, next: NextFunctio
     } catch (error) {
         next(error);
     }
+});
+/**
+ * @swagger
+ * /users/login:
+ *   post:
+ *      security:
+ *          - bearerAuth: []
+ *      summary: Login as a know user.
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/AuthenticationRequest'
+ *      responses:
+ *         200:
+ *            description: The created user.
+ *            content:
+ *              application/json:
+ *                schema:
+ *                  $ref: '#/components/schemas/AuthenticationResponse'
+ */
+userRouter.post('/login', async (req:Request, res:Response, next: NextFunction) => {
+    try {
+        const userInput: UserInput = req.body;
+        const response = await userService.authenticate(userInput);
+        res.status(200).json({message:"authentication succesfull", ...response})
+    } catch (error) {
+        next(error);
+    }
 })
 
 export { userRouter };
