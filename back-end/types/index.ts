@@ -14,6 +14,7 @@ type TaskInput = {
 };
 
 type PriorityInput = {
+    id?: number;
     levelName: string;
     colour: string;
 };

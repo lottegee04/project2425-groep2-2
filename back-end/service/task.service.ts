@@ -33,35 +33,31 @@ const createTask = async ({
     deadline,
     priority: priorityInput,
     user: userInput,
-}: TaskInput): Promise<Task> => {
-    // if (!description) {
-    //     throw new Error('Description is required.');
-    // }
-    // if (!deadline) {
-    //     throw new Error('Deadline is required.');
-    // }
-    if (!userInput.id) {
-        throw new Error('userId is required.');
-    }
-    const user = await userDb.getUserById(userInput.id);
+}: TaskInput, {username,role}:any): Promise<Task> => {
+    const user = await userDb.getUserByUserName(username);
     if (!user) {
-        throw new Error(`User not found with given userId: ${userInput.id}.`);
+        throw new Error(`User not found with given username: ${username}.`);
     }
-    const priority = new Priority(priorityInput);
-    const createPriority = await priorityDb.createPriority(priority);
-    const startDate = new Date();
-    const task = new Task({
-        id,
-        description,
-        sidenote,
-        startDate,
-        endDate: null,
-        done: false,
-        deadline,
-        priority,
-        user,
-    });
-    return taskDb.createTask(task);
+    if (role === "guest") {
+        throw new UnauthorizedError('credentials_required', {message: 'you are not authorized to access this resource.',});
+    } else {
+        const priority = new Priority(priorityInput);
+        const createPriority = await priorityDb.createPriority(priority);
+        const startDate = new Date();
+        const task = new Task({
+            id,
+            description,
+            sidenote,
+            startDate,
+            endDate: null,
+            done: false,
+            deadline,
+            priority: createPriority,
+            user,
+        });
+        return taskDb.createTask(task);
+    }
+    
 };
 
 const getTasksByPriority = async(levelName: string): Promise<Task[]> => {

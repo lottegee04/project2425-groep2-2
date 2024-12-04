@@ -131,6 +131,8 @@ taskRouter.get("/active",async ( req: Request, res: Response, next: NextFunction
  * @swagger
  * /tasks:
  *   post:
+ *      security:
+ *       - bearerAuth: []
  *      summary: Create a new task for a existing user.
  *      requestBody:
  *        required: true
@@ -148,8 +150,10 @@ taskRouter.get("/active",async ( req: Request, res: Response, next: NextFunction
  */
 taskRouter.post("/",async(req:Request, res:Response,next:NextFunction) => {
     try {
+        const request = req as Request & { auth: { username: string; role: Role } };
+        const { username, role } = request.auth;
         const task = <TaskInput>req.body;
-        const result = await taskService.createTask(task);
+        const result = await taskService.createTask(task,{username,role});
         res.status(200).json(result);
     } catch (error) {
         next(error)
