@@ -223,7 +223,7 @@ test("given valid levelName, when: getting Tasks By Priority, then those tasks a
     mockTaskDbGetTasksByPriority.mockResolvedValue(tasks);
 
     //when:
-    const result = await taskService.getTasksByPriority("basic");
+    const result = await taskService.getTasksByPriority("basic", {username: user.getUsername(), role: user.getRole()});
 
     //then:
     expect(mockPriorityDbGetPriorityByName).toHaveBeenCalledTimes(1);
@@ -238,7 +238,7 @@ test("given valid levelName with no tasks, when: getting Tasks By Priority, then
     mockTaskDbGetTasksByPriority.mockResolvedValue([]);
 
     //when:
-    const result = await taskService.getTasksByPriority("urgent");
+    const result = await taskService.getTasksByPriority("urgent", {username: user.getUsername(), role: user.getRole()});
 
     //then:
     expect(mockPriorityDbGetPriorityByName).toHaveBeenCalledTimes(1);
@@ -251,5 +251,5 @@ test("given unknown levelName, when: getting Tasks By Priority, then an error is
     expect.assertions(1);
     mockPriorityDbGetPriorityByName.mockResolvedValue(null);
 
-    await expect(taskService.getTasksByPriority("notALevel")).rejects.toThrow("No Priority found with levelName: notALevel.");
+    await expect(taskService.getTasksByPriority("notALevel", {username: user.getUsername(), role: user.getRole()})).rejects.toThrow("No Priority found with levelName: notALevel.");
 });
