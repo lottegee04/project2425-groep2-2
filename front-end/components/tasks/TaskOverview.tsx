@@ -21,6 +21,10 @@ const TaskOverview: React.FC<Props> = ({tasks}) =>{
                 <td>Sidenote:</td>
                 <td>{task.sidenote}</td>
             </tr>
+            <tr>
+                <td>Priority:</td>
+                <td>{task.priority.levelName}</td>
+            </tr>
             </table>
         ))
         }
