@@ -20,3 +20,8 @@ export type User = {
     username: string;
     tasks: Task[];
 }
+
+export type StatusMessage = {
+    message: string,
+    type: "error" | "success";
+}
