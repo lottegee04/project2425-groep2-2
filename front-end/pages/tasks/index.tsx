@@ -8,31 +8,40 @@ import Header from '../../components/header';
 import TaskOverview from '../../components/tasks/TaskOverview';
 import Link from 'next/link';
 import useInterval from 'use-interval';
+import useSWR, { mutate } from 'swr';
 
 
 
 
 const Tasks: React.FC = () => {
-  const [tasks, setTasks] = useState<Array<Task>>();
   const [priority, setPriority] = useState<string>("all");
-
+  const [error, setError] = useState<string | null>(null);
   const getTasks = async () => {
+    setError(null);
     if (priority === "all"){
-    const res = await TaskService.getActiveTasks();
-    const taskss = await res.json();
-    setTasks(taskss);
+    const response = await TaskService.getAllTasks();
+    if (response.ok) {
+      const tasks = await response.json();
+     return {tasks}
+    } else {
+      setError("You are not authorized to view this page.")
+      return {tasks: []};
+    }
   } else {
-    const res = await TaskService.getTasksByPriority(priority);
-    const taskss = await res.json();
-    setTasks(taskss);
-  }
+    const response = await TaskService.getTasksByPriority(priority);
+    if (response.ok) {
+      const tasks = await response.json();
+      return {tasks}
+    }}
   };
-  useEffect(() => {
-    getTasks();
-  }, [priority]);
+  const {data, isLoading} = useSWR( "tasks", getTasks)
+
+  // useEffect(() => {
+  //   getTasks();
+  // }, [priority]);
 
   useInterval(() => {
-    getTasks();
+    mutate("tasks", getTasks());
   }, 2000);
   return (
     <>
@@ -54,7 +63,11 @@ const Tasks: React.FC = () => {
             Basic</button>
         </div>
         <section className="align-self-center d-flex flex-row p-2  self-center">
-          <TaskOverview tasks={tasks}></TaskOverview>
+          {error && <p className="text-red-800">{error}</p>}
+          {isLoading && <p className="text-green-800">Loading....</p>}
+          {data &&
+          <TaskOverview tasks={data.tasks}/>
+          }
           <Link href="/tasks/addTask">
             <button>+</button>
           </Link>

@@ -36,6 +36,7 @@ const Header: React.FC = () => {
         <Link href="/login" className="nav-link px-4 fs-5 text-dark"
         onClick={() => {
           sessionStorage.removeItem("loggedInUser");
+          localStorage.removeItem("loggedInUser");
           setloggedInUser(null);
         }}> Logout</Link>
         <div className="nav-link px-4 fs-5 text-dark">

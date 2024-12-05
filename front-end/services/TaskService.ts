@@ -6,7 +6,7 @@ const getAllTasks = async () => {
         method:'GET',
         headers: {
             'Content-type':'application/json',
-            Authorization: `${token}`,
+            Authorization: `Bearer ${token}`,
         }
     })
 };
@@ -16,7 +16,7 @@ const getActiveTasks = async () => {
         method:'GET',
         headers: {
             'Content-type':'application/json',
-            Authorization: `${token}`,
+            Authorization: `Bearer ${token}`,
         }
     })}
     catch (error) {
@@ -30,7 +30,7 @@ const getTasksByPriority = async (priority: string) => {
         method:'GET',
         headers: {
             'Content-type':'application/json',
-            Authorization: `${token}`,
+            Authorization: `Bearer ${token}`,
         }
     })
 };
@@ -40,7 +40,7 @@ const createTask = async (task: { description: string; sidenote: string; deadlin
        method: "POST",
        headers: {
            "Content-type": "application/json",
-           Authorization: `${token}`,
+           Authorization: `Bearer ${token}`,
        },
        body: JSON.stringify(task)
     });
@@ -59,7 +59,7 @@ const finishTask = async (id: { taskId: number; userId:number }) => {
         method:'GET',
         headers: {
             'Content-type':'application/json',
-            Authorization: `${token}`,
+            Authorization: `Bearer ${token}`,
         }
     })
     return response.json()
@@ -71,7 +71,7 @@ const getAllFinishedTasksByUser = async (userId: number) => {
         method:'GET',
         headers: {
             'Content-type':'application/json',
-            Authorization: `${token}`,
+            Authorization: `Bearer ${token}`,
         }   
     })
     return response.json()
