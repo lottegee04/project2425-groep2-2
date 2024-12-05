@@ -17,9 +17,10 @@ export type Task = {
   };
 
 export type User = {
-    id: number;
+    id?: number;
     username?: string;
     password?: string;
+    role?: string;
 }
 
 export type StatusMessage = {

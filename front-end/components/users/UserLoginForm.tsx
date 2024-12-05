@@ -2,14 +2,18 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { StatusMessage } from "../../types";
 import classNames from "classnames";
+import UserService from "../../services/UserService";
 const UserLoginFrom: React.FC = () => {
     const router = useRouter();
     const [username, setUsername] = useState("");
-    const [nameError, setNameError] = useState<string | null>(null)
+    const [password, setPassword] = useState("");
+    const [nameError, setNameError] = useState<string | null>(null);
+    const [passwordError, setPasswordError] = useState<string | null>(null);
     const [statusMessage, setStatusMessage] = useState<StatusMessage[]>([]);
     
     const clearErrors = () =>  {
         setNameError("");
+        setPasswordError("");
         setStatusMessage([]);
     }
     const validate = (): boolean => {
@@ -18,6 +22,10 @@ const UserLoginFrom: React.FC = () => {
             setNameError("Username is required.")
             result = false;
             };
+        if(!password && password.trim() === "") {
+            setPasswordError("Password is required.")
+            result = false;
+        }
         return result;
     };
     const handleSubmit = async (event) => {
@@ -26,14 +34,36 @@ const UserLoginFrom: React.FC = () => {
         if (!validate()) {
             return;
         }
-        setStatusMessage([{
-            message:"Login successfull. Redirecting to homepage...",
-            type:"success"
-        },]);
-        sessionStorage.setItem("loggedInUser",username);
-        setTimeout(() => {
-            router.push("/");
-        },2000);
+        const user = {username, password};
+        const response = await UserService.loginUser(user);
+        if (response.status === 200) {
+            const user = await response.json();
+            localStorage.setItem(
+                "loggedInUser",
+                JSON.stringify({
+                    token:user.token,
+                    username: user.username,
+                    role: user.role,
+                })
+            );
+            sessionStorage.setItem("loggedInUser",username);
+            setStatusMessage([{
+                message:"Login successfull. Redirecting to homepage...",
+                type:"success"
+            },]);
+            setTimeout(() => {
+                router.push("/");},2000);
+        } else if (response.status === 401) {
+            const {errorMessage} = await response.json();
+            setStatusMessage([{message: errorMessage, type: "error"}])
+        } else {
+            setStatusMessage([{
+                message: "Oops, an error has occurred. Please try again later.",
+                type: "error"
+                },
+            ]);
+        };
+        
     };
 
     return (
@@ -56,7 +86,7 @@ const UserLoginFrom: React.FC = () => {
             </div>
         )}
         <form  onSubmit={(event) => (handleSubmit(event))} className="flex flex-center flex-col p-3">
-            <div className="flex-row">
+            <div className="flex-row my-3" >
             <label htmlFor="nameInput">
                 Username: 
             </label>
@@ -69,6 +99,20 @@ const UserLoginFrom: React.FC = () => {
             />
             {nameError && <div className="text-red-800 text-center"> {nameError} </div>}
             </div>
+            <div className="flex-row my-3">
+            <label htmlFor="nameInput">
+               Password: 
+            </label>
+            
+            <input className="mx-2 border-2 border-gray-300"
+            id="passwordInput"
+            type="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            />
+            {passwordError && <div className="text-red-800 text-center"> {nameError} </div>}
+            </div>
+            
             <button type="submit" className="m-2 border-2 border-orange-500 bg-orange-300 text-orange-50">Login</button>
         </form>
        
