@@ -1,3 +1,4 @@
+import { ta } from 'date-fns/locale';
 import { Task } from '../model/task';
 import taskDb from '../repository/task.db';
 import taskhistoryDb from '../repository/taskhistory.db';
@@ -17,7 +18,7 @@ const getAllFinishedTasksByUser = async (userId: number): Promise<Task[]> => {
     return historyByUser.getFinishedTasks();
 };
 
-const addFinishedTaskToHistoryByUser = async (userId: number, taskId: number): Promise<Task> => {
+const addFinishedTaskToHistoryByUser = async (userId: number, taskId: number): Promise<Task|null> => {
     if (!userId) {
         throw new Error('Userid is required.');
     }
@@ -39,9 +40,9 @@ const addFinishedTaskToHistoryByUser = async (userId: number, taskId: number): P
     if (finishedTask.getUser().getId() != userId) {
         throw new Error(`The task is not from owner with id ${userId}.`);
     }
-    finishedTask.finishTask();
-    taskhistory.addFinishedTask(finishedTask);
+    // finishedTask.finishTask();
+
     // taskDb.deleteTask(finishedTask);
-    return finishedTask;
+    return taskhistoryDb.finishTask({task: finishedTask});
 };
 export default { getAllFinishedTasksByUser, addFinishedTaskToHistoryByUser };

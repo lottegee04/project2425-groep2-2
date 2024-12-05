@@ -13,10 +13,11 @@ export type Task = {
     deadline: Date;
     done: boolean;
     priority: Priority
+    user: User;
   };
 
 export type User = {
     id: number;
-    username: string;
-    tasks: Task[];
+    username?: string;
+    password?: string;
 }

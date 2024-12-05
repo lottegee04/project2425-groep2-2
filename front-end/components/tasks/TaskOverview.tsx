@@ -10,7 +10,7 @@ type Props = {
 const TaskOverview: React.FC<Props> = ({ tasks}) => {
   const finishTask = (task: Task) => {
     //fetch request to update task.done to true:
-    TaskService.finishTask({taskId: task.id, userId: 1})
+    TaskService.finishTask({taskId: task.id, userId: task.user.id});
     //!! watch out for the userId, it should be dynamic: you can only finish the task of user 1 (johnDoe) atm
   }
   

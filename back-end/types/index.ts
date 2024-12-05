@@ -20,8 +20,8 @@ type PriorityInput = {
 
 type UserInput = {
     id?: number;
-    username: string;
-    password: string;
+    username?: string;
+    password?: string;
 };
 
 export { TaskInput, PriorityInput, UserInput };

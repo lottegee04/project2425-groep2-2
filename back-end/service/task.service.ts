@@ -12,7 +12,6 @@ const getActiveTasks = async (): Promise<Task[]>  => {
 }
 
 const createTask = async ({
-    id,
     description,
     sidenote,
     deadline,
@@ -33,10 +32,8 @@ const createTask = async ({
         throw new Error(`User not found with given userId: ${userInput.id}.`);
     }
     const priority = new Priority(priorityInput);
-    const createPriority = await priorityDb.createPriority(priority);
     const startDate = new Date();
     const task = new Task({
-        id,
         description,
         sidenote,
         startDate,

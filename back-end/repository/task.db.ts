@@ -14,8 +14,9 @@ const createTask = async (task: Task): Promise<Task> => {
                 done: task.getDone(),
                 deadline: task.getDeadline(),
                 priority: {
-                    connect: {
-                        id: task.getPriority().getId()
+                    create: {
+                        levelName: task.getPriority().getLevelName(),
+                        colour: task.getPriority().getColour()
                     }
                 },
                 user: {
@@ -93,7 +94,8 @@ const getTasksByPriority = async (levelName: string): Promise<Task[]> => {
             where: {
                 priority: {
                     levelName
-                }
+                },
+                done: false
             },
             include: {
                 priority: true,
@@ -119,6 +121,8 @@ const deleteTask =  async (id: number): Promise<void> => {
         throw new Error('Database error. See server log for details.');
     }
 };
+
+
 
 export default {
     createTask,

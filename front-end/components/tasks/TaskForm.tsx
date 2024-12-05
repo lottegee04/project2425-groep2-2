@@ -29,9 +29,9 @@ const TaskForm: React.FC = () => {
     await TaskService.createTask({
       description,
       sidenote,
-      deadline,
+      deadline: new Date(deadline),
       priority,
-      userId,
+      user: {id: userId},
     });
     setDescription(description);
     setSidenote(sidenote);

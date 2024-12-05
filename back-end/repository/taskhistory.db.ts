@@ -78,8 +78,46 @@ const createTaskHistory = async (taskHistory: TaskHistory): Promise<TaskHistory>
     }
 }
 
+const finishTask = async ({task}:{task:Task;}): Promise<Task | null> => {
+    try {
+        const taskPrisma = await database.task.update({
+        where: {id: task.getId()},
+        data: {
+            done: true,
+            endDate: new Date(),
+        },
+        include: {
+            priority: true,
+            user: true,
+        }
+    })
+    const taskHistoryPrisma = await database.taskHistory.update({
+        where: {userId: task.getUser().getId()},
+        data: {
+            finishedTasks: {
+                connect: {id: task.getId()}
+            }
+        },
+        include: {
+            user: true,
+            finishedTasks: {
+                include: {
+                    priority: true,
+                    user: true,
+                },
+            },
+        }
+    })
+    return taskPrisma ? Task.from(taskPrisma) : null;
+    }catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
 export default {
     createTaskHistory,
     getAllTaskHistories,
     getTaskHistoryByUser,
+    finishTask
 };
