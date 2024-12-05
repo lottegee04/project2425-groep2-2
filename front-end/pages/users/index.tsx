@@ -41,8 +41,8 @@ const Users: React.FC = () => {
     <h1 className='align-self-center'>Users Overview</h1>
     <p className='align-self-center'>Click on the user to see their tasks.</p>
     <section className='align-self-center d-flex flex-row p-2 '>
-    {errorMessage && <p className="text-red-800">{errorMessage}</p>}
-    {isLoading && <p className="text-green-800">Loading....</p>}
+    {errorMessage && <p className="text-[#b62626]">{errorMessage}</p>}
+    {isLoading && <p className="text-[#2866da]">Loading....</p>}
     {data && 
       <UserOverview users={data.users} selectUser={setSelectedUser}></UserOverview>
     }

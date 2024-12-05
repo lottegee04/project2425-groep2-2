@@ -76,8 +76,8 @@ const UserLoginFrom: React.FC = () => {
                         <li 
                         key={index}
                         className={classNames({
-                            "text-red-800": type =="error",
-                            "text-green-800": type =="success",
+                            "text-[#b62626]": type =="error",
+                            "text-[#26b639]": type =="success",
                         })} >
                             {message}
                         </li>
@@ -97,7 +97,7 @@ const UserLoginFrom: React.FC = () => {
             value={username}
             onChange={(event) => setUsername(event.target.value)}
             />
-            {nameError && <div className="text-red-800 text-center"> {nameError} </div>}
+            {nameError && <div className="text-[#b62626] text-center"> {nameError} </div>}
             </div>
             <div className="flex-row my-3">
             <label htmlFor="nameInput">
@@ -110,7 +110,7 @@ const UserLoginFrom: React.FC = () => {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             />
-            {passwordError && <div className="text-red-800 text-center"> {nameError} </div>}
+            {passwordError && <div className="text-[#b62626] text-center"> {nameError} </div>}
             </div>
             
             <button type="submit" className="m-2 border-2 border-orange-500 bg-orange-300 text-orange-50">Login</button>
