@@ -45,7 +45,6 @@ const createTask = async ({
         const createPriority = await priorityDb.createPriority(priority);
         const startDate = new Date();
         const task = new Task({
-            id,
             description,
             sidenote,
             startDate,
