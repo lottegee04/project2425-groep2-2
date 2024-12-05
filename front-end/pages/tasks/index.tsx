@@ -51,8 +51,8 @@ const Tasks: React.FC = () => {
       </Head>
       <Header />
       <main className="d-flex  flex-column ">
-        <h1 className="align-self-start font-['Open_Sans']">{" "}
-        {loggedInUser && `${loggedInUser.role === "admin"? "All Tasks (admin)": loggedInUser.username}`}</h1>
+        <h1 className="align-self-start font-['Open_Sans']">Tasks{" "}
+        {loggedInUser && `for ${loggedInUser.role === "admin"? "All Tasks (admin)": loggedInUser.username}`}</h1>
         <section className='flex flex-row justify-between'>
         <div className='flex flex-column self-start m-3 border p-2 rounded bg-beige'>
           <button className="  m-1 p-2 rounded-lg hover:bg-[#473c2f] duration-150 text-[#000000] hover:text-[#ffffff]" onClick={() => {setPriority("all")}}>

@@ -21,6 +21,7 @@ export type User = {
     username?: string;
     password?: string;
     role?: string;
+    tasks?: Task[];
 }
 
 export type StatusMessage = {
