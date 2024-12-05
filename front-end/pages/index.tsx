@@ -7,10 +7,14 @@ import Header from '../components/header';
 const Home: React.FC = () => {
   return (
     <>
+      <Head>
+        <title>Home</title>
+      </Head>
       <Header/>
-      <main>
+      <main className=''>
 
       </main>
+
     </>
   );
 };

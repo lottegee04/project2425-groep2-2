@@ -1,4 +1,4 @@
-import { Priority } from "../types";
+import { Priority, User } from "../types";
 
 const getAllTasks = async () => {
     return fetch(process.env.NEXT_PUBLIC_API_URL + "/tasks",{
@@ -7,17 +7,29 @@ const getAllTasks = async () => {
             'Content-type':'application/json',
         }
     })
-}
+};
 const getActiveTasks = async () => {
-    return fetch(process.env.NEXT_PUBLIC_API_URL + "/tasks/active",{
+    try {return fetch(process.env.NEXT_PUBLIC_API_URL + "/tasks/active",{
+        method:'GET',
+        headers: {
+            'Content-type':'application/json',
+        }
+    })}
+    catch (error) {
+        console.error(error)
+    }
+};
+
+const getTasksByPriority = async (priority: string) => {
+    return fetch(process.env.NEXT_PUBLIC_API_URL + `/tasks/priority/${priority}`,{
         method:'GET',
         headers: {
             'Content-type':'application/json',
         }
     })
-}
-const createTask = async (task: { description: string; sidenote: string; deadline: Date; priority: Priority; userId: number}) => {
-    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/tasks", {
+};
+const createTask = async (task: { description: string; sidenote: string; deadline: Date; priority: Priority; user: User}) => {
+    try {const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/tasks", {
        method: "POST",
        headers: {
            "Content-type": "application/json"
@@ -27,7 +39,10 @@ const createTask = async (task: { description: string; sidenote: string; deadlin
     if (!response.ok) {
         throw new Error('Failed to submit task');
       }
-      return response.json();
+      return response.json();}
+      catch (error) {
+            console.error(error)
+      }
    };
 
 const finishTask = async (id: { taskId: number; userId:number }) => {
@@ -56,6 +71,7 @@ const TaskService = {
     createTask,
     finishTask,
     getAllFinishedTasksByUser,
+    getTasksByPriority
 }
 
 

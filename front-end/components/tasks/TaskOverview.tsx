@@ -10,7 +10,7 @@ type Props = {
 const TaskOverview: React.FC<Props> = ({ tasks}) => {
   const finishTask = (task: Task) => {
     //fetch request to update task.done to true:
-    TaskService.finishTask({taskId: task.id, userId: 1})
+    TaskService.finishTask({taskId: task.id, userId: task.user.id});
     //!! watch out for the userId, it should be dynamic: you can only finish the task of user 1 (johnDoe) atm
   }
   
@@ -30,6 +30,10 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
               <td>Sidenote:</td>
               <td>{task.sidenote}</td>
             </tr>
+            <tr>
+                <td>Priority:</td>
+                <td>{task.priority.levelName}</td>
+            </tr>
             {!task.done  &&
             <tr>
             <Image 
@@ -41,6 +45,7 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
             />
           </tr>}
             
+
           </table>
         ))}
       {!tasks && <p>No Active Tasks</p>}

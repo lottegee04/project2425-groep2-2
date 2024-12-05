@@ -27,7 +27,6 @@ const getTasks = async ({username,role}:any) : Promise<Task[]> =>  {
 } 
 
 const createTask = async ({
-    id,
     description,
     sidenote,
     deadline,
@@ -38,11 +37,11 @@ const createTask = async ({
     if (!user) {
         throw new Error(`User not found with given username: ${username}.`);
     }
+
     if (role === "guest") {
         throw new UnauthorizedError('credentials_required', {message: 'you are not authorized to access this resource.',});
     } else {
         const priority = new Priority(priorityInput);
-        const createPriority = await priorityDb.createPriority(priority);
         const startDate = new Date();
         const task = new Task({
             description,
@@ -51,12 +50,13 @@ const createTask = async ({
             endDate: null,
             done: false,
             deadline,
-            priority: createPriority,
+            priority,
             user,
         });
         return taskDb.createTask(task);
     }
-    
+   
+
 };
 
 const getTasksByPriority = async(levelName: string, {username,role}:any): Promise<Task[]> => {

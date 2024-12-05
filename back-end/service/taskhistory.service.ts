@@ -1,4 +1,6 @@
+
 import { UnauthorizedError } from 'express-jwt';
+import { ta } from 'date-fns/locale';
 import { Task } from '../model/task';
 import taskDb from '../repository/task.db';
 import taskhistoryDb from '../repository/taskhistory.db';
@@ -22,7 +24,8 @@ const getAllFinishedTasksByUser = async (userId: number, {username,role}:any): P
     }
 };
 
-const addFinishedTaskToHistoryByUser = async (userId: number, taskId: number, {username,role}:any): Promise<Task> => {
+
+const addFinishedTaskToHistoryByUser = async (userId: number, taskId: number, {username,role}:any): Promise<Task|null> => {
     if (!userId) {
         throw new Error('Userid is required.');
     }
@@ -47,10 +50,12 @@ const addFinishedTaskToHistoryByUser = async (userId: number, taskId: number, {u
     if (role === "guest") {
         throw new UnauthorizedError('credentials_required', {message: 'you are not authorized to access this resource.',});
     } else {
-        finishedTask.finishTask();
-        taskhistory.addFinishedTask(finishedTask);
-        return finishedTask;
+            return taskhistoryDb.finishTask({task: finishedTask});
     }
+
+    // finishedTask.finishTask();
+
+    // taskDb.deleteTask(finishedTask);
 
 };
 export default { getAllFinishedTasksByUser, addFinishedTaskToHistoryByUser };
