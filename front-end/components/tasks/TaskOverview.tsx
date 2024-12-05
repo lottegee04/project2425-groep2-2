@@ -13,8 +13,9 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
     TaskService.finishTask({taskId: task.id, userId: task.user.id});
     //!! watch out for the userId, it should be dynamic: you can only finish the task of user 1 (johnDoe) atm
   }
-  
-
+  if (!tasks || tasks.length === 0) {
+    return <p>No Active Tasks</p>;
+  }
   return (
     <>
       {Array.isArray(tasks) &&
@@ -48,7 +49,6 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
 
           </table>
         ))}
-      {!tasks && <p>No Active Tasks</p>}
     </>
   );
 };

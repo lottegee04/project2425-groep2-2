@@ -13,22 +13,24 @@ import useInterval from 'use-interval';
 
 const Users: React.FC = () => {
     const [selectedUser,setSelectedUser] = useState<User>();
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
+    const [error, seterror] = useState<string | null>(null);
+    const [loggedInUser, setLoggedInUser] = useState<User>(null);
+    useEffect(() => {setLoggedInUser(JSON.parse(localStorage.getItem("loggedInUser")));
+    }, []);
     const getUsers = async () =>{
-        setErrorMessage(null);
+        seterror(null);
         const response = await UserService.getUsers()
         if (response.ok) {
         const users = await response.json();
         return {users}
       } else {
-        setErrorMessage("You are not authorized to view this page.")
+        seterror("You are not authorized to view this page. Log in to see this content!")
         return {users: []};
       }
   };
   const {data, isLoading} = useSWR("users",getUsers);
   useInterval(() => {
-    mutate("users",getUsers());
+    if (!error) mutate("users",getUsers());
   }, 2000);
 
   return (
@@ -38,16 +40,17 @@ const Users: React.FC = () => {
     </Head>
     <Header/>
     <main className='d-flex  flex-column '>
-    <h1 className='align-self-center'>Users Overview</h1>
-    <p className='align-self-center'>Click on the user to see their tasks.</p>
+    <h1 className='align-self-center'>{" "}
+    {loggedInUser && `${loggedInUser.role === "admin"? "All Users (admin)": `User: ${loggedInUser.username}`}`}</h1>
+    {!error && <p className='align-self-center'>Click on the user to see their tasks.</p>}
     <section className='align-self-center d-flex flex-row p-2 '>
-    {errorMessage && <p className="text-[#b62626]">{errorMessage}</p>}
-    {isLoading && <p className="text-[#2866da]">Loading....</p>}
-    {data && 
+    {error && <p className="text-[#b62626]">{error}</p>}
+    {!error &&isLoading && <p className="text-[#2866da]">Loading....</p>}
+    {!error && data && 
       <UserOverview users={data.users} selectUser={setSelectedUser}></UserOverview>
     }
     </section>
-    {selectedUser && (
+    {!error && selectedUser && (
          <section className='align-self-center d-flex flex-column p-2 '>
          <h2> Tasks from "{selectedUser.username}"</h2>
          <TasksByUser user={selectedUser}></TasksByUser>

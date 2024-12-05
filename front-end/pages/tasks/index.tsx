@@ -2,7 +2,7 @@
 import Head from 'next/head';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-import { Task } from '../../types';
+import { Task, User } from '../../types';
 import TaskService from '../../services/TaskService';
 import Header from '../../components/header';
 import TaskOverview from '../../components/tasks/TaskOverview';
@@ -11,11 +11,12 @@ import useInterval from 'use-interval';
 import useSWR, { mutate } from 'swr';
 
 
-
-
 const Tasks: React.FC = () => {
   const [priority, setPriority] = useState<string>("all");
   const [error, setError] = useState<string | null>(null);
+  const [loggedInUser, setLoggedInUser] = useState<User>(null);
+  useEffect(() => {setLoggedInUser(JSON.parse(localStorage.getItem("loggedInUser")));
+  }, []);
   const getTasks = async () => {
     setError(null);
     if (priority === "all"){
@@ -24,7 +25,7 @@ const Tasks: React.FC = () => {
       const tasks = await response.json();
      return {tasks}
     } else {
-      setError("You are not authorized to view this page.")
+      setError("You are not authorized to view this page. Log in to see this content!")
       return {tasks: []};
     }
   } else {
@@ -41,7 +42,7 @@ const Tasks: React.FC = () => {
   // }, [priority]);
 
   useInterval(() => {
-    mutate("tasks", getTasks());
+    if (!error) mutate("tasks", getTasks());
   }, 2000);
   return (
     <>
@@ -50,7 +51,8 @@ const Tasks: React.FC = () => {
       </Head>
       <Header />
       <main className="d-flex  flex-column ">
-        <h1 className="align-self-start font-['Open_Sans']">Tasks</h1>
+        <h1 className="align-self-start font-['Open_Sans']">{" "}
+        {loggedInUser && `${loggedInUser.role === "admin"? "All Tasks (admin)": loggedInUser.username}`}</h1>
         <section className='flex flex-row justify-between'>
         <div className='flex flex-column self-start m-3 border p-2 rounded bg-beige'>
           <button className="  m-1 p-2 rounded-lg hover:bg-[#473c2f] duration-150 text-[#000000] hover:text-[#ffffff]" onClick={() => {setPriority("all")}}>
@@ -64,16 +66,17 @@ const Tasks: React.FC = () => {
         </div>
         <section className="align-self-center d-flex flex-row p-2  self-center">
           {error && <p className="text-[#b62626]">{error}</p>}
-          {isLoading && <p className="text-[#2866da]">Loading....</p>}
-          {data &&
+          {!error && isLoading && <p className="text-[#2866da]">Loading....</p>}
+          {!error && data &&
           <TaskOverview tasks={data.tasks}/>
           }
+          {!error && 
           <Link href="/tasks/addTask">
             <button>+</button>
-          </Link>
+          </Link>}
         </section>
       <section>
-      <Link href='/taskhistory'><button>History</button></Link>
+      {!error && <Link href='/taskhistory'><button>History</button></Link>}
       </section>
     </section>
       </main>
