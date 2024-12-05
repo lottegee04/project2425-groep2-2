@@ -63,8 +63,8 @@ const Tasks: React.FC = () => {
             Basic</button>
         </div>
         <section className="align-self-center d-flex flex-row p-2  self-center">
-          {error && <p className="text-red-800">{error}</p>}
-          {isLoading && <p className="text-green-800">Loading....</p>}
+          {error && <p className="text-[#b62626]">{error}</p>}
+          {isLoading && <p className="text-[#2866da]">Loading....</p>}
           {data &&
           <TaskOverview tasks={data.tasks}/>
           }
