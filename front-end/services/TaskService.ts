@@ -1,18 +1,22 @@
 import { Priority, User } from "../types";
 
 const getAllTasks = async () => {
+    const token = JSON.parse(localStorage.getItem("loggedInUser"))?.token;
     return fetch(process.env.NEXT_PUBLIC_API_URL + "/tasks",{
         method:'GET',
         headers: {
             'Content-type':'application/json',
+            Authorization: `${token}`,
         }
     })
 };
 const getActiveTasks = async () => {
+    const token = JSON.parse(localStorage.getItem("loggedInUser"))?.token;
     try {return fetch(process.env.NEXT_PUBLIC_API_URL + "/tasks/active",{
         method:'GET',
         headers: {
             'Content-type':'application/json',
+            Authorization: `${token}`,
         }
     })}
     catch (error) {
@@ -21,18 +25,22 @@ const getActiveTasks = async () => {
 };
 
 const getTasksByPriority = async (priority: string) => {
+    const token = JSON.parse(localStorage.getItem("loggedInUser"))?.token;
     return fetch(process.env.NEXT_PUBLIC_API_URL + `/tasks/priority/${priority}`,{
         method:'GET',
         headers: {
             'Content-type':'application/json',
+            Authorization: `${token}`,
         }
     })
 };
 const createTask = async (task: { description: string; sidenote: string; deadline: Date; priority: Priority; user: User}) => {
+    const token = JSON.parse(localStorage.getItem("loggedInUser"))?.token;
     try {const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/tasks", {
        method: "POST",
        headers: {
-           "Content-type": "application/json"
+           "Content-type": "application/json",
+           Authorization: `${token}`,
        },
        body: JSON.stringify(task)
     });
@@ -46,20 +54,24 @@ const createTask = async (task: { description: string; sidenote: string; deadlin
    };
 
 const finishTask = async (id: { taskId: number; userId:number }) => {
+    const token = JSON.parse(localStorage.getItem("loggedInUser"))?.token;
     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/taskhistory/finishTask/${id.userId}/${id.taskId}` , {
         method:'GET',
         headers: {
             'Content-type':'application/json',
+            Authorization: `${token}`,
         }
     })
     return response.json()
 }
 
 const getAllFinishedTasksByUser = async (userId: number) => {
+    const token = JSON.parse(localStorage.getItem("loggedInUser"))?.token;
     const response =  await fetch(process.env.NEXT_PUBLIC_API_URL + `/taskhistory/${userId}`,{
         method:'GET',
         headers: {
             'Content-type':'application/json',
+            Authorization: `${token}`,
         }   
     })
     return response.json()

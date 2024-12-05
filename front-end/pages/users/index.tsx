@@ -18,7 +18,7 @@ const Users: React.FC = () => {
 
 
     const getUsers = async () =>{
-        const res = await UserService.getAllUsers()
+        const res = await UserService.getUsers()
         const userss = await res.json()
         setUsers(userss)
     }
