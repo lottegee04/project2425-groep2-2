@@ -17,7 +17,7 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
 
   return (
     <>
-      {tasks &&
+      {Array.isArray(tasks) &&
         tasks.map((task, index) => (
           <table
             className={`border border-${task.priority.colour} border-opacity-50 border-4 m-2 bg-secondary bg-opacity-25 container`}

@@ -9,7 +9,7 @@ type Props = {
 const UserOverview: React.FC<Props> = ({users,selectUser}) =>{
     return (
         <>
-        {users && 
+        {Array.isArray(users) && 
         users.map((user, index)=>(
             <table className="border-4 m-2 bg-secondary bg-opacity-25">
             <tr key = {index}

@@ -21,8 +21,8 @@ type PriorityInput = {
 
 type UserInput = {
     id?: number;
-    username?: string;
-    password?: string;
+    username: string;
+    password: string;
     role: Role;
 };
 type AuthenticationResponse = {
