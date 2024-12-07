@@ -35,6 +35,7 @@ CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "username" TEXT NOT NULL,
     "password" TEXT NOT NULL,
+    "role" TEXT NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -47,9 +48,6 @@ CREATE TABLE "_TaskToTaskHistory" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Task_priorityId_key" ON "Task"("priorityId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Task_userId_key" ON "Task"("userId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "TaskHistory_userId_key" ON "TaskHistory"("userId");

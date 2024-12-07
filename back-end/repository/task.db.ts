@@ -31,6 +31,7 @@ const createTask = async (task: Task): Promise<Task> => {
                 user: true,
             }
         })
+        
         return Task.from(taskPrisma);
     }
     catch (error) {
