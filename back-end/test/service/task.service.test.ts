@@ -1,3 +1,4 @@
+import { UnauthorizedError } from 'express-jwt';
 import { Priority } from '../../model/priority';
 import { Task } from '../../model/task';
 import { User } from '../../model/user';
@@ -252,4 +253,39 @@ test("given unknown levelName, when: getting Tasks By Priority, then an error is
     mockPriorityDbGetPriorityByName.mockResolvedValue(null);
 
     await expect(taskService.getTasksByPriority("notALevel", {username: user.getUsername(), role: user.getRole()})).rejects.toThrow("No Priority found with levelName: notALevel.");
+});
+test('given invalid role, when: calling getTasks, then an error is thrown', async () => {
+    const activeTasks = [
+        new Task({
+            id: 1,
+            description: 'shopping',
+            sidenote: 'need to do shopping for food.',
+            startDate: new Date(),
+            endDate: null,
+            deadline: addDays(new Date(), 1),
+            done: false,
+            priority: new Priority({ levelName: 'basic', colour: 'success' }),
+            user,
+        }),
+        new Task({
+            id: 2,
+            description: 'uploading paper',
+            sidenote: 'uploading a paper for a certain course',
+            startDate: new Date(),
+            endDate: null,
+            deadline: addDays(new Date(), 4),
+            done: false,
+            priority: new Priority({ levelName: 'basic', colour: 'success' }),
+            user,
+        }),
+    ];
+    mockUserDbgetUserByUserName.mockResolvedValue(user);
+    mockTaskDbGetActiveTasks.mockResolvedValue(activeTasks);
+    await expect(
+        taskService.getTasks({ username: user.getUsername(), role: 'invalid' })
+    ).rejects.toThrow(
+        new UnauthorizedError('credentials_required', {
+            message: 'you are not authorized to access this resource.',
+        })
+    );
 });
