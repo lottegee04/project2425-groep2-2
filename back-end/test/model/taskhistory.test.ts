@@ -27,7 +27,7 @@ test('given: valid finished task, when adding task to taskHistory, then task is 
         endDate: null,
         deadline: addDays(new Date(), 1),
         done: true,
-        priority: new Priority({ levelName: 'basic', colour: 'success' }),
+        priority: new Priority({ levelName: 'basic', colour: 'green' }),
         user,
     });
     finishedTask.finishTask();
@@ -49,7 +49,7 @@ test('given not finished task, when adding task to taskHistory, then an error sh
         endDate: null,
         deadline: addDays(new Date(), 1),
         done: false,
-        priority: new Priority({ levelName: 'basic', colour: 'success' }),
+        priority: new Priority({ levelName: 'basic', colour: 'green' }),
         user,
     });
     //when:

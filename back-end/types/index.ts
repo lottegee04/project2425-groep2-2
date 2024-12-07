@@ -1,5 +1,7 @@
 
 type Role = 'admin' | 'user' | 'guest';
+type Level = 'basic' | 'neutral' | 'urgent';
+type Colour = 'green' | 'yellow' | 'red';
 
 type TaskInput = {
     id?: number;
@@ -15,8 +17,8 @@ type TaskInput = {
 
 type PriorityInput = {
     id?: number;
-    levelName: string;
-    colour: string;
+    levelName: Level;
+    colour: Colour;
 };
 
 type UserInput = {
@@ -33,4 +35,4 @@ type AuthenticationResponse = {
 
 
 
-export { TaskInput, PriorityInput, UserInput, AuthenticationResponse, Role };
+export { TaskInput, PriorityInput, UserInput, AuthenticationResponse, Role, Level, Colour };

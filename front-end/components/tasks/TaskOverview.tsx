@@ -16,12 +16,27 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
   if (!tasks || tasks.length === 0) {
     return <p>No Active Tasks</p>;
   }
+
+  const determineColour = (task: Task) => {
+    if (task.priority.colour === "green") {
+      return "#4daa2b";
+    } else if (task.priority.colour === "yellow") {
+      return "#e19e4c";
+    } else if (task.priority.colour === "red") {
+      return "#d34e4e";
+    }
+    else {
+      return "#ffffff";
+    }
+  }
   return (
     <>
       {Array.isArray(tasks) &&
         tasks.map((task, index) => (
           <table
-            className={`border border-${task.priority.colour} border-opacity-50 border-4 m-2 bg-secondary bg-opacity-25 container`}
+            key={index}
+            style={{borderColor: determineColour(task)}}
+            className={`border-4 border-${() => determineColour(task)} m-2 bg-secondary bg-opacity-25 container`}
           >
             <tr className="col">
               <td>Description: </td>

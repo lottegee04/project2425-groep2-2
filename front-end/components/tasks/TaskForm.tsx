@@ -54,11 +54,11 @@ const TaskForm: React.FC = () => {
   const getPriorityColor = (level: string) => {
     switch (level) {
       case "urgent":
-        return "danger";
+        return "red";
       case "neutral":
-        return "warning";
+        return "yellow";
       case "basic":
-        return "success";
+        return "green";
       default:
         return "";
     }

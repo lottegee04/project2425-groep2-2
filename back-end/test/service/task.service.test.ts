@@ -12,7 +12,7 @@ import { addDays } from 'date-fns';
 const priorityInput: PriorityInput = {
     id: 1,
     levelName: 'basic',
-    colour: 'success',
+    colour: 'green',
 };
 
 const priority = new Priority({
@@ -48,7 +48,7 @@ const tasks = [ new Task({
     endDate: null,
     deadline: addDays(new Date(), 1),
     done: true,
-    priority: new Priority({ id:1,levelName: 'basic', colour: 'success' }),
+    priority: new Priority({ id:1,levelName: 'basic', colour: 'green' }),
     user,
 }),
 new Task({
@@ -59,7 +59,7 @@ new Task({
     endDate: null,
     deadline: addDays(new Date(), 4),
     done: false,
-    priority: new Priority({ id:2,levelName: 'basic', colour: 'success' }),
+    priority: new Priority({ id:2,levelName: 'basic', colour: 'green' }),
     user,
 })]
 
@@ -181,7 +181,7 @@ test('given active tasks, when:getting all active tasks, then all active tasks a
         endDate: null,
         deadline: addDays(new Date(), 1),
         done: false,
-        priority: new Priority({ levelName: 'basic', colour: 'success' }),
+        priority: new Priority({ levelName: 'basic', colour: 'green' }),
         user,
     }),
     new Task({
@@ -192,7 +192,7 @@ test('given active tasks, when:getting all active tasks, then all active tasks a
         endDate: null,
         deadline: addDays(new Date(), 4),
         done: false,
-        priority: new Priority({ levelName: 'basic', colour: 'success' }),
+        priority: new Priority({ levelName: 'basic', colour: 'green' }),
         user,
     })]
     mockTaskDbGetActiveTasks.mockResolvedValue(activeTasks);
@@ -264,7 +264,7 @@ test('given invalid role, when: calling getTasks, then an error is thrown', asyn
             endDate: null,
             deadline: addDays(new Date(), 1),
             done: false,
-            priority: new Priority({ levelName: 'basic', colour: 'success' }),
+            priority: new Priority({ levelName: 'basic', colour: 'green' }),
             user,
         }),
         new Task({
@@ -275,7 +275,7 @@ test('given invalid role, when: calling getTasks, then an error is thrown', asyn
             endDate: null,
             deadline: addDays(new Date(), 4),
             done: false,
-            priority: new Priority({ levelName: 'basic', colour: 'success' }),
+            priority: new Priority({ levelName: 'basic', colour: 'green' }),
             user,
         }),
     ];

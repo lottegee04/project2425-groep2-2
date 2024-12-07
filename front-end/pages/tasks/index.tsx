@@ -24,8 +24,11 @@ const Tasks: React.FC = () => {
     if (response.ok) {
       const tasks = await response.json();
      return {tasks}
-    } else {
+    } else  if (response.status === 401) {
       setError("You are not authorized to view this page. Log in to see this content!")
+      return {tasks: []};
+    } else {
+      setError("Failed to fetch tasks. Please try again later.")
       return {tasks: []};
     }
   } else {
@@ -36,6 +39,7 @@ const Tasks: React.FC = () => {
     }}
   };
   const {data, isLoading} = useSWR( "tasks", getTasks)
+  
 
   // useEffect(() => {
   //   getTasks();
@@ -54,14 +58,14 @@ const Tasks: React.FC = () => {
         <h1 className="align-self-start font-['Open_Sans']">Tasks{" "}
         {loggedInUser && `for ${loggedInUser.role === "admin"? "All Tasks (admin)": loggedInUser.username}`}</h1>
         <section className='flex flex-row justify-between'>
-        <div className='flex flex-column self-start m-3 border p-2 rounded bg-beige'>
+        <div className='flex flex-column self-start m-3 border p-2 rounded bg-[#e2dbd3]'>
           <button className="  m-1 p-2 rounded-lg hover:bg-[#473c2f] duration-150 text-[#000000] hover:text-[#ffffff]" onClick={() => {setPriority("all")}}>
             All</button>
           <button className='  m-1 p-2 rounded-lg hover:bg-[#d34e4e] duration-150 text-[#000000] hover:text-[#ffffff]' onClick={() =>  {setPriority("urgent")}}>
             Urgent</button>
           <button className='  m-1 p-2 rounded-lg hover:bg-[#e19e4c] duration-150 text-[#000000] hover:text-[#ffffff]' onClick={() => {setPriority("neutral")}}>
             Neutral</button>
-          <button className =' m-1 p-2 rounded-lg hover:bg-[#4ed368] duration-150 text-[#000000] hover:text-[#ffffff]' onClick={() => {setPriority("basic")}}>
+          <button className =' m-1 p-2 rounded-lg hover:bg-[#4daa2b] duration-150 text-[#000000] hover:text-[#ffffff]' onClick={() => {setPriority("basic")}}>
             Basic</button>
         </div>
         <section className="align-self-center d-flex flex-row p-2  self-center">

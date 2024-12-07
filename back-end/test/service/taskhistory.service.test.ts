@@ -22,7 +22,7 @@ const task = new Task({
     endDate: null,
     deadline: addDays(new Date(), 1),
     done: false,
-    priority: new Priority({ levelName: 'basic', colour: 'success' }),
+    priority: new Priority({ levelName: 'basic', colour: 'green' }),
     user,
 });
 
@@ -34,7 +34,7 @@ const finishedTask = new Task({
     endDate: null,
     deadline: addDays(new Date(), 1),
     done: true,
-    priority: new Priority({ levelName: 'basic', colour: 'success' }),
+    priority: new Priority({ levelName: 'basic', colour: 'green' }),
     user,
 });
 const taskHistory = new TaskHistory({ user, finishedTasks: [finishedTask] });
@@ -152,7 +152,7 @@ test('given task that is not from user; when adding task to taskhistory; then ta
         endDate: null,
         deadline: addDays(new Date(), 1),
         done: false,
-        priority: new Priority({ levelName: 'basic', colour: 'success' }),
+        priority: new Priority({ levelName: 'basic', colour: 'green' }),
         user: user2,
     });
     userDb.getUserById = mockUserDbgetUserById.mockResolvedValue(user);
