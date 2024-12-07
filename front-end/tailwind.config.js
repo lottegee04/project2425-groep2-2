@@ -10,11 +10,6 @@ module.exports = {
   ],
   theme: {
     extend: {},
-    colors: {
-      'beige':'#e2dbd3',
-      'dark-beige':'#d8cfc4',
-      'dark-brown': '#473c2f'
-    }
   },
   plugins: [],
 }

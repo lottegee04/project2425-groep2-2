@@ -85,13 +85,13 @@ const UserLoginFrom: React.FC = () => {
                 </ul>
             </div>
         )}
-        <form  onSubmit={(event) => (handleSubmit(event))} className="flex flex-center flex-col p-3">
+        <form  onSubmit={(event) => (handleSubmit(event))} className=" border flex flex-center flex-col p-3 rounded shadow ">
             <div className="flex-row my-3" >
             <label htmlFor="nameInput">
                 Username: 
             </label>
             
-            <input className="mx-2 border-2 border-gray-300"
+            <input className="mx-2 border-2 border-gray-300 rounded"
             id="nameInput"
             type="text"
             value={username}
@@ -104,7 +104,7 @@ const UserLoginFrom: React.FC = () => {
                Password: 
             </label>
             
-            <input className="mx-2 border-2 border-gray-300"
+            <input className="mx-2 border-2 border-gray-300 rounded"
             id="passwordInput"
             type="password"
             value={password}
@@ -113,7 +113,7 @@ const UserLoginFrom: React.FC = () => {
             {passwordError && <div className="text-[#b62626] text-center"> {nameError} </div>}
             </div>
             
-            <button type="submit" className="m-2 border-2 border-orange-500 bg-orange-300 text-orange-50">Login</button>
+            <button type="submit" className="m-2 p-2 rounded bg-[#474132] text-[#ffffff]">Login</button>
         </form>
        
         </>
