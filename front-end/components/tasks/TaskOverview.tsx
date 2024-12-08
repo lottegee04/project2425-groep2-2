@@ -31,39 +31,51 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
   }
   return (
     <>
+    <ul className="grid grid-cols-4 gap-6">
       {Array.isArray(tasks) &&
         tasks.map((task, index) => (
-          <table
+          <li
             key={index}
-            style={{borderColor: determineColour(task)}}
-            className={`border-4 border-${() => determineColour(task)} m-2 bg-secondary bg-opacity-25 container`}
+            className={` m-2 bg-[#dfceba] bg-opacity-25 container rounded shadow border`}
           >
-            <tr className="col">
-              <td>Description: </td>
-              <td>{task.description}</td>
-            </tr>
-            <tr className="col">
-              <td>Sidenote:</td>
-              <td>{task.sidenote}</td>
-            </tr>
-            <tr>
-                <td>Priority:</td>
-                <td>{task.priority.levelName}</td>
-            </tr>
+            <div className="flex items-center mb-3">
+                    <span 
+                    style={{backgroundColor: determineColour(task)}}
+                    className="inline-flex items-center px-3 py-0.5 rounded-full text-xs font-bold leading-5 text-white font-display mr-2 capitalize" >
+                        {task.priority.levelName}
+                    </span>
+                    <p className="font-mono text-xs font-normal opacity-75 pt-2 text-black">{new Date(task.startDate).toLocaleDateString()}</p>
+                </div>
+            <p className="font-display max-w-sm text-2xl font-bold leading-tight">
+                    <span className=" text-black">
+                        {task.description}
+                    </span>
+                </p>
+                <p className="font-display max-w-sm text-md  leading-tight">
+                    <span className=" text-black">
+                        {task.sidenote}
+                    </span>
+                </p>
+                <div className="flex justify-between ">
+                <p className="font-mono text-xs font-normal opacity-75 pt-2 text-black underline"> DEADLINE: {new Date(task.deadline).toLocaleDateString()} </p>
             {!task.done  &&
-            <tr>
             <Image 
+            className="cursor-pointer rounded bg-[#b1a27b] hover:bg-[#9d8e68] m-2 p-2"
             src='/images/check-mark.png'
             alt='Check Mark icon'
-            width={20}
-            height={20}
+            width={40}
+            height={40}
             onClick={() => {finishTask(task)}}
             />
-          </tr>}
+            
+          }
+          </div>
             
 
-          </table>
+          </li>
+          
         ))}
+        </ul>
     </>
   );
 };

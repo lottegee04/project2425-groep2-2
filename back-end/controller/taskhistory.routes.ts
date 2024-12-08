@@ -49,12 +49,12 @@ const taskhistoryRouter = express.Router();
  *                      schema:
  *                          $ref: '#/components/schemas/Task'
  */
-taskhistoryRouter.get('/:userId', async (req: Request, res: Response, next: NextFunction) => {
+taskhistoryRouter.get('/finished', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const request = req as Request & { auth: { username: string; role: Role } };
         const { username,role } = request.auth;
         const allFinishedTasks = await taskhistoryService.getAllFinishedTasksByUser(
-            Number(req.params.userId), {username,role}
+        {username,role}
         );
         res.status(200).json(allFinishedTasks);
     } catch (error) {

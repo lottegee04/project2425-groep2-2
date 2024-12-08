@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { User } from '../types';
+import Image from "next/image";
 
 
 
@@ -13,9 +14,12 @@ const Header: React.FC = () => {
   return (
     <>
     <header className=" bg-[#e2dbd3] flex flex-row items-center justify-between m-3 p-2 rounded-2xl">
-      <h1 className="fs-3 text-decoration-none text-[#473c2f]">
-        DoneDeal
-      </h1>
+      <Image
+      src='/images/donedeal_logo_transparant.png'
+      alt='logo donedeal'
+      width={150}
+      height={150}
+      />
       <nav className="flex flex-row m-2 rounded-md justify-between items-stretch px-2">
         <Link href="/" className="nav-link p-2 fs-6 m-1 rounded-md hover:bg-[#d8cfc4] ">
           Home
