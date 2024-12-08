@@ -6,14 +6,16 @@ import taskDb from '../repository/task.db';
 import taskhistoryDb from '../repository/taskhistory.db';
 import userDb from '../repository/user.db';
 
-const getAllFinishedTasksByUser = async (userId: number, {username,role}:any): Promise<Task[]> => {
+const getAllFinishedTasksByUser = async ({username,role}:any): Promise<Task[]> => {
+    const user = await userDb.getUserByUserName(username);
+    if (!user) {
+        throw new Error(`No user found with username ${username}.`);
+    }
+    const userId = user.getId();
     if (!userId) {
-        throw new Error('Userid is required.');
+        throw new Error('No id found for this user.');
     }
-    if (!await userDb.getUserById(userId)) {
-        throw new Error(`No user found with id ${userId}.`);
-    }
-    if (role === "guest") {
+    else if (role === "guest") {
         throw new UnauthorizedError('credentials_required', {message: 'you are not authorized to access this resource.',});
     } else {
         const historyByUser =  await taskhistoryDb.getTaskHistoryByUser(userId);

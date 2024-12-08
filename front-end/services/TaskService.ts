@@ -65,9 +65,9 @@ const finishTask = async (id: { taskId: number; userId:number }) => {
     return response.json()
 }
 
-const getAllFinishedTasksByUser = async (userId: number) => {
+const getAllFinishedTasksByUser = async () => {
     const token = JSON.parse(localStorage.getItem("loggedInUser"))?.token;
-    const response =  await fetch(process.env.NEXT_PUBLIC_API_URL + `/taskhistory/${userId}`,{
+    const response =  await fetch(process.env.NEXT_PUBLIC_API_URL + `/taskhistory/finished`,{
         method:'GET',
         headers: {
             'Content-type':'application/json',
