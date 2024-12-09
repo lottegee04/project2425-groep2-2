@@ -183,5 +183,34 @@ userRouter.post('/login', async (req:Request, res:Response, next: NextFunction) 
         next(error);
     }
 })
+/**
+ * @swagger
+ * /users/exists/{username}:
+ *  get:
+ *      summary: Know if a User already exists or not.
+ *      parameters:
+ *          - in: path
+ *            name: username
+ *            schema:
+ *              type: string
+ *              required: true
+ *              description: The username
+ *      responses:
+ *          200:
+ *              description: boolean
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: boolean
+ */
+userRouter.get("/exists/:username", async (req: Request, res:Response, next:NextFunction) => {
+   try {
+        const result = await userService.userExists(
+            String(req.params.username));
+        res.status(200).json(result);
+    } catch (error) {
+        next(error)
+    }
+})
 
 export { userRouter };

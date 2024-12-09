@@ -9,7 +9,19 @@ const getUsers = async () => {
             Authorization: ` Bearer ${token}`,
         }
     })
-
+}
+const userExists = async (username: string) : Promise<boolean> => {
+    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/users/exists/${username}`,{
+        method:'GET',
+        headers: {
+            'Content-type':'application/json',
+        },
+    })
+    if (!response.ok) {
+        throw new Error("failed to look for existing user");
+    }
+    const result = await response.json();
+    return result;
 }
 
 const loginUser = (user:User) => {
@@ -41,7 +53,7 @@ const signupUser = async(user: {username: string; password: string; role: string
 
 
 const UserService = {
-    getUsers, loginUser, signupUser
+    getUsers, loginUser, signupUser, userExists
 }
 
 export default UserService

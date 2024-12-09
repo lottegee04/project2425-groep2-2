@@ -52,5 +52,13 @@ const authenticate = async ({username,password}:UserInput):Promise<Authenticatio
         role: user.getRole().toString()
     }
 }
+const userExists = async (username: string) : Promise<boolean> => {
+    const user = await userDb.getUserByUserName(username);
+    if (!user) {
+        return false;
+    } else {
+        return true;
+    }
+}
 
-export default { getUsers, getAllUsers, getUserById, createUser,authenticate };
+export default { getUsers, getAllUsers, getUserById, createUser,authenticate, userExists };
