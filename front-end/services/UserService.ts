@@ -21,9 +21,27 @@ const loginUser = (user:User) => {
         body: JSON.stringify(user),
     });
 }
+const signupUser = async(user: {username: string; password: string; role: string;}) => {
+    try {
+        const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/users/signup", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify(user)
+         });
+    if (!response.ok) {
+        throw new Error("Failed to sign up user");
+    } 
+    return response.json();}
+    catch (error) {
+        console.error(error);
+    }
+};
+
 
 const UserService = {
-    getUsers, loginUser
+    getUsers, loginUser, signupUser
 }
 
 export default UserService
