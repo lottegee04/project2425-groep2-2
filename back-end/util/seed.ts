@@ -9,11 +9,18 @@ const main= async () => {
     await prisma.priority.deleteMany();
     await prisma.user.deleteMany();
 
+    const admin = await prisma.user.create({
+        data: {
+            username: 'admin',
+            password: await bcrypt.hash('admin123',12),
+            role: "admin"
+        }
+    })
     const ode = await prisma.user.create({
         data: {
-            username: 'ode_m',
-            password: await bcrypt.hash('ode123',12),
-            role: "admin"
+            username: "ode_m",
+            password: await bcrypt.hash("ode123",12),
+            role: "user"
         }
     })
 
