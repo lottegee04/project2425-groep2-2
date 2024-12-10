@@ -21,7 +21,14 @@ app.use(
         secret: process.env.JWT_SECRET || 'default_secret',
         algorithms: ['HS256'],
     }).unless({
-        path:['/api-docs',/^\/api-docs\/.*/, "/users/login","/users/signup","/status",/^\/users\/exists\/.*/]
+        path: [
+            '/api-docs',
+            /^\/api-docs\/.*/,
+            '/users/login',
+            '/users/signup',
+            '/status',
+            /^\/users\/exists\/.*/,
+        ],
     })
 );
 //routes
@@ -51,7 +58,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err.name === 'UnauthorizedError') {
         res.status(401).json({ status: 'unauthorized', message: err.message });
-    } else if (err.name === 'CoursesError') {
+    } else if (err.name === 'DoneDealError') {
         res.status(400).json({ status: 'domain error', message: err.message });
     } else {
         res.status(400).json({ status: 'application error', message: err.message });
