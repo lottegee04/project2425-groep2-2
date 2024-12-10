@@ -127,6 +127,9 @@ const UserLoginFrom: React.FC = () => {
         >
           Login
         </button>
+        <p className="text-center text-sm">
+          No account yet? <a href="/signup">Click here</a> to sign up!
+        </p>
       </form>
     </>
   );
