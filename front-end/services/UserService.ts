@@ -43,7 +43,7 @@ const loginUser = async (user: User) => {
       const errorData = await response.json();
       throw new Error(errorData.message || "Failed To login user");
     }
-    return response.json();
+    return response;
   } catch (error) {
     console.log(error);
     return { status: 401, message: error.message };
