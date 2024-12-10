@@ -23,13 +23,15 @@ const UserSignupForm: React.FC = () => {
   };
   const validate = async (): Promise<boolean> => {
     let result = true;
-    const userDoesExists = await userExists(username);
     if (!username && username.trim() === "") {
       setNameError("Username is required.");
       result = false;
-    } else if (userDoesExists) {
-      setNameError(`There is already a user with username: ${username}.`);
-      result = false;
+    } else {
+      const userDoesExists = await userExists(username);
+      if (userDoesExists) {
+        setNameError(`There is already a user with username: ${username}.`);
+        result = false;
+      }
     }
     if (!password && password.trim() === "") {
       setPasswordError("Password is required.");
