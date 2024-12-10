@@ -4,7 +4,7 @@ import userDb from '../../repository/user.db';
 import userService from '../../service/user.service';
 import { AuthenticationResponse, UserInput } from '../../types';
 import { generateJwtToken } from '../../util/jwt';
-import bcrypt from "bcrypt";
+import bcrypt from 'bcrypt';
 
 const admin = new User({
     id: 1,
@@ -164,7 +164,7 @@ test('given unknown user, when calling getUserById', async () => {
     expect(mockUserDbgetUserById).toHaveBeenCalledTimes(1);
     await expect(result).rejects.toThrow('User with id 1 does not exists.');
 });
-test("given new valid user, when calling createUser, then new user is returned", async () => {
+test('given new valid user, when calling createUser, then new user is returned', async () => {
     //given:
     mockUserDbgetUserByUserName.mockResolvedValue(null);
     mockUserDbcreateUser.mockResolvedValue(newUser);
@@ -175,11 +175,13 @@ test("given new valid user, when calling createUser, then new user is returned",
     expect(mockUserDbcreateUser).toHaveBeenCalledTimes(1);
     expect(result).toEqual(newUser);
 });
-test("given extisting user, when calling createUser, then error is thrown", () => {
+test('given extisting user, when calling createUser, then error is thrown', () => {
     mockUserDbgetUserByUserName.mockResolvedValue(user2);
     //when:
     const result = async () => await userService.createUser(userInput2);
-    expect(result).rejects.toThrow(`User with username ${user2.getUsername()} is already registered.`)
+    expect(result).rejects.toThrow(
+        `User with username ${user2.getUsername()} is already registered.`
+    );
 });
 
 test('given valid credentials, when authenticate is called, then returns authentication response', async () => {
@@ -207,11 +209,9 @@ test('given a unknown username, when authenticate is called, then error is throw
     mockUserDbgetUserByUserName.mockResolvedValue(null);
 
     //when:
-    const result = async () => await userService.authenticate(userInput2)
+    const result = async () => await userService.authenticate(userInput2);
     //then:
-    expect(result).rejects.toThrow(
-        `User with username: ${userInput2.username} is not found.`
-    );
+    expect(result).rejects.toThrow(`User with username: ${userInput2.username} is not found.`);
 });
 
 test('given an incorrect password, when authenticate is called, then an error is thrown', () => {
@@ -220,7 +220,23 @@ test('given an incorrect password, when authenticate is called, then an error is
     mockBcryptCompare.mockResolvedValue(false);
 
     //when:
-    const result = async () => await userService.authenticate(userInput2)
+    const result = async () => await userService.authenticate(userInput2);
     //then
     expect(result).rejects.toThrow('Incorrect username or password');
+});
+test('given existing user, when calling userExists, then true is returned', async () => {
+    //given:
+    mockUserDbgetUserByUserName.mockResolvedValue(admin);
+    //when:
+    const result = await userService.userExists(admin.getUsername());
+    //then:
+    expect(result).toBeTruthy();
+});
+test('given non existing user, when calling userExists, then false is returned', async () => {
+    //given:
+    mockUserDbgetUserByUserName.mockResolvedValue(null);
+    //when:
+    const result = await userService.userExists(admin.getUsername());
+    //then:
+    expect(result).toBeFalsy();
 });
