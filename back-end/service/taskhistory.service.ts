@@ -55,9 +55,7 @@ const addFinishedTaskToHistoryByUser = async (userId: number, taskId: number, {u
             return taskhistoryDb.finishTask({task: finishedTask});
     }
 
-    // finishedTask.finishTask();
 
-    // taskDb.deleteTask(finishedTask);
 
 };
 export default { getAllFinishedTasksByUser, addFinishedTaskToHistoryByUser };
