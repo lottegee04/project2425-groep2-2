@@ -11,7 +11,6 @@ const UserSignupForm: React.FC = () => {
   const [nameError, setNameError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [statusMessage, setStatusMessage] = useState<StatusMessage[]>([]);
-  const [roleError, setRoleError] = useState<string | null>(null);
   const clearErrors = () => {
     setNameError("");
     setPasswordError("");

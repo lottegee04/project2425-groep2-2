@@ -1,20 +1,34 @@
-import { Task } from "../../types";
+import { StatusMessage, Task } from "../../types";
 import { table } from "console";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import TaskService from "../../services/TaskService";
+import { stringify } from "querystring";
+import classNames from "classnames";
 type Props = {
   tasks: Array<Task>;
 };
 
 const TaskOverview: React.FC<Props> = ({ tasks}) => {
+  const [statusMessage, setStatusMessage] = useState<StatusMessage[]>([]);
   const finishTask = (task: Task) => {
     //fetch request to update task.done to true:
     TaskService.finishTask({taskId: task.id, userId: task.user.id});
     //!! watch out for the userId, it should be dynamic: you can only finish the task of user 1 (johnDoe) atm
   }
-  const deleteTask = (task: Task) => {
-    TaskService.deleteTask({taskId: task.id, userId: task.user.id})
+  const deleteTask = async (task: Task) => {
+    setStatusMessage([]);
+    try {
+      const response = await TaskService.deleteTask({taskId: task.id})
+      if (response.status === 200) {
+        setStatusMessage([{message:"Task Successfully deleted",type:"success"}])
+        return response;
+      }
+    } catch (error) {
+      console.log(error);
+      setStatusMessage([{message:error,type:"error"}])
+    }
+    
   }
   if (!tasks || tasks.length === 0) {
     return <p>No Active Tasks</p>;
@@ -32,8 +46,33 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
       return "#ffffff";
     }
   }
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setStatusMessage([]);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [statusMessage]);
   return (
     <>
+    <div className="flex flex-column">
+     {statusMessage && (
+            <div className="text-center">
+              <ul className="list-none">
+                {statusMessage.map(({ message, type }, index) => (
+                  <li
+                    key={index}
+                    className={classNames({
+                      "text-[#b62626]": type == "error",
+                      "text-[#26b639]": type == "success",
+                    })}
+                  >
+                    {message}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
     <ul className="grid grid-cols-4 gap-6">
       {Array.isArray(tasks) &&
         tasks.map((task, index) => (
@@ -81,12 +120,10 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
             onClick={() => (deleteTask(task))}
             />}
           </div>
-            
-
           </li>
-          
         ))}
         </ul>
+        </div>
     </>
   );
 };
