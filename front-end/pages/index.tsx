@@ -12,21 +12,21 @@ const Home: React.FC = () => {
   const data = [
     {username: "admin",
       password: "admin123",
-      role: "admin"},
+      role: "Admin"},
       {
         username: "ode_m",
             password: "ode123",
-            role: "user"
+            role: "User"
       },
       {
         username: "lotte_g",
         password: "lotte123",
-        role: "user"
+        role: "User"
       },
       {
         username: "guest",
             password:"guest132",
-            role: "guest"
+            role: "Guest"
       }
   ]
   return (
