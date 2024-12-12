@@ -13,6 +13,9 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
     TaskService.finishTask({taskId: task.id, userId: task.user.id});
     //!! watch out for the userId, it should be dynamic: you can only finish the task of user 1 (johnDoe) atm
   }
+  const deleteTask = (task: Task) => {
+    TaskService.deleteTask({taskId: task.id, userId: task.user.id})
+  }
   if (!tasks || tasks.length === 0) {
     return <p>No Active Tasks</p>;
   }
@@ -67,8 +70,16 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
             height={40}
             onClick={() => {finishTask(task)}}
             />
-            
           }
+           {task  &&
+            <Image 
+            className="cursor-pointer rounded bg-[#b1a27b] hover:bg-[#9d8e68] m-2 p-2"
+            src='/images/bin.png'
+            alt='Check Mark icon'
+            width={40}
+            height={40}
+            onClick={() => (deleteTask(task))}
+            />}
           </div>
             
 

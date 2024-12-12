@@ -64,6 +64,17 @@ const finishTask = async (id: { taskId: number; userId:number }) => {
     })
     return response.json()
 }
+const deleteTask = async (id: {taskId: number; userId: number}) => {
+    const token = JSON.parse(localStorage.getItem("loggedInUser"))?.token;
+    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/tasks/deleteTask/${id.userId}/${id.taskId}` , {
+        method:'GET',
+        headers: {
+            'Content-type':'application/json',
+            Authorization: `Bearer ${token}`,
+        }
+    })
+    return response.json()
+}
 
 const getAllFinishedTasksByUser = async () => {
     const token = JSON.parse(localStorage.getItem("loggedInUser"))?.token;
@@ -83,7 +94,8 @@ const TaskService = {
     createTask,
     finishTask,
     getAllFinishedTasksByUser,
-    getTasksByPriority
+    getTasksByPriority,
+    deleteTask
 }
 
 
