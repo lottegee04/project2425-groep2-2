@@ -222,8 +222,10 @@ taskRouter.delete("/deleteTask/:taskId", async (req:Request, res:Response, next:
     try {
         const request = req as Request & { auth: { username: string; role: Role } };
         const { username,role } = request.auth; 
-        const deleteTask = await taskService.deleteTask(Number(req.params.taskId), {username,role});
-        res.status(200).json(deleteTask);
+        const success = await taskService.deleteTask(Number(req.params.taskId), {username,role});
+        if (success) {
+            res.status(200).json({message: "Task successfully deleted!"});
+        }
     } catch (error) {
         next(error)
     }

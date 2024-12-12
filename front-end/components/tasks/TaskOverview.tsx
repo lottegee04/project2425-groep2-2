@@ -30,9 +30,10 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
     }
     
   }
-  if (!tasks || tasks.length === 0) {
-    return <p>No Active Tasks</p>;
-  }
+  // if (!tasks || tasks.length === 0) {
+  //   return <p>No Active Tasks</p>;
+  // }
+  //dit stuk verplaats naar beneden, gaf errors met mijn timer
 
   const determineColour = (task: Task) => {
     if (task.priority.colour === "green") {
@@ -47,12 +48,14 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
     }
   }
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setStatusMessage([]);
-    }, 2000);
+    if (statusMessage.length > 0) {
+        const timer = setTimeout(() => {
+            setStatusMessage([]);
+        }, 2000);
 
-    return () => clearTimeout(timer);
-  }, [statusMessage]);
+        return () => clearTimeout(timer);
+    }
+}, [statusMessage]);
   return (
     <>
     <div className="flex flex-column">
@@ -73,6 +76,9 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
               </ul>
             </div>
           )}
+    {(!tasks || tasks.length === 0) ? (
+                <p>No Active Tasks</p>
+            ) : (
     <ul className="grid grid-cols-4 gap-6">
       {Array.isArray(tasks) &&
         tasks.map((task, index) => (
@@ -122,7 +128,7 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
           </div>
           </li>
         ))}
-        </ul>
+        </ul>)}
         </div>
     </>
   );
