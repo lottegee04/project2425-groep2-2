@@ -49,7 +49,7 @@ const createTask = async ({
             startDate,
             endDate: null,
             done: false,
-            deadline,
+            deadline: new Date(deadline.toLocaleString("en-GB", { timeZone: "Europe/London" })),
             priority,
             user,
         });

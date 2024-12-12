@@ -34,7 +34,7 @@ const UserTableHome: React.FC<Props> = ({ users }) => {
                 <td className="w-56 m-2  px-5 p-3">{user.password}</td>
                 <td className="w-56 m-2  px-5 p-3">{user.role}</td>
             </tr>);
-        } )};
+        } )}
         </tbody>
         </table>
         </>

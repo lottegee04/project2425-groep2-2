@@ -10,6 +10,7 @@ import UserOverview from "../../components/users/UserOverview";
 import TasksByUser from "../../components/tasks/TasksByUser";
 import useSWR, { mutate } from "swr";
 import useInterval from "use-interval";
+import UserTableHome from "../../components/users/UserTableHome";
 
 const Users: React.FC = () => {
   // const [selectedUser, setSelectedUser] = useState<User>();
