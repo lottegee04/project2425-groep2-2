@@ -70,5 +70,23 @@ const getTasksByPriority = async(levelName: string, {username,role}:any): Promis
         return taskDb.getTasksByPriority(levelName);
     }
 }
+const deleteTask = async (taskId:number, {username,role}:any): Promise<string> => {
+    const user = await userDb.getUserByUserName(username);
+    let message = "Task not deleted...";
+    if (role === "guest") {
+        throw new UnauthorizedError('credentials_required', {message: 'you are not authorized to access this resource.',});
+    }
+    else if (user) {
+        const task = await taskDb.getTaskByUserById(user,taskId)
+        if (!task) {
+            throw new Error(`No existing task found with id: ${taskId} for user ${user.getUsername()}`);
+        }
+         else {
+            taskDb.deleteTask(taskId)
+            message = "Task Successfully deleted"
+        }
+    }
+    return message
+}
 
-export default { getAllTasks, getActiveTasks, createTask, getTasksByPriority , getTasks};
+export default { getAllTasks, getActiveTasks, createTask, getTasksByPriority , getTasks,deleteTask};

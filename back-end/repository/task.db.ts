@@ -90,6 +90,23 @@ const getTaskById = async (id: number): Promise<Task | null> => {
         throw new Error('Database error. See server log for details.');
     }
 };
+const getTaskByUserById = async (user:User, taskId: number) : Promise<Task | null> => {
+    try {
+        const taskPrisma = await database.task.findUnique({
+            where: {id: taskId,
+                    userId: user.getId()
+            },
+            include: {
+                priority: true,
+                user: true
+            }
+        });
+        return taskPrisma ? Task.from(taskPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
 
 const getActiveTasksByUser = async (user: User): Promise<Task[]> => {
     try {
@@ -152,5 +169,6 @@ export default {
     deleteTask,
     getActiveTasks,
     getTasksByPriority,
-    getActiveTasksByUser
+    getActiveTasksByUser,
+    getTaskByUserById
 };

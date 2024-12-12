@@ -196,5 +196,37 @@ taskRouter.get("/priority/:levelName",async ( req: Request, res: Response, next:
         next(error)
     }
 })
+/**
+ * @swagger
+ * /tasks/deleteTask/{taskId}:
+ *  delete:
+ *      security:
+ *       - bearerAuth: []
+ *      summary: Delete task by taskId
+ *      parameters:
+ *          - in: path
+ *            name: taskId
+ *            schema:
+ *              type: integer
+ *              required: true
+ *              description: The id of the task.
+ *      responses:
+ *       200:
+ *         description: A message when the tasks is succesfully deleted.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: string
+ */
+taskRouter.delete("/deleteTask/:taskId", async (req:Request, res:Response, next:NextFunction) => {
+    try {
+        const request = req as Request & { auth: { username: string; role: Role } };
+        const { username,role } = request.auth; 
+        const deleteTask = await taskService.deleteTask(Number(req.params.taskId), {username,role});
+        res.status(200).json(deleteTask);
+    } catch (error) {
+        next(error)
+    }
+})
 
 export {taskRouter}
