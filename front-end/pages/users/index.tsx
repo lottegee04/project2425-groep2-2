@@ -52,11 +52,11 @@ const Users: React.FC = () => {
                 : `User: ${loggedInUser.username}`
             }`}
         </h1>
-        {!error && (
+        {/* {!error && (
           <p className="align-self-center">
             Click on the user to see their tasks.
           </p>
-        )}
+        )} */}
         <section className="align-self-center d-flex flex-row p-2 ">
           {error && <p className="text-[#b62626]">{error}</p>}
           {!error && isLoading && <p className="text-[#2866da]">Loading....</p>}

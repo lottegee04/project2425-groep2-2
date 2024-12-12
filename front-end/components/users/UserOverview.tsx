@@ -15,7 +15,7 @@ const UserOverview: React.FC<Props> = ({ users }) => {
             <tr
               key={index}
               // onClick={() => selectUser(user)}
-              role="button"
+              // role="button"
             >
               <td>user id: </td>
               <td>{user.id}</td>
