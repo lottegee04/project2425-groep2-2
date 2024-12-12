@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { User } from "../../types";
 import UserService from "../../services/UserService";
 import useSWR from "swr";
@@ -7,6 +7,14 @@ type Props = {
     users: Array<any>
 }
 const UserTableHome: React.FC<Props> = ({ users }) => {
+    const [hydrated, setHydrated] = useState(false);
+    useEffect(() => {
+        setHydrated(true);
+    }, []);
+
+    if (!hydrated) {
+        return null;
+    }
     return (
         <>
         <table>

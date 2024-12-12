@@ -38,6 +38,7 @@ const Home: React.FC = () => {
       <main className="">
       <div className="flex justify-center">
         {data &&
+        
         <UserTableHome users={data}/>
         }
         </div>
