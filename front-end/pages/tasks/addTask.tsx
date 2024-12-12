@@ -16,7 +16,7 @@ const addTask: React.FC = () => {
             <Header/>
             <main className='d-flex  flex-column '>
             <h1 className='align-self-center'>Add a Task</h1>
-            <section className='align-self-center d-flex flex-row p-2 '>
+            <section className='align-self-center w-full max-w-md p-8 rounded-lg mx-auto'>
                 <TaskForm></TaskForm>
             </section>
             </main>
