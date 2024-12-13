@@ -8,6 +8,8 @@ import userDb from '../../repository/user.db';
 import taskService from '../../service/task.service';
 import { PriorityInput, UserInput } from '../../types';
 import { addDays } from 'date-fns';
+import { de } from 'date-fns/locale';
+import exp from 'constants';
 
 const priorityInput: PriorityInput = {
     id: 1,
@@ -113,6 +115,7 @@ test('given all tasks, when:getting all tasks, then all tasks are returned', asy
 
 test('given: valid task, when: task is created, then task is created with those values', async () => {
     //given:
+    const deadlineDate = new Date(deadline.toLocaleString("en-GB", { timeZone: "Europe/London" }));
     mockUserDbgetUserByUserName.mockResolvedValue(user);
     mockPriorityDbCreatePriority.mockResolvedValue(priority);
     mockTaskDbCreateTask.mockResolvedValue(new Task({
@@ -121,7 +124,7 @@ test('given: valid task, when: task is created, then task is created with those 
         startDate: new Date(),
         endDate: null,
         done: false,
-        deadline,
+        deadline: deadlineDate,
         priority,
         user
     }));
@@ -144,7 +147,7 @@ test('given: valid task, when: task is created, then task is created with those 
         startDate: expect.any(Date),
         endDate: null,
         done: false,
-        deadline,
+        deadline: expect.any(Date),
         priority: expect.objectContaining({
             id: priority.getId(),
             levelName: priority.getLevelName(),

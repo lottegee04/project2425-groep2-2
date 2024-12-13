@@ -47,7 +47,7 @@ const createTask = async (task: { description: string; sidenote: string; deadlin
     if (!response.ok) {
         throw new Error('Failed to submit task');
       }
-      return response.json();}
+      return response;}
       catch (error) {
             console.error(error)
       }
