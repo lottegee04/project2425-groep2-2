@@ -159,7 +159,41 @@ const deleteTask =  async (id: number): Promise<void> => {
         throw new Error('Database error. See server log for details.');
     }
 };
+const editTask = async (id: number, task: Task): Promise<Task> => {
+    try {
+        const taskPrisma = await database.task.update({
+            where: { id },
+            data: {
+                description: task.getDescription(),
+                sidenote: task.getSidenote(),
+                startDate: task.getStartDate(),
+                endDate: task.getEndDate(),
+                done: task.getDone(),
+                deadline: task.getDeadline(),
+                priority: {
+                    update: {
+                        levelName: task.getPriority().getLevelName(),
+                        colour: task.getPriority().getColour(),
+                    },
+                },
+                user: {
+                    connect: {
+                        id: task.getUser().getId(),
+                    },
+                },
+            },
+            include: {
+                priority: true,
+                user: true,
+            },
+        });
 
+        return Task.from(taskPrisma);
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
 
 
 export default {
@@ -170,5 +204,6 @@ export default {
     getActiveTasks,
     getTasksByPriority,
     getActiveTasksByUser,
-    getTaskByUserById
+    getTaskByUserById,
+    editTask
 };

@@ -230,5 +230,44 @@ taskRouter.delete("/deleteTask/:taskId", async (req:Request, res:Response, next:
         next(error)
     }
 })
+/**
+ * @swagger
+ * /tasks/editTask/{taskId}:
+ *   put:
+ *      security:
+ *       - bearerAuth: []
+ *      summary: Edit a task for a existing user.
+ *      parameters:
+ *          - in: path
+ *            name: taskId
+ *            schema:
+ *              type: integer
+ *              required: true
+ *              description: The id of the task.
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/TaskInput'
+ *      responses:
+ *         200:
+ *            description: The updated task.
+ *            content:
+ *              application/json:
+ *                schema:
+ *                  $ref: '#/components/schemas/Task'
+ */
+taskRouter.put("/editTask/:taskId", async (req:Request, res:Response, next:NextFunction) => {
+    try {
+        const request = req as Request & {auth: {username: string; role: Role; }};
+        const { username, role } = request.auth;
+        const task = <TaskInput>req.body;
+        const editedTask = await taskService.editTask(Number(req.params.taskId), task, {username, role})
+        res.status(200).json(editedTask);
+    } catch(error) {
+        next(error)
+    }
+})
 
 export {taskRouter}

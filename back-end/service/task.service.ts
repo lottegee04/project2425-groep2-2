@@ -4,7 +4,7 @@ import { Task } from '../model/task';
 import priorityDb from '../repository/priority.db';
 import taskDb from '../repository/task.db';
 import userDb from '../repository/user.db';
-import { TaskInput } from '../types';
+import { PriorityInput, TaskInput } from '../types';
 
 const getAllTasks = async (): Promise<Task[]>=> await taskDb.getAllTasks();
 
@@ -92,5 +92,34 @@ const deleteTask = async (taskId:number, {username,role}:any): Promise<boolean> 
     }
     return false
 }
+const editTask = async (taskId:number, {description,sidenote,deadline,priority:priorityInput}:TaskInput, {username, role}:any) : Promise<Task>=> {
+    const user = await userDb.getUserByUserName(username);
+    if (!user) {
+        throw new Error(`No user found with username: ${username}`)
+    }
+    if (user && role === "guest") {
+        throw new UnauthorizedError('credentials_required', {message: 'you are not authorized to access this resource.',});
+    }
+    const task = await taskDb.getTaskById(taskId)
+    if (!task) {
+        const errorMessage = role === "admin" 
+        ? `No task found with id: ${taskId}`
+        : `Not task found with id: ${taskId} for user: ${username}`
+        throw new Error(errorMessage)}
+    const priority = new Priority(priorityInput);
+    const updatedTask = new Task({
+        description,
+        sidenote,
+        deadline,
+        startDate: task.getStartDate(),
+        endDate: task.getEndDate(),
+        done: task.getDone(),
+        priority,
+        user: task.getUser()
+    })
+    const editedTask = await taskDb.editTask(taskId,updatedTask);
+    return editedTask;
+}
 
-export default { getAllTasks, getActiveTasks, createTask, getTasksByPriority , getTasks,deleteTask};
+
+export default { getAllTasks, getActiveTasks, createTask, getTasksByPriority , getTasks,deleteTask,editTask};

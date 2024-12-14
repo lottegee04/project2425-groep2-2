@@ -1,4 +1,4 @@
-import { Priority, User } from "../types";
+import { Priority, Task, User } from "../types";
 
 const getAllTasks = async () => {
     const token = JSON.parse(localStorage.getItem("loggedInUser"))?.token;
@@ -86,6 +86,22 @@ const getAllFinishedTasksByUser = async () => {
     })
     return response.json()
 }
+const editTask = async (task: { taskId: number; description: string; sidenote: string; deadline: Date; priority: { levelName: string; colour: string } }) => {
+    const token = JSON.parse(localStorage.getItem("loggedInUser"))?.token;
+    return await fetch(process.env.NEXT_PUBLIC_API_URL + `/tasks/editTask/${task.taskId}`,{
+        method:'PUT',
+        headers: {
+            'Content-type':'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+            description: task.description,
+            sidenote: task.sidenote,
+            deadline: task.deadline,
+            priority: task.priority,
+        })
+    })
+}
 
 const TaskService = {
     getAllTasks,
@@ -94,7 +110,8 @@ const TaskService = {
     finishTask,
     getAllFinishedTasksByUser,
     getTasksByPriority,
-    deleteTask
+    deleteTask,
+    editTask
 }
 
 

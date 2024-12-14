@@ -5,17 +5,24 @@ import Image from "next/image";
 import TaskService from "../../services/TaskService";
 import { stringify } from "querystring";
 import classNames from "classnames";
+import { useRouter } from "next/router";
+import EditTaskForm from "./EditTaskForm";
 type Props = {
   tasks: Array<Task>;
 };
 
 const TaskOverview: React.FC<Props> = ({ tasks}) => {
+  const router = useRouter();
   const [statusMessage, setStatusMessage] = useState<StatusMessage[]>([]);
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
   const finishTask = (task: Task) => {
     //fetch request to update task.done to true:
     TaskService.finishTask({taskId: task.id, userId: task.user.id});
     //!! watch out for the userId, it should be dynamic: you can only finish the task of user 1 (johnDoe) atm
   }
+  const editTask = (task: Task) => {
+    setEditingTask(task);
+  };
   const deleteTask = async (task: Task) => {
     setStatusMessage([]);
     try {
@@ -80,6 +87,14 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
                 <p>No Active Tasks</p>
             ) : (
     <ul className="grid grid-cols-4 gap-6">
+    {/* popup for edit task */}
+    {editingTask && (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+      <div className="bg-white p-6 rounded shadow-lg w-96">
+        <EditTaskForm task={editingTask}></EditTaskForm>
+      </div>
+    </div>
+  )}
       {Array.isArray(tasks) &&
         tasks.map((task, index) => (
           <li
@@ -114,6 +129,16 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
             width={40}
             height={40}
             onClick={() => {finishTask(task)}}
+            />
+          }
+            {!task.done  &&
+            <Image 
+            className="cursor-pointer rounded bg-[#b1a27b] hover:bg-[#9d8e68] m-2 p-2"
+            src='/images/edit.png'
+            alt='Check Mark icon'
+            width={40}
+            height={40}
+            onClick={() => {editTask(task)}}
             />
           }
            {task  &&
