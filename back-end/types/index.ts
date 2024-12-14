@@ -12,7 +12,7 @@ type TaskInput = {
     endDate?: Date;
     priority: PriorityInput;
     done?: boolean;
-    user: UserInput;
+    user?: UserInput;
 };
 
 type PriorityInput = {

@@ -72,7 +72,6 @@ const getTasksByPriority = async(levelName: string, {username,role}:any): Promis
 }
 const deleteTask = async (taskId:number, {username,role}:any): Promise<boolean> => {
     const user = await userDb.getUserByUserName(username);
-    let message = "Task not deleted...";
     if (role === "guest") {
         throw new UnauthorizedError('credentials_required', {message: 'you are not authorized to access this resource.',});
     }
@@ -104,7 +103,7 @@ const editTask = async (taskId:number, {description,sidenote,deadline,priority:p
     if (!task) {
         const errorMessage = role === "admin" 
         ? `No task found with id: ${taskId}`
-        : `Not task found with id: ${taskId} for user: ${username}`
+        : `No task found with id: ${taskId} for user: ${username}`
         throw new Error(errorMessage)}
     const priority = new Priority(priorityInput);
     const updatedTask = new Task({

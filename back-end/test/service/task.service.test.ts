@@ -6,7 +6,7 @@ import priorityDb from '../../repository/priority.db';
 import taskDb from '../../repository/task.db';
 import userDb from '../../repository/user.db';
 import taskService from '../../service/task.service';
-import { PriorityInput, UserInput } from '../../types';
+import { PriorityInput, TaskInput, UserInput } from '../../types';
 import { addDays } from 'date-fns';
 import { de } from 'date-fns/locale';
 import exp from 'constants';
@@ -73,6 +73,10 @@ let mockTaskDbGetTasksByPriority: jest.Mock;
 let mockTaskDbCreateTask: jest.Mock;
 let mockPriorityDbGetPriorityByName: jest.Mock;
 let mockPriorityDbCreatePriority: jest.Mock;
+let mockTaskdbGetTaskByUserById: jest.Mock;
+let mockTaskDbGetTaskById: jest.Mock;
+let mockTaskDbDeleteTask: jest.Mock;
+let  mockTaskDbEditTask: jest.Mock;
 
 beforeEach(() => {
     mockUserDbgetUserByUserName = jest.fn();
@@ -83,6 +87,10 @@ beforeEach(() => {
     mockTaskDbCreateTask = jest.fn();
     mockPriorityDbGetPriorityByName = jest.fn();
     mockPriorityDbCreatePriority = jest.fn();
+    mockTaskdbGetTaskByUserById = jest.fn();
+    mockTaskDbGetTaskById = jest.fn();
+    mockTaskDbDeleteTask = jest.fn();
+    mockTaskDbEditTask = jest.fn();
 
     userDb.getUserByUserName = mockUserDbgetUserByUserName;
     priorityDb.getPriorityById = mockPriorityDbGetPriorityById;
@@ -92,6 +100,10 @@ beforeEach(() => {
     taskDb.createTask = mockTaskDbCreateTask;
     priorityDb.getPriorityByName = mockPriorityDbGetPriorityByName;
     priorityDb.createPriority = mockPriorityDbCreatePriority;
+    taskDb.getTaskByUserById = mockTaskdbGetTaskByUserById;
+    taskDb.getTaskById = mockTaskDbGetTaskById;
+    taskDb.deleteTask = mockTaskDbDeleteTask;
+    taskDb.editTask =  mockTaskDbEditTask;
 
     jest.resetAllMocks();
 });
@@ -292,3 +304,128 @@ test('given invalid role, when: calling getTasks, then an error is thrown', asyn
         })
     );
 });
+
+test("given valid task and user, when deleting task, then task is deleted", async () => {
+    //given:
+    mockUserDbgetUserByUserName.mockResolvedValue(user);
+    mockTaskdbGetTaskByUserById.mockResolvedValue(tasks[0]);
+    //when:
+    const result = await taskService.deleteTask(1, { username: user.getUsername(), role: user.getRole() });
+    //then:
+    expect(result).toBeTruthy();
+})
+test("given valid task and guest user, when deleting task, the unauthorization error is thrown", async () => {
+    //given:
+    mockUserDbgetUserByUserName.mockResolvedValue(user);
+    //when + then:
+    await expect(
+        taskService.deleteTask(1,{ username: user.getUsername(), role: 'guest' })
+    ).rejects.toThrow(
+        new UnauthorizedError('credentials_required', {
+            message: 'you are not authorized to access this resource.',
+        })
+    );
+})
+test("given invalid task, when deleting task, then error is thrown", () => {
+    mockUserDbgetUserByUserName.mockResolvedValue(user);
+    mockTaskdbGetTaskByUserById.mockResolvedValue(null);
+    const result = async () => await taskService.deleteTask(1,{ username: user.getUsername(), role: user.getRole() })
+    expect(result).rejects.toThrow("No existing task found with id: 1 for user johnDoe")
+})
+test("given valid task, when editing task, then edited task is returned", async () => {
+    //given:
+    const priorityInput : PriorityInput = { levelName: ('urgent'), colour: 'red' }
+    const taskInput: TaskInput = {
+        description: "Updated description",
+        sidenote: "Updated sidenote",
+        deadline: addDays(new Date(), 3),
+        priority: priorityInput,
+        user:userInput,
+
+    };
+    const updatedTask = new Task({
+        id: 1,
+        description: taskInput.description,
+        sidenote: taskInput.sidenote,
+        startDate: tasks[0].getStartDate(),
+        endDate: null,
+        deadline: taskInput.deadline,
+        done: false,
+        priority: new Priority(priorityInput),
+        user,
+    })
+    mockUserDbgetUserByUserName.mockResolvedValue(user);
+    mockTaskDbGetTaskById.mockResolvedValue(tasks[0]);
+    mockTaskDbEditTask.mockResolvedValue(updatedTask);
+    //when:
+    const result = await taskService.editTask(1,{description:taskInput.description,sidenote:taskInput.sidenote, deadline:taskInput.deadline, priority:priorityInput},{ username: user.getUsername(), role: user.getRole() })
+    //then:
+    expect(result).toEqual(updatedTask);
+})
+test("given invalid user, when editing task, then error is thrown", async () => {
+    //given:
+    mockUserDbgetUserByUserName.mockResolvedValue(null);
+    const priorityInput : PriorityInput = { levelName: ('urgent'), colour: 'red' }
+    const taskInput: TaskInput = {
+        description: "Updated description",
+        sidenote: "Updated sidenote",
+        deadline: addDays(new Date(), 3),
+        priority: priorityInput,
+        user:userInput,
+
+    };
+    //when:
+    const result = async () => await taskService.editTask(1,{description:taskInput.description,sidenote:taskInput.sidenote, deadline:taskInput.deadline, priority:priorityInput},{ username: "invalidUser", role: user.getRole() });
+    //then:
+    expect(result).rejects.toThrow("No user found with username: invalidUser")
+})
+test("given user with guest role, when editing task, then unauthorized error is thrown", () => {
+    mockUserDbgetUserByUserName.mockResolvedValue(user);
+    const priorityInput : PriorityInput = { levelName: ('urgent'), colour: 'red' }
+    const taskInput: TaskInput = {
+        description: "Updated description",
+        sidenote: "Updated sidenote",
+        deadline: addDays(new Date(), 3),
+        priority: priorityInput,
+        user:userInput,
+
+    };
+    //when:
+    const result = async () => await taskService.editTask(1,{description:taskInput.description,sidenote:taskInput.sidenote, deadline:taskInput.deadline, priority:priorityInput},{ username: user.getUsername, role: "guest" });
+    //then:
+    expect(result).rejects.toThrow("you are not authorized to access this resource.")
+})
+test("given user with admin role and invalid task, then error for admin is thrown", () => {
+    mockUserDbgetUserByUserName.mockResolvedValue(user);
+    mockTaskDbGetTaskById.mockResolvedValue(null);
+    const priorityInput : PriorityInput = { levelName: ('urgent'), colour: 'red' }
+    const taskInput: TaskInput = {
+        description: "Updated description",
+        sidenote: "Updated sidenote",
+        deadline: addDays(new Date(), 3),
+        priority: priorityInput,
+        user:userInput,
+
+    };
+    //when:
+    const result = async () => await taskService.editTask(100,{description:taskInput.description,sidenote:taskInput.sidenote, deadline:taskInput.deadline, priority:priorityInput},{ username: user.getUsername, role: "admin" });
+    //then:
+    expect(result).rejects.toThrow("No task found with id: 100")
+})
+test("given user with user role and invalid task, then error for admin is thrown", () => {
+    mockUserDbgetUserByUserName.mockResolvedValue(user);
+    mockTaskDbGetTaskById.mockResolvedValue(null);
+    const priorityInput : PriorityInput = { levelName: ('urgent'), colour: 'red' }
+    const taskInput: TaskInput = {
+        description: "Updated description",
+        sidenote: "Updated sidenote",
+        deadline: addDays(new Date(), 3),
+        priority: priorityInput,
+        user:userInput,
+
+    };
+    //when:
+    const result = async () => await taskService.editTask(100,{description:taskInput.description,sidenote:taskInput.sidenote, deadline:taskInput.deadline, priority:priorityInput},{ username: user.getUsername(), role: "user" });
+    //then:
+    expect(result).rejects.toThrow("No task found with id: 100 for user: johnDoe")
+})
