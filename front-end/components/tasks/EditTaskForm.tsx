@@ -2,11 +2,13 @@ import { useState } from "react";
 import { Priority, StatusMessage, Task } from "../../types";
 import { useRouter } from "next/router";
 import TaskService from "../../services/TaskService";
+import classNames from "classnames";
 
 type Props= {
-    task: Task
+    task: Task,
+    onClose: () => void;
 }
-const EditTaskForm: React.FC<Props>= ({task}) => {
+const EditTaskForm: React.FC<Props>= ({task,onClose}) => {
     const router = useRouter();
     const [formData, setFormData] = useState<Task>(task);
     const [description, setDescription] = useState(formData.description);
@@ -14,8 +16,7 @@ const EditTaskForm: React.FC<Props>= ({task}) => {
     const [deadline, setDeadline] = useState(formData.deadline.toString());
     const [deadlineError, setDeadlineError] = useState("");
     const [descriptionError, setDescriptionError] = useState("");
-    const [priorityError, setPriorityError] = useState("");
-    const [statusMessages, setStatusMessages] = useState<StatusMessage[]>([]);
+    const [priorityError, setPriorityError] = useState("");;
     const [priority, setPriority] = useState<Priority>({
     levelName: formData.priority.levelName,
     colour: formData.priority.colour,
@@ -31,11 +32,6 @@ const EditTaskForm: React.FC<Props>= ({task}) => {
         setDeadlineError("Deadline cannot be before today.");
         return false;
       } 
-  
-      if (!deadline || deadline.trim() === "") {
-        setDeadlineError("Deadline cannot be empty.");
-        return false;
-      }
   
       const now = new Date();
       console.log(now.toLocaleString("en-GB", { timeZone: "Europe/London" }));
@@ -71,18 +67,9 @@ const EditTaskForm: React.FC<Props>= ({task}) => {
       setDeadline(deadline);
       if (response && response.status === 200) {
         setTimeout(() => {
-          setStatusMessages([{message: "Task is editted succesfully", type:"success"}])
-          router.push("/tasks");
-        }, 2000);
-      } else {
-        setStatusMessages([
-          {
-            message: "Oops, an error has occurred. Please try again later.",
-            type: "error",
-          },
-        ])
-      }
-      
+          onClose();
+        }, 1000);
+      };
     };
       const handlePriorityChange = (
         event: React.ChangeEvent<HTMLSelectElement>
@@ -107,10 +94,10 @@ const EditTaskForm: React.FC<Props>= ({task}) => {
             return "";
         }
       };
-    
     return (
-      <form onSubmit={handleSubmit} className="w-full max-w-md p-8 pt-1 rounded-lg mx-auto shadow flex flex-col items-stretch">
-      <button className="p-1 m-0" onClick={() => router.push("/tasks")}><img className="size-8" src="/images/exit-cross.png"/></button>
+      <>
+      <form className="w-full max-w-md p-8 pt-1 rounded-lg mx-auto shadow flex flex-col items-stretch">
+      <button className="p-1 m-0" onClick={(e) => {e.preventDefault(); onClose();}}><img className="size-8" src="/images/exit-cross.png"/></button>
       <div className=" flex flex-col my-3">
       <h4 className="text-center">Edit task:</h4>
       <h4 className="text-center">"{task.description}"</h4>
@@ -120,7 +107,8 @@ const EditTaskForm: React.FC<Props>= ({task}) => {
           type="text"
           id="description"
           name="description"
-          value={formData.description}
+          defaultValue={formData.description}
+          value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
         {descriptionError && (
@@ -135,7 +123,8 @@ const EditTaskForm: React.FC<Props>= ({task}) => {
         className="border-2 border-gray-300 rounded"
           id="sidenote"
           name="sidenote"
-          value={formData.sidenote}
+          defaultValue={formData.sidenote}
+          value={sidenote}
           onChange={(e) => setSidenote(e.target.value)}
         />
         
@@ -148,6 +137,7 @@ const EditTaskForm: React.FC<Props>= ({task}) => {
           id="deadline"
           name="deadline"
           defaultValue={deadline.toString()}
+          value={deadline.toString()}
           onChange={(e) => setDeadline(e.target.value)}
         />
          {deadlineError && (
@@ -160,7 +150,8 @@ const EditTaskForm: React.FC<Props>= ({task}) => {
         className=" border-2 border-gray-300 rounded"
           id="priorityLevel"
           name="levelName"
-          value={formData.priority.levelName}
+          defaultValue={formData.priority.levelName}
+          value={priority.levelName}
           onChange={handlePriorityChange}
         >
           <option value="">Select priority</option>
@@ -172,8 +163,10 @@ const EditTaskForm: React.FC<Props>= ({task}) => {
       {priorityError && (
         <small className="text-[#b62626]">{priorityError}</small>
       )}
-      <button className="p-2 rounded bg-[#474132] text-[#ffffff] mt-2" type="submit">Save changes</button>
+      <button className="p-2 rounded bg-[#474132] text-[#ffffff] mt-2" type="button" onClick={handleSubmit} >Save changes</button>
         </form>
+        </>
     )
-}
+  }
+
 export default EditTaskForm;

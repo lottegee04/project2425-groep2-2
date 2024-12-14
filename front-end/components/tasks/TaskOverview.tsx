@@ -89,9 +89,9 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
     <ul className="grid grid-cols-4 gap-6">
     {/* popup for edit task */}
     {editingTask && (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center" style={{ zIndex: 9999 }}>
       <div className="bg-white p-6 rounded shadow-lg w-96">
-        <EditTaskForm task={editingTask}></EditTaskForm>
+        <EditTaskForm task={editingTask} onClose={() => setEditingTask(null)}></EditTaskForm>
       </div>
     </div>
   )}
