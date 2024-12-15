@@ -6,9 +6,12 @@ import UserTableHome from "../components/users/UserTableHome";
 import UserService from "../services/UserService";
 import useSWR, { mutate } from "swr";
 import useInterval from "use-interval";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 
 const Home: React.FC = () => {
+  const { t } = useTranslation();
   const data = [
     {username: "admin",
       password: "admin123",
@@ -32,7 +35,7 @@ const Home: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Home</title>
+        <title>{t('app.title')} </title>
       </Head>
       <Header/>
       <main className="">
@@ -47,5 +50,15 @@ const Home: React.FC = () => {
     </>
   );
 };
+
+export const getServerSideProps = async (context) => {
+  const { locale } = context;
+
+  return {
+      props: {
+          ...(await serverSideTranslations(locale ?? "en", ["common"])),
+      },
+  };
+}
 
 export default Home;

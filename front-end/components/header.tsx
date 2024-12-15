@@ -2,11 +2,14 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { User } from '../types';
 import Image from "next/image";
+import Language from './language/Language';
+import { useTranslation } from 'next-i18next';
 
 
 
 const Header: React.FC = () => {
  const [loggedInUser, setloggedInUser] = useState<User | null>(null);
+ const { t } = useTranslation();
  useEffect(() => {
   setloggedInUser(JSON.parse(localStorage.getItem("loggedInUser")));
  }, []);
@@ -21,20 +24,21 @@ const Header: React.FC = () => {
       height={150}
       />
       <nav className="flex flex-row m-2 rounded-md justify-between items-stretch px-2">
+      <Language></Language>
         <Link href="/" className="nav-link p-2 fs-6 m-1 rounded-md hover:bg-[#d8cfc4] ">
-          Home
+          {t('header.nav.home')}
         </Link>
         
         
         {!loggedInUser && (
            <Link href="/login" className="nav-link p-2 m-1 fs-6 text-white bg-[#474132] hover:bg-[#655d53] rounded-md">
-           Login
+           {t('header.nav.login')}
            </Link>
         )}
         {loggedInUser?.role === "admin" && (
           <>
           <Link href="/users" className="nav-link p-2 fs-6 text-dark m-1 rounded-md hover:bg-[#d8cfc4] ">
-          Users
+          {t('header.nav.users')}
         </Link>
           </>
         )}
@@ -44,20 +48,21 @@ const Header: React.FC = () => {
       {loggedInUser && (
         <>
         <Link href="/tasks" className="nav-link p-2 fs-6 text-dark  m-1 rounded-md hover:bg-[#d8cfc4]">
-          All tasks
+        {t('header.nav.tasks')}
         </Link>
         <div className="nav-link p-2  fs-6 mt-1 ml-6 text-[#534e46] italic">
-          Welcome, {loggedInUser.username}!
+        {t('header.welcome')}, {loggedInUser.username}!
         </div>
         <Link href="/login" className="nav-link p-2 m-1 fs-6 text-white bg-[#474132] hover:bg-[#655d53] rounded-md" 
         onClick={() => {
           sessionStorage.removeItem("loggedInUser");
           localStorage.removeItem("loggedInUser");
           setloggedInUser(null);
-        }}> Logout</Link>
+        }}> {t('header.nav.logout')}</Link>
         
         </>
       )}
+      
       </nav>
     </header>
     </>
