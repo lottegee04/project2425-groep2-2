@@ -11,11 +11,13 @@ import TasksByUser from "../../components/tasks/TasksByUser";
 import useSWR, { mutate } from "swr";
 import useInterval from "use-interval";
 import UserTableHome from "../../components/users/UserTableHome";
+import { useTranslation } from "next-i18next";
 
 const Users: React.FC = () => {
   // const [selectedUser, setSelectedUser] = useState<User>();
   const [error, seterror] = useState<string | null>(null);
   const [loggedInUser, setLoggedInUser] = useState<User>(null);
+  const { t } = useTranslation();
   useEffect(() => {
     setLoggedInUser(JSON.parse(localStorage.getItem("loggedInUser")));
   }, []);
@@ -27,7 +29,7 @@ const Users: React.FC = () => {
       return { users };
     } else {
       seterror(
-        "You are not authorized to view this page. Log in to see this content!"
+        t('auth.error')
       );
       return { users: [] };
     }

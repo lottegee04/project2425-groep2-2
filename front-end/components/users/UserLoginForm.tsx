@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { StatusMessage } from "../../types";
 import classNames from "classnames";
 import UserService from "../../services/UserService";
+import { useTranslation } from "next-i18next";
 const UserLoginFrom: React.FC = () => {
   const router = useRouter();
   const [username, setUsername] = useState("");
@@ -10,6 +11,7 @@ const UserLoginFrom: React.FC = () => {
   const [nameError, setNameError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [statusMessage, setStatusMessage] = useState<StatusMessage[]>([]);
+  const {t} = useTranslation();
 
   const clearErrors = () => {
     setNameError("");
@@ -19,11 +21,11 @@ const UserLoginFrom: React.FC = () => {
   const validate = (): boolean => {
     let result = true;
     if (!username && username.trim() === "") {
-      setNameError("Username is required.");
+      setNameError(t('login.validate.usernameError'));
       result = false;
     }
     if (!password && password.trim() === "") {
-      setPasswordError("Password is required.");
+      setPasswordError(t('login.validate.passwordError'));
       result = false;
     }
     return result;
@@ -49,7 +51,7 @@ const UserLoginFrom: React.FC = () => {
       sessionStorage.setItem("loggedInUser", username);
       setStatusMessage([
         {
-          message: "Login successfull. Redirecting to homepage...",
+          message: t('login.success'),
           type: "success",
         },
       ]);
@@ -61,7 +63,7 @@ const UserLoginFrom: React.FC = () => {
     } else {
       setStatusMessage([
         {
-          message: "Oops, an error has occurred. Please try again later.",
+          message: t('login.error'),
           type: "error",
         },
       ]);
@@ -70,7 +72,7 @@ const UserLoginFrom: React.FC = () => {
 
   return (
     <>
-      <h3>Login</h3>
+      <h3>{t('login.title')} </h3>
       {statusMessage && (
         <div>
           <ul className="list-none">
@@ -93,7 +95,7 @@ const UserLoginFrom: React.FC = () => {
         className=" border flex flex-center flex-col p-3 rounded shadow "
       >
         <div className="flex-row my-3">
-          <label htmlFor="nameInput">Username:</label>
+          <label htmlFor="nameInput">{t('login.validate.username')}:</label>
 
           <input
             className="mx-2 border-2 border-gray-300 rounded"
@@ -107,7 +109,7 @@ const UserLoginFrom: React.FC = () => {
           )}
         </div>
         <div className="flex-row my-3">
-          <label htmlFor="nameInput">Password:</label>
+          <label htmlFor="nameInput">{t('login.validate.password')}:</label>
 
           <input
             className="mx-2 border-2 border-gray-300 rounded"
@@ -125,10 +127,10 @@ const UserLoginFrom: React.FC = () => {
           type="submit"
           className="m-2 p-2 rounded bg-[#474132] text-[#ffffff]"
         >
-          Login
+          {t('login.button')}
         </button>
         <p className="text-center text-sm">
-          No account yet? <a href="/signup">Click here</a> to sign up!
+          {t('login.register')} <a href="/signup"> {t('login.registerLink')}</a>
         </p>
       </form>
     </>

@@ -7,6 +7,7 @@ import { stringify } from "querystring";
 import classNames from "classnames";
 import { useRouter } from "next/router";
 import EditTaskForm from "./EditTaskForm";
+import { useTranslation } from "next-i18next";
 type Props = {
   tasks: Array<Task>;
 };
@@ -15,6 +16,7 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
   const router = useRouter();
   const [statusMessage, setStatusMessage] = useState<StatusMessage[]>([]);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const { t } = useTranslation();
   const finishTask = (task: Task) => {
     //fetch request to update task.done to true:
     TaskService.finishTask({taskId: task.id, userId: task.user.id});
@@ -28,7 +30,7 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
     try {
       const response = await TaskService.deleteTask({taskId: task.id})
       if (response.status === 200) {
-        setStatusMessage([{message:"Task Successfully deleted",type:"success"}])
+        setStatusMessage([{message: t('tasks.messages.delete'),type:"success"}])
         return response;
       }
     } catch (error) {
@@ -84,7 +86,7 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
             </div>
           )}
     {(!tasks || tasks.length === 0) ? (
-                <p>No Active Tasks</p>
+                <p className="m-5">{t('tasks.none')} </p>
             ) : (
     <ul className="grid grid-cols-4 gap-6">
     {/* popup for edit task */}
@@ -105,7 +107,7 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
                     <span 
                     style={{backgroundColor: determineColour(task)}}
                     className="inline-flex items-center px-3 py-0.5 rounded-full text-xs font-bold leading-5 text-white font-display mr-2 capitalize" >
-                        {task.priority.levelName}
+                        {t(`tasks.priority.${task.priority.levelName}`)}
                     </span>
                     <p className="font-mono text-xs font-normal opacity-75 pt-2 text-black">{new Date(task.startDate).toLocaleDateString()}</p>
                 </div>
@@ -120,7 +122,7 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
                     </span>
                 </p>
                 <div className="flex justify-between ">
-                <p className="font-mono text-xs font-normal opacity-75 pt-2 text-black underline"> DEADLINE: {new Date(task.deadline).toLocaleDateString()} </p>
+                <p className="font-mono text-xs font-normal opacity-75 pt-2 text-black underline"> {t('tasks.deadline').toLocaleUpperCase()}: {new Date(task.deadline).toLocaleDateString()} </p>
             {!task.done  &&
             <Image 
             className="cursor-pointer rounded bg-[#b1a27b] hover:bg-[#9d8e68] m-2 p-2"

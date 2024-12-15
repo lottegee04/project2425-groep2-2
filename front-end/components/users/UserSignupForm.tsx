@@ -3,6 +3,7 @@ import { StatusMessage } from "../../types";
 import classNames from "classnames";
 import UserService from "../../services/UserService";
 import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
 
 const UserSignupForm: React.FC = () => {
   const router = useRouter();
@@ -11,6 +12,7 @@ const UserSignupForm: React.FC = () => {
   const [nameError, setNameError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [statusMessage, setStatusMessage] = useState<StatusMessage[]>([]);
+  const { t } = useTranslation();
   const clearErrors = () => {
     setNameError("");
     setPasswordError("");
@@ -23,17 +25,17 @@ const UserSignupForm: React.FC = () => {
   const validate = async (): Promise<boolean> => {
     let result = true;
     if (!username && username.trim() === "") {
-      setNameError("Username is required.");
+      setNameError(t("signup.validate.usernameError"));
       result = false;
     } else {
       const userDoesExists = await userExists(username);
       if (userDoesExists) {
-        setNameError(`There is already a user with username: ${username}.`);
+        setNameError(`${t('signup.validate.usernameError2')}: ${username}.`);
         result = false;
       }
     }
     if (!password && password.trim() === "") {
-      setPasswordError("Password is required.");
+      setPasswordError(t("signup.validate.passwordError"));
       result = false;
     }
     return result;
@@ -53,7 +55,7 @@ const UserSignupForm: React.FC = () => {
     if (response && response.status === 200) {
       setStatusMessage([
         {
-          message: "User Signup successfull, now you can log in...",
+          message: t("signup.success"),
           type: "success",
         },
       ]);
@@ -66,7 +68,7 @@ const UserSignupForm: React.FC = () => {
     } else {
       setStatusMessage([
         {
-          message: "Oops, an error has occurred. Please try again later.",
+          message: t('signup.error'),
           type: "error",
         },
       ]);
@@ -77,7 +79,7 @@ const UserSignupForm: React.FC = () => {
 
   return (
     <>
-      <h3 className="p-2">Sign up for DoneDeal</h3>
+      <h3 className="p-2">{t('signup.page.title')} </h3>
       {statusMessage && (
         <div>
           <ul className="list-none">
@@ -102,7 +104,7 @@ const UserSignupForm: React.FC = () => {
         className=" border flex flex-center flex-col p-3 rounded shadow "
       >
         <div className="flex-row my-3">
-          <label htmlFor="nameInput">Username:</label>
+          <label htmlFor="nameInput">{t('signup.validate.username')}:</label>
 
           <input
             className="mx-2 border-2 border-gray-300 rounded"
@@ -116,7 +118,7 @@ const UserSignupForm: React.FC = () => {
           )}
         </div>
         <div className="flex-row my-3">
-          <label htmlFor="nameInput">Password:</label>
+          <label htmlFor="nameInput">{t('signup.validate.password')}:</label>
 
           <input
             className="mx-2 border-2 border-gray-300 rounded"
@@ -133,7 +135,7 @@ const UserSignupForm: React.FC = () => {
           type="submit"
           className="m-2 p-2 rounded bg-[#474132] text-[#ffffff]"
         >
-          Sign up
+          {t('signup.button')}
         </button>
       </form>
     </>
