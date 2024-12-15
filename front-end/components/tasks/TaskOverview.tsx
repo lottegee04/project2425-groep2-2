@@ -15,6 +15,8 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
   const router = useRouter();
   const [statusMessage, setStatusMessage] = useState<StatusMessage[]>([]);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [areYouSure, setAreYouSure] = useState<boolean>(false);
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const finishTask = (task: Task) => {
     //fetch request to update task.done to true:
     TaskService.finishTask({taskId: task.id, userId: task.user.id});
@@ -36,6 +38,10 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
       setStatusMessage([{message:error,type:"error"}])
     }
     
+  }
+  const openAreYouSure = (task: Task) => {
+    setSelectedTask(task);
+    setAreYouSure(true);
   }
   // if (!tasks || tasks.length === 0) {
   //   return <p>No Active Tasks</p>;
@@ -95,6 +101,19 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
       </div>
     </div>
   )}
+  {/* popup for are you sure before deleting task */}
+  {areYouSure && (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center" style={{ zIndex: 9999 }}>
+      <div className="bg-white p-6 rounded shadow-lg w-96 text-center">
+       <h3 className="font-semibold">Are you sure?</h3>
+       <p>Do you really want to delete this task?</p>
+       <div className="flex flex-row p-2 m-2 justify-evenly">
+          <button className="rounded bg-[#b1a27b] hover:bg-[#9d8e68] text-[#000000] mt-2" onClick={()=>{setAreYouSure(false); deleteTask(selectedTask)}}>Yes</button>
+          <button className="rounded bg-[#b1a27b] hover:bg-[#9d8e68] text-[#000000] mt-2" onClick={()=>{setAreYouSure(false)}}>No</button>
+       </div>
+      </div>
+    </div>
+  )}
       {Array.isArray(tasks) &&
         tasks.map((task, index) => (
           <li
@@ -148,7 +167,7 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
             alt='Check Mark icon'
             width={40}
             height={40}
-            onClick={() => (deleteTask(task))}
+            onClick={() => {openAreYouSure(task)}}
             />}
           </div>
           </li>
