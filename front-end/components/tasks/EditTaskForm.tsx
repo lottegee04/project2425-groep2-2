@@ -3,6 +3,7 @@ import { Priority, StatusMessage, Task } from "../../types";
 import { useRouter } from "next/router";
 import TaskService from "../../services/TaskService";
 import classNames from "classnames";
+import { useTranslation } from "next-i18next";
 
 type Props= {
     task: Task,
@@ -21,15 +22,16 @@ const EditTaskForm: React.FC<Props>= ({task,onClose}) => {
     levelName: formData.priority.levelName,
     colour: formData.priority.colour,
     });
+    const { t } = useTranslation();
     const validate = (): boolean => {
       if (!description || description.trim() === "") {
-        setDescriptionError("Description cannot be empty.");
+        setDescriptionError(t('editTask.validate.descriptionError'));
         return false;
       }
       const today = new Date().toISOString().split("T")[0];
   
       if (deadline < today) {
-        setDeadlineError("Deadline cannot be before today.");
+        setDeadlineError(t('editTask.validate.deadlineError2'));
         return false;
       } 
   
@@ -37,12 +39,12 @@ const EditTaskForm: React.FC<Props>= ({task,onClose}) => {
       console.log(now.toLocaleString("en-GB", { timeZone: "Europe/London" }));
       console.log(new Date(deadline).toLocaleString("en-GB", { timeZone: "Europe/London" }));
       if (new Date(deadline).toLocaleString("en-GB", {timeZone: "Europe/London"}) < now.toLocaleString("en-GB", { timeZone: "Europe/London" })) {
-        setDeadlineError("Deadline is too soon.");
+        setDeadlineError(t('editTask.validate.deadlineError3'));
         return  false;
       }
   
       if (priority.levelName !== "basic" && priority.levelName !== "neutral" && priority.levelName !== "urgent") {
-        setPriorityError("Priority is invalid.");
+        setPriorityError(t('editTask.validate.priorityError'));
         return false;
       }
       return true;
@@ -99,9 +101,9 @@ const EditTaskForm: React.FC<Props>= ({task,onClose}) => {
       <form className="w-full max-w-md p-8 pt-1 rounded-lg mx-auto shadow flex flex-col items-stretch">
       <button className="p-1 m-0" onClick={(e) => {e.preventDefault(); onClose();}}><img className="size-8" src="/images/exit-cross.png"/></button>
       <div className=" flex flex-col my-3">
-      <h4 className="text-center">Edit task:</h4>
+      <h4 className="text-center">{t('editTask.title')} </h4>
       <h4 className="text-center">"{task.description}"</h4>
-        <label htmlFor="description">Description:</label>
+        <label htmlFor="description">{t('editTask.description')} </label>
         <input
         className="border-2 border-gray-300 rounded"
           type="text"
@@ -118,7 +120,7 @@ const EditTaskForm: React.FC<Props>= ({task,onClose}) => {
         ) }
       </div>
       <div className="flex flex-col my-3">
-        <label htmlFor="sidenote">Sidenote:</label>
+        <label htmlFor="sidenote"> {t('editTask.sidenote')} </label>
         <textarea
         className="border-2 border-gray-300 rounded"
           id="sidenote"
@@ -130,7 +132,7 @@ const EditTaskForm: React.FC<Props>= ({task,onClose}) => {
         
       </div>
       <div className="flex flex-col my-3">
-        <label htmlFor="deadline">Deadline:</label>
+        <label htmlFor="deadline">{t('editTask.deadline')} :</label>
         <input
         className=" border-2 border-gray-300 rounded"
           type="datetime-local"
@@ -145,7 +147,7 @@ const EditTaskForm: React.FC<Props>= ({task,onClose}) => {
         )}
       </div>
       <div className="flex flex-col my-3">
-        <label htmlFor="priorityLevel">Priority Level:</label>
+        <label htmlFor="priorityLevel">{t('editTask.priorityLevel')} </label>
         <select
         className=" border-2 border-gray-300 rounded"
           id="priorityLevel"
@@ -154,16 +156,16 @@ const EditTaskForm: React.FC<Props>= ({task,onClose}) => {
           value={priority.levelName}
           onChange={handlePriorityChange}
         >
-          <option value="">Select priority</option>
-          <option value="urgent">urgent</option>
-          <option value="neutral">neutral</option>
-          <option value="basic">basic</option>
+          <option value="">{t('editTask.priority.select')} </option>
+          <option value="urgent">{t('editTask.priority.urgent')}</option>
+          <option value="neutral">{t('editTask.priority.neutral')}</option>
+          <option value="basic">{t('editTask.priority.basic')}</option>
         </select>
       </div>
       {priorityError && (
         <small className="text-[#b62626]">{priorityError}</small>
       )}
-      <button className="p-2 rounded bg-[#474132] text-[#ffffff] mt-2" type="button" onClick={handleSubmit} >Save changes</button>
+      <button className="p-2 rounded bg-[#474132] text-[#ffffff] mt-2" type="button" onClick={handleSubmit} >{t('editTask.button')} </button>
         </form>
         </>
     )
