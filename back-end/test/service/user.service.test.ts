@@ -5,6 +5,8 @@ import userService from '../../service/user.service';
 import { AuthenticationResponse, UserInput } from '../../types';
 import { generateJwtToken } from '../../util/jwt';
 import bcrypt from 'bcrypt';
+import taskhistoryDb from '../../repository/taskhistory.db';
+import { TaskHistory } from '../../model/taskhistory';
 
 const admin = new User({
     id: 1,
@@ -40,6 +42,10 @@ const newUser = new User({
     role: 'user',
 });
 
+const newTaskHistory = new TaskHistory({
+    user: newUser, 
+    finishedTasks: []
+});
 const userInputNewUser: UserInput = {
     id: 3,
     username: 'Junior',
@@ -58,6 +64,7 @@ let mockUserDbgetAllUsers: jest.Mock;
 let mockUserDbgetUserByUserName: jest.Mock;
 let mockUserDbgetUserById: jest.Mock;
 let mockUserDbcreateUser: jest.Mock;
+let mockTaskHistoryDbCreateTaskHistory: jest.Mock;
 
 const mockBcryptCompare = jest.fn();
 bcrypt.compare = mockBcryptCompare;
@@ -69,11 +76,13 @@ mockUserDbgetAllUsers = jest.fn();
 mockUserDbgetUserByUserName = jest.fn();
 mockUserDbgetUserById = jest.fn();
 mockUserDbcreateUser = jest.fn();
+mockTaskHistoryDbCreateTaskHistory = jest.fn();
 
 userDb.getAllUsers = mockUserDbgetAllUsers;
 userDb.getUserByUserName = mockUserDbgetUserByUserName;
 userDb.getUserById = mockUserDbgetUserById;
 userDb.createUser = mockUserDbcreateUser;
+taskhistoryDb.createTaskHistory = mockTaskHistoryDbCreateTaskHistory;
 beforeEach = () => {
     jest.resetAllMocks();
     jest.clearAllMocks();
@@ -168,6 +177,7 @@ test('given new valid user, when calling createUser, then new user is returned',
     //given:
     mockUserDbgetUserByUserName.mockResolvedValue(null);
     mockUserDbcreateUser.mockResolvedValue(newUser);
+    mockTaskHistoryDbCreateTaskHistory.mockResolvedValue(newTaskHistory)
     //when:
     const result = await userService.createUser(userInputNewUser);
     //then:
