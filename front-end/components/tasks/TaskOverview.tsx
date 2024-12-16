@@ -95,7 +95,7 @@ const TaskOverview: React.FC<Props> = ({ tasks}) => {
     {(!tasks || tasks.length === 0) ? (
                 <p className="m-5">{t('tasks.none')} </p>
             ) : (
-    <ul className="grid grid-cols-4 gap-6">
+    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-6 xl:grid-cols-4">
     {/* popup for edit task */}
     {editingTask && (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center" style={{ zIndex: 9999 }}>

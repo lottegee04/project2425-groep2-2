@@ -19,7 +19,7 @@ const UserTableHome: React.FC<Props> = ({ users }) => {
     }
     return (
         <>
-        <table>
+        <table className="md:w-4 ">
         <thead>
             <tr className=" bg-[#af9a81] flex flex-row items-center m-2 p-1 rounded-2xl text-white font-bold text-xl">
                 <th className="w-56 m-2 px-5 p-3">{t('home.username')} </th>

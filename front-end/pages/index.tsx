@@ -37,8 +37,9 @@ const Home: React.FC = () => {
       <Head>
         <title>{t('app.title')} </title>
       </Head>
-      <Header/>
+      
       <main className="">
+      <Header/>
       <div className="flex justify-center">
         {data &&
         
