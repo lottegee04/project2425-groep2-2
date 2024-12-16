@@ -148,6 +148,30 @@ const getTasksByPriority = async (levelName: string): Promise<Task[]> => {
     }
 }
 
+const getTasksByPriorityByUser = async (levelName:string, username: string) => {
+    try {
+        const tasksPrisma = await database.task.findMany({
+            where: {
+                priority: {
+                    levelName: levelName
+                },
+                done: false,
+                user : {
+                    username: username
+                }
+            },
+            include: {
+                priority: true,
+                user: true,
+            }
+        })
+        return tasksPrisma.map((taskPrisma) => Task.from(taskPrisma));
+    }
+    catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
 
 const deleteTask =  async (id: number): Promise<void> => {
     try {const taskPrisma = await database.task.delete({
@@ -205,5 +229,6 @@ export default {
     getTasksByPriority,
     getActiveTasksByUser,
     getTaskByUserById,
-    editTask
+    editTask,
+    getTasksByPriorityByUser
 };

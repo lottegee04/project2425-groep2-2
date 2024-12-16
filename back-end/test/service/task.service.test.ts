@@ -76,8 +76,8 @@ let mockPriorityDbCreatePriority: jest.Mock;
 let mockTaskdbGetTaskByUserById: jest.Mock;
 let mockTaskDbGetTaskById: jest.Mock;
 let mockTaskDbDeleteTask: jest.Mock;
-let  mockTaskDbEditTask: jest.Mock;
-
+let mockTaskDbEditTask: jest.Mock;
+let mockTaskDbGetTasksByPriorityByUser : jest.Mock;
 beforeEach(() => {
     mockUserDbgetUserByUserName = jest.fn();
     mockPriorityDbGetPriorityById = jest.fn();
@@ -91,6 +91,7 @@ beforeEach(() => {
     mockTaskDbGetTaskById = jest.fn();
     mockTaskDbDeleteTask = jest.fn();
     mockTaskDbEditTask = jest.fn();
+    mockTaskDbGetTasksByPriorityByUser = jest.fn();
 
     userDb.getUserByUserName = mockUserDbgetUserByUserName;
     priorityDb.getPriorityById = mockPriorityDbGetPriorityById;
@@ -104,6 +105,7 @@ beforeEach(() => {
     taskDb.getTaskById = mockTaskDbGetTaskById;
     taskDb.deleteTask = mockTaskDbDeleteTask;
     taskDb.editTask =  mockTaskDbEditTask;
+    taskDb.getTasksByPriorityByUser = mockTaskDbGetTasksByPriorityByUser;
 
     jest.resetAllMocks();
 });
@@ -233,13 +235,13 @@ test('given active tasks, when:getting all active tasks, then all active tasks a
     expect(result).toEqual([]);
 });
 
-test("given valid levelName, when: getting Tasks By Priority, then those tasks are returned", async () => {
+test("given valid levelName and admin user, when: getting Tasks By Priority, then those tasks are returned", async () => {
     //given:
     mockPriorityDbGetPriorityByName.mockResolvedValue([priority]);
     mockTaskDbGetTasksByPriority.mockResolvedValue(tasks);
 
     //when:
-    const result = await taskService.getTasksByPriority("basic", {username: user.getUsername(), role: user.getRole()});
+    const result = await taskService.getTasksByPriority("basic", {username: user.getUsername(), role: "admin"});
 
     //then:
     expect(mockPriorityDbGetPriorityByName).toHaveBeenCalledTimes(1);
@@ -248,13 +250,13 @@ test("given valid levelName, when: getting Tasks By Priority, then those tasks a
     expect(result).toEqual(tasks);
 });
 
-test("given valid levelName with no tasks, when: getting Tasks By Priority, then empty list is returned", async () => {
+test("given admin user and valid levelName with no tasks, when: getting Tasks By Priority, then empty list is returned", async () => {
     //given:
     mockPriorityDbGetPriorityByName.mockResolvedValue([priority]);
     mockTaskDbGetTasksByPriority.mockResolvedValue([]);
 
     //when:
-    const result = await taskService.getTasksByPriority("urgent", {username: user.getUsername(), role: user.getRole()});
+    const result = await taskService.getTasksByPriority("urgent", {username: user.getUsername(), role: "admin"});
 
     //then:
     expect(mockPriorityDbGetPriorityByName).toHaveBeenCalledTimes(1);
@@ -262,6 +264,21 @@ test("given valid levelName with no tasks, when: getting Tasks By Priority, then
     expect(result).toHaveLength(0);
     expect(result).toEqual([]);
 });
+
+test("given user user and valid levelName, when getting Tasks By Priority, then tasks for this user are returned", async () => {
+        //given:
+        mockPriorityDbGetPriorityByName.mockResolvedValue([priority]);
+        mockTaskDbGetTasksByPriorityByUser.mockResolvedValue(tasks)
+    
+        //when:
+        const result = await taskService.getTasksByPriority("basic", {username: user.getUsername(), role: user.getRole()});
+    
+        //then:
+        expect(mockPriorityDbGetPriorityByName).toHaveBeenCalledTimes(1);
+        expect(mockTaskDbGetTasksByPriorityByUser).toHaveBeenCalledTimes(1);
+        expect(result).toHaveLength(2);
+        expect(result).toEqual(tasks);
+})
 
 test("given unknown levelName, when: getting Tasks By Priority, then an error is thrown", async () => {
     expect.assertions(1);

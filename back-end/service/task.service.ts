@@ -66,8 +66,10 @@ const getTasksByPriority = async(levelName: string, {username,role}:any): Promis
     }
     if (role === "guest") {
         throw new UnauthorizedError('credentials_required', {message: 'you are not authorized to access this resource.',});
-    } else {
+    } else if (role === "admin") {
         return taskDb.getTasksByPriority(levelName);
+    } else {
+        return taskDb.getTasksByPriorityByUser(levelName,username)
     }
 }
 const deleteTask = async (taskId:number, {username,role}:any): Promise<boolean> => {
