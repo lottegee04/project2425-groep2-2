@@ -119,6 +119,7 @@
     },
     "taskHistory": {
         "title": "Historial de tareas",
-        "p": "Aqui puedes ver todas las tareas que has completado."
+        "p": "Aqui puedes ver todas las tareas que has completado.",
+        "back": "Volver a tareas"
     }
 }

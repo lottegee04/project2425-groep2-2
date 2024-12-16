@@ -123,6 +123,7 @@
     },
     "taskHistory": {
         "title": "Task History",
-        "p": "Here you can find all your finished tasks."
+        "p": "Here you can find all your finished tasks.",
+        "back": "Back to Tasks"
     }
 }

@@ -7,6 +7,7 @@ import TaskOverview from "../../components/tasks/TaskOverview";
 import useInterval from "use-interval";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import Link from "next/link";
 
 const TaskHistory: React.FC = () => {
   const [tasks, setTasks] = useState<Array<Task>>();
@@ -32,7 +33,9 @@ const TaskHistory: React.FC = () => {
   return (
     <>
       <Header />
-      <main >
+
+      <main className="flex flex-col" >
+      <Link  className="bg-[#6e654d] hover:bg-[#978b7c] text-white font-bold mx-4 p-2 rounded text-decoration-none self-start" href='/tasks'>{t('taskHistory.back')} </Link>
         <h1 className=" font-bold text-[#534e46] m-2 ">{t('taskHistory.title')} </h1>
         <p className="mx-5">{t('taskHistory.p')} </p>
         {tasks && <TaskOverview tasks={tasks} />}
