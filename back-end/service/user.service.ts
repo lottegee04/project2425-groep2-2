@@ -4,6 +4,8 @@ import { AuthenticationResponse, UserInput } from '../types';
 import bcrypt from 'bcrypt';
 import { generateJwtToken } from '../util/jwt';
 import { UnauthorizedError } from 'express-jwt';
+import { TaskHistory } from '../model/taskhistory';
+import taskhistoryDb from '../repository/taskhistory.db';
 
 const getUsers = async ({username,role}:any): Promise<User[]> => {
     if (role === 'admin') {
@@ -34,6 +36,8 @@ const createUser = async ({ username, password,role }: UserInput): Promise<User>
     const hashedPassword = await bcrypt.hash(password, 12);
     const user = new User({ username, password: hashedPassword, role });
     const newUser = await userDb.createUser(user);
+    const taskHistory = new TaskHistory({user:newUser, finishedTasks: []});
+    const newTaskHistory = await taskhistoryDb.createTaskHistory(taskHistory);
     return newUser;
 };
 
