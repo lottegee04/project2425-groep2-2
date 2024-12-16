@@ -2,6 +2,7 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "express-jwt": "^8.4.1",
+    "helmet": "^8.0.0",
     "jsonwebtoken": "^9.0.2",
     "swr": "^2.2.5"
   }

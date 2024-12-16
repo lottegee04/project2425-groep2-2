@@ -8,8 +8,10 @@ import { userRouter } from './controller/user.routes';
 import { taskRouter } from './controller/task.routes';
 import { taskhistoryRouter } from './controller/taskhistory.routes';
 import { expressjwt } from 'express-jwt';
+import helmet from 'helmet';
 
 const app = express();
+app.use(helmet());
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
 
