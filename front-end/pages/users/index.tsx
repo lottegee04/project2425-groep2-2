@@ -12,6 +12,7 @@ import useSWR, { mutate } from "swr";
 import useInterval from "use-interval";
 import UserTableHome from "../../components/users/UserTableHome";
 import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const Users: React.FC = () => {
   // const [selectedUser, setSelectedUser] = useState<User>();
@@ -80,5 +81,14 @@ const Users: React.FC = () => {
     </>
   );
 };
+export const getServerSideProps = async (context) => {
+  const { locale } = context;
+
+  return {
+      props: {
+          ...(await serverSideTranslations(locale ?? "en", ["common"])),
+      },
+  };
+}
 
 export default Users;
