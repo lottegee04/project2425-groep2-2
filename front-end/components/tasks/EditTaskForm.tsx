@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Priority, StatusMessage, Task } from "../../types";
 import { useRouter } from "next/router";
 import TaskService from "../../services/TaskService";
@@ -22,6 +22,15 @@ const EditTaskForm: React.FC<Props> = ({ task }) => {
     colour: formData.priority.colour,
   });
   const { t } = useTranslation();
+  useEffect(() => {
+    if (task) {
+      setFormData(task);
+      setDescription(task.description);
+      setSidenote(task.sidenote);
+      setDeadline(task.deadline.toString());
+      setPriority(task.priority);
+    }
+  }, [task]);
   const validate = (): boolean => {
     if (!description || description.trim() === "") {
       setDescriptionError(t("editTask.validate.descriptionError"));
@@ -76,7 +85,7 @@ const EditTaskForm: React.FC<Props> = ({ task }) => {
     setSidenote(sidenote);
     setDeadline(deadline);
     if (response && response.status === 200) {
-      setTimeout(() => {}, 1000);
+      setTimeout(() => {router.push("/tasks")}, 1000);
     }
   };
   const handlePriorityChange = (

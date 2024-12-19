@@ -173,7 +173,7 @@ const TaskOverview: React.FC<Props> = ({ tasks }) => {
                         width={40}
                         height={40}
                         onClick={() => {
-                          router.push("/tasks/{task.id}");
+                          router.push(`/tasks/${task.id}`);
                         }}
                       />
                     )}
