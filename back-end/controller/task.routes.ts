@@ -27,7 +27,7 @@
  *              type: string
  *              format: date-time
  *              description: date when the task is completed.
- *            deadline: 
+ *            deadline:
  *              type: string
  *              format: date-time
  *              description: due date of the task.
@@ -46,31 +46,31 @@
  *              type: number
  *              format: int64
  *       TaskInput:
-    *          type: object
-    *          properties:
-    *            id:
-    *              type: number
-    *              format: int64
-    *            description:
-    *              type: string
-    *            sidenote:
-    *              type: string
-    *            deadline: 
-    *              type: string
-    *              format: date-time
-    *              description: due date of the task.
-    *            priority:
-    *              type: object
-    *              properties:
-    *                 levelName:
-    *                      type: string
-    *                 colour:
-    *                      type: string
-    *            userId:
-    *              type: number
-    *              format: int64
+ *          type: object
+ *          properties:
+ *            id:
+ *              type: number
+ *              format: int64
+ *            description:
+ *              type: string
+ *            sidenote:
+ *              type: string
+ *            deadline:
+ *              type: string
+ *              format: date-time
+ *              description: due date of the task.
+ *            priority:
+ *              type: object
+ *              properties:
+ *                 levelName:
+ *                      type: string
+ *                 colour:
+ *                      type: string
+ *            userId:
+ *              type: number
+ *              format: int64
  */
-import express, {NextFunction, Request, Response} from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import taskService from '../service/task.service';
 import { Role, TaskInput } from '../types';
 
@@ -118,16 +118,14 @@ taskRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  *               items:
  *                  $ref: '#/components/schemas/Task'
  */
-taskRouter.get("/active",async ( req: Request, res: Response, next: NextFunction) => {
+taskRouter.get('/active', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const activeTasks = await taskService.getActiveTasks();
         res.status(200).json(activeTasks);
     } catch (error) {
-        next(error)
+        next(error);
     }
-})
-
-
+});
 
 /**
  * @swagger
@@ -150,18 +148,17 @@ taskRouter.get("/active",async ( req: Request, res: Response, next: NextFunction
  *                schema:
  *                  $ref: '#/components/schemas/Task'
  */
-taskRouter.post("/",async(req:Request, res:Response,next:NextFunction) => {
+taskRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const request = req as Request & { auth: { username: string; role: Role } };
         const { username, role } = request.auth;
         const task = <TaskInput>req.body;
-        const result = await taskService.createTask(task,{username,role});
+        const result = await taskService.createTask(task, { username, role });
         res.status(200).json(result);
     } catch (error) {
-        next(error)
+        next(error);
     }
-
-}) ;
+});
 /**
  * @swagger
  * /tasks/priority/{levelName}:
@@ -186,16 +183,19 @@ taskRouter.post("/",async(req:Request, res:Response,next:NextFunction) => {
  *               items:
  *                  $ref: '#/components/schemas/Task'
  */
-taskRouter.get("/priority/:levelName",async ( req: Request, res: Response, next: NextFunction) => {
+taskRouter.get('/priority/:levelName', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const request = req as Request & { auth: { username: string; role: Role } };
         const { username, role } = request.auth;
-        const tasks = await taskService.getTasksByPriority(String(req.params.levelName),{username,role});
+        const tasks = await taskService.getTasksByPriority(String(req.params.levelName), {
+            username,
+            role,
+        });
         res.status(200).json(tasks);
     } catch (error) {
-        next(error)
+        next(error);
     }
-})
+});
 /**
  * @swagger
  * /tasks/deleteTask/{taskId}:
@@ -218,18 +218,24 @@ taskRouter.get("/priority/:levelName",async ( req: Request, res: Response, next:
  *             schema:
  *               type: string
  */
-taskRouter.delete("/deleteTask/:taskId", async (req:Request, res:Response, next:NextFunction) => {
-    try {
-        const request = req as Request & { auth: { username: string; role: Role } };
-        const { username,role } = request.auth; 
-        const success = await taskService.deleteTask(Number(req.params.taskId), {username,role});
-        if (success) {
-            res.status(200).json({message: "Task successfully deleted!"});
+taskRouter.delete(
+    '/deleteTask/:taskId',
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const request = req as Request & { auth: { username: string; role: Role } };
+            const { username, role } = request.auth;
+            const success = await taskService.deleteTask(Number(req.params.taskId), {
+                username,
+                role,
+            });
+            if (success) {
+                res.status(200).json({ message: 'Task successfully deleted!' });
+            }
+        } catch (error) {
+            next(error);
         }
-    } catch (error) {
-        next(error)
     }
-})
+);
 /**
  * @swagger
  * /tasks/editTask/{taskId}:
@@ -258,16 +264,52 @@ taskRouter.delete("/deleteTask/:taskId", async (req:Request, res:Response, next:
  *                schema:
  *                  $ref: '#/components/schemas/Task'
  */
-taskRouter.put("/editTask/:taskId", async (req:Request, res:Response, next:NextFunction) => {
+taskRouter.put('/editTask/:taskId', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const request = req as Request & {auth: {username: string; role: Role; }};
+        const request = req as Request & { auth: { username: string; role: Role } };
         const { username, role } = request.auth;
         const task = <TaskInput>req.body;
-        const editedTask = await taskService.editTask(Number(req.params.taskId), task, {username, role})
+        const editedTask = await taskService.editTask(Number(req.params.taskId), task, {
+            username,
+            role,
+        });
         res.status(200).json(editedTask);
-    } catch(error) {
-        next(error)
+    } catch (error) {
+        next(error);
     }
-})
+});
+/**
+ * @swagger
+ * /tasks/{id}:
+ *  get:
+ *      security:
+ *       - bearerAuth: []
+ *      summary: Get a task by id.
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            schema:
+ *              type: integer
+ *              required: true
+ *              description: The task id.
+ *      responses:
+ *          200:
+ *              description: A task object.
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Task'
+ */
+taskRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const request = req as Request & { auth: { username: string; role: Role } };
+        const { username, role } = request.auth;
+        const task = await taskService.getTaskById(Number(req.params.id), { username, role });
 
-export {taskRouter}
+        res.status(200).json(task);
+    } catch (error) {
+        next(error);
+    }
+});
+
+export { taskRouter };

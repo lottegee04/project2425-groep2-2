@@ -56,9 +56,9 @@
  *            password:
  *              type: string
  *              description: User password.
-  *            role:
+ *            role:
  *               $ref: '#/components/schemas/Role'
-  *      Role:
+ *      Role:
  *          type: string
  *          enum: [admin,user,guest]
  */
@@ -90,7 +90,7 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const request = req as Request & { auth: { username: string; role: Role } };
         const { username, role } = request.auth;
-        const users = await userService.getUsers({username,role});
+        const users = await userService.getUsers({ username, role });
         res.status(200).json(users);
     } catch (error) {
         next(error);
@@ -100,6 +100,8 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
  * @swagger
  * /users/{id}:
  *  get:
+ *      security:
+ *       - bearerAuth: []
  *      summary: Get a user by id.
  *      parameters:
  *          - in: path
@@ -119,7 +121,9 @@ userRouter.get('/', async (req: Request, res: Response, next: NextFunction) => {
 
 userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const user = await userService.getUserById(Number(req.params.id));
+        const request = req as Request & { auth: { username: string; role: Role } };
+        const { username, role } = request.auth;
+        const user = await userService.getUserById(Number(req.params.id), { username, role });
         res.status(200).json(user);
     } catch (error) {
         next(error);
@@ -144,11 +148,11 @@ userRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) =
  *                schema:
  *                  $ref: '#/components/schemas/User'
  */
-userRouter.post("/signup", async (req: Request, res: Response, next: NextFunction) => {
+userRouter.post('/signup', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = <UserInput>req.body;
         const result = await userService.createUser(user);
-        res.status(200).json(result)
+        res.status(200).json(result);
     } catch (error) {
         next(error);
     }
@@ -174,15 +178,15 @@ userRouter.post("/signup", async (req: Request, res: Response, next: NextFunctio
  *                schema:
  *                  $ref: '#/components/schemas/AuthenticationResponse'
  */
-userRouter.post('/login', async (req:Request, res:Response, next: NextFunction) => {
+userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userInput: UserInput = req.body;
         const response = await userService.authenticate(userInput);
-        res.status(200).json({message:"authentication succesfull", ...response})
+        res.status(200).json({ message: 'authentication succesfull', ...response });
     } catch (error) {
         next(error);
     }
-})
+});
 /**
  * @swagger
  * /users/exists/{username}:
@@ -203,14 +207,13 @@ userRouter.post('/login', async (req:Request, res:Response, next: NextFunction) 
  *                      schema:
  *                          type: boolean
  */
-userRouter.get("/exists/:username", async (req: Request, res:Response, next:NextFunction) => {
-   try {
-        const result = await userService.userExists(
-            String(req.params.username));
+userRouter.get('/exists/:username', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const result = await userService.userExists(String(req.params.username));
         res.status(200).json(result);
     } catch (error) {
-        next(error)
+        next(error);
     }
-})
+});
 
 export { userRouter };

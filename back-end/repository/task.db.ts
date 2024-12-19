@@ -17,28 +17,27 @@ const createTask = async (task: Task): Promise<Task> => {
                 priority: {
                     create: {
                         levelName: task.getPriority().getLevelName(),
-                        colour: task.getPriority().getColour()
-                    }
+                        colour: task.getPriority().getColour(),
+                    },
                 },
                 user: {
                     connect: {
-                        id: task.getUser().getId()
-                    }
-                }
+                        id: task.getUser().getId(),
+                    },
+                },
             },
             include: {
                 priority: true,
                 user: true,
-            }
-        })
-        
+            },
+        });
+
         return Task.from(taskPrisma);
-    }
-    catch (error) {
+    } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');
     }
-}
+};
 
 const getAllTasks = async (): Promise<Task[]> => {
     try {
@@ -46,139 +45,133 @@ const getAllTasks = async (): Promise<Task[]> => {
             include: {
                 priority: true,
                 user: true,
-            }
-        })
+            },
+        });
         return tasksPrisma.map((taskPrisma) => Task.from(taskPrisma));
-    }
-    catch (error) {
+    } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');
-    }   
+    }
 };
 
 const getActiveTasks = async (): Promise<Task[]> => {
-   try {
-         const tasksPrisma = await database.task.findMany({
-              where: {
+    try {
+        const tasksPrisma = await database.task.findMany({
+            where: {
                 done: false,
-              },
-              include: {
+            },
+            include: {
                 priority: true,
                 user: true,
-              }
-         });
-         return tasksPrisma.map((taskPrisma) => Task.from(taskPrisma));
-   }
-   catch (error) {
-         console.error(error);
-         throw new Error('Database error. See server log for details.');
-   }
-}
-
-const getTaskById = async (id: number): Promise<Task | null> => {
-    try {const taskPrisma = await database.task.findUnique({
-        where: {id},
-        include: {
-            priority: true,
-            user: true,
-        }
-    })
-    return taskPrisma ? Task.from(taskPrisma) : null;
-}
-    catch (error) {
+            },
+        });
+        return tasksPrisma.map((taskPrisma) => Task.from(taskPrisma));
+    } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');
     }
 };
-const getTaskByUserById = async (user:User, taskId: number) : Promise<Task | null> => {
+
+const getTaskById = async (id: number): Promise<Task | null> => {
     try {
         const taskPrisma = await database.task.findUnique({
-            where: {id: taskId,
-                    userId: user.getId()
-            },
+            where: { id },
             include: {
                 priority: true,
-                user: true
-            }
+                user: true,
+            },
         });
         return taskPrisma ? Task.from(taskPrisma) : null;
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');
     }
-}
+};
+const getTaskByUserById = async (user: User, taskId: number): Promise<Task | null> => {
+    try {
+        const taskPrisma = await database.task.findUnique({
+            where: { id: taskId, userId: user.getId() },
+            include: {
+                priority: true,
+                user: true,
+            },
+        });
+        return taskPrisma ? Task.from(taskPrisma) : null;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+};
 
 const getActiveTasksByUser = async (user: User): Promise<Task[]> => {
     try {
         const tasksPrisma = await database.task.findMany({
             where: {
                 done: false,
-                userId: user.getId()
+                userId: user.getId(),
             },
             include: {
                 priority: true,
                 user: true,
-            }
+            },
         });
         return tasksPrisma.map((taskPrisma) => Task.from(taskPrisma));
     } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');
-  }
-}
+    }
+};
 const getTasksByPriority = async (levelName: string): Promise<Task[]> => {
     try {
         const tasksPrisma = await database.task.findMany({
             where: {
                 priority: {
-                    levelName
+                    levelName,
                 },
-                done: false
+                done: false,
             },
             include: {
                 priority: true,
                 user: true,
-            }
-        })
+            },
+        });
         return tasksPrisma.map((taskPrisma) => Task.from(taskPrisma));
-    }
-    catch (error) {
+    } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');
     }
-}
+};
 
-const getTasksByPriorityByUser = async (levelName:string, username: string) => {
+const getTasksByPriorityByUser = async (levelName: string, username: string) => {
     try {
         const tasksPrisma = await database.task.findMany({
             where: {
                 priority: {
-                    levelName: levelName
+                    levelName: levelName,
                 },
                 done: false,
-                user : {
-                    username: username
-                }
+                user: {
+                    username: username,
+                },
             },
             include: {
                 priority: true,
                 user: true,
-            }
-        })
+            },
+        });
         return tasksPrisma.map((taskPrisma) => Task.from(taskPrisma));
-    }
-    catch (error) {
+    } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');
     }
-}
+};
 
-const deleteTask =  async (id: number): Promise<void> => {
-    try {const taskPrisma = await database.task.delete({
-        where: {id}
-    })
-}
-    catch (error) {
+const deleteTask = async (id: number): Promise<void> => {
+    try {
+        const taskPrisma = await database.task.delete({
+            where: { id },
+        });
+    } catch (error) {
         console.error(error);
         throw new Error('Database error. See server log for details.');
     }
@@ -219,7 +212,6 @@ const editTask = async (id: number, task: Task): Promise<Task> => {
     }
 };
 
-
 export default {
     createTask,
     getAllTasks,
@@ -230,5 +222,5 @@ export default {
     getActiveTasksByUser,
     getTaskByUserById,
     editTask,
-    getTasksByPriorityByUser
+    getTasksByPriorityByUser,
 };
