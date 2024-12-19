@@ -8,6 +8,7 @@ import useSWR, { mutate } from "swr";
 import useInterval from "use-interval";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import Welcome from "../components/Welcome";
 
 
 const Home: React.FC = () => {
@@ -40,12 +41,7 @@ const Home: React.FC = () => {
       
       <main className="">
       <Header/>
-      <div className="flex justify-center">
-        {data &&
-        
-        <UserTableHome users={data}/>
-        }
-        </div>
+      <Welcome></Welcome>
       </main>
 
     </>
