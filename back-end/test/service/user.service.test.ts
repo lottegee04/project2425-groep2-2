@@ -43,8 +43,8 @@ const newUser = new User({
 });
 
 const newTaskHistory = new TaskHistory({
-    user: newUser, 
-    finishedTasks: []
+    user: newUser,
+    finishedTasks: [],
 });
 const userInputNewUser: UserInput = {
     id: 3,
@@ -177,7 +177,7 @@ test('given new valid user, when calling createUser, then new user is returned',
     //given:
     mockUserDbgetUserByUserName.mockResolvedValue(null);
     mockUserDbcreateUser.mockResolvedValue(newUser);
-    mockTaskHistoryDbCreateTaskHistory.mockResolvedValue(newTaskHistory)
+    mockTaskHistoryDbCreateTaskHistory.mockResolvedValue(newTaskHistory);
     //when:
     const result = await userService.createUser(userInputNewUser);
     //then:
