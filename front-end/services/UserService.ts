@@ -74,11 +74,43 @@ const signupUser = async (user: {
   }
 };
 
+const deleteUser = async (username: string, user: User) => {
+  const token = JSON.parse(localStorage.getItem("loggedInUser"))?.token;
+  return fetch(process.env.NEXT_PUBLIC_API_URL + `/users/${username}`, {
+    method: "DELETE",
+    headers: {
+      "Content-type": "application/json",
+      Authorization: ` Bearer ${token}`,
+    },
+      body: JSON.stringify(user),
+  });
+};
+
+const changePassword = async (username: string, user: User,newPassword: string) => {
+  const token = JSON.parse(localStorage.getItem("loggedInUser"))?.token;
+  return fetch(process.env.NEXT_PUBLIC_API_URL + `/users/${username}`, {
+    method: "PUT",
+    headers: {
+      "Content-type": "application/json",
+      Authorization: ` Bearer ${token}`,
+    },
+    body: JSON.stringify({ 
+      username: user.username,  
+      oldPassword: user.password,
+      role: user.role,  
+      newPassword: newPassword,    
+    }),
+  });
+};
+
+
 const UserService = {
   getUsers,
   loginUser,
   signupUser,
   userExists,
+  deleteUser,
+  changePassword,
 };
 
 export default UserService;

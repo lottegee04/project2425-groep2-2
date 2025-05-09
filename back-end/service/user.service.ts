@@ -6,6 +6,7 @@ import { generateJwtToken } from '../util/jwt';
 import { UnauthorizedError } from 'express-jwt';
 import { TaskHistory } from '../model/taskhistory';
 import taskhistoryDb from '../repository/taskhistory.db';
+import e from 'express';
 
 const getUsers = async ({ username, role }: any): Promise<User[]> => {
     if (role === 'admin') {
@@ -22,13 +23,19 @@ const getUsers = async ({ username, role }: any): Promise<User[]> => {
         });
     }
 };
-const getAllUsers = async (): Promise<User[]> => await userDb.getAllUsers();
+
 
 const getUserById = async (id: number): Promise<User> => {
     const user = await userDb.getUserById(id);
     if (!user) throw new Error(`User with id ${id} does not exists.`);
     return user;
 };
+
+const getUserByUserName = async (username: string): Promise<User> => {
+    const user = await userDb.getUserByUserName(username);
+    if (!user) throw new Error(`User with username ${username} does not exists.`);
+    return user;
+}
 
 const createUser = async ({ username, password, role }: UserInput): Promise<User> => {
     const existingUser = await userDb.getUserByUserName(username);
@@ -58,6 +65,23 @@ const authenticate = async ({ username, password }: UserInput): Promise<Authenti
         role: user.getRole().toString(),
     };
 };
+const verifyPassword = async ( { username, password }: UserInput): Promise<boolean> => {
+    const user = await userDb.getUserByUserName(username);
+    if (!user) {
+      throw new Error(`User with username:  ${username} not found.`);
+    }
+  
+    const valid = await bcrypt.compare(password, user.getPassword());
+    if (!valid) {
+      return false;
+    }
+    else {
+        return true;
+    }
+  };
+
+
+
 const userExists = async (username: string): Promise<boolean> => {
     const user = await userDb.getUserByUserName(username);
     if (!user) {
@@ -67,4 +91,26 @@ const userExists = async (username: string): Promise<boolean> => {
     }
 };
 
-export default { getUsers, getAllUsers, getUserById, createUser, authenticate, userExists };
+const deleteUser = async (id: number): Promise<String> => {
+    const user = await userDb.getUserById(id);
+    if (!user) {
+        throw new Error(`User with id ${id} does not exists.`);
+    }
+    await taskhistoryDb.deleteTaskHistoryByUserId(id);
+    await userDb.deleteUser(id);
+    return `User with id ${id} deleted.`;
+
+}
+
+const changePassword = async (username: string, password: string): Promise<User> => {
+    const user = await userDb.getUserByUserName(username);
+    if (!user) {
+        throw new Error(`User with username: ${username} not found.`);
+    }
+    const hashedPassword = await bcrypt.hash(password, 12);
+    user.setPassword(hashedPassword);
+    const updatedUser = await userDb.updateUser(user);
+    return updatedUser;
+}
+
+export default { getUsers, getUserById,getUserByUserName, createUser, authenticate, verifyPassword, userExists, deleteUser, changePassword };

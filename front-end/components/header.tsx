@@ -65,7 +65,7 @@ const Header: React.FC = () => {
                 href="/login"
                 className="nav-link p-2 m-1 fs-6 text-white bg-[#474132] hover:bg-[#655d53] rounded-md "
                 onClick={() => {
-                  sessionStorage.removeItem("loggedInUser");
+                  
                   localStorage.removeItem("loggedInUser");
                   setloggedInUser(null);
                 }}
@@ -73,6 +73,15 @@ const Header: React.FC = () => {
                 {" "}
                 {t("header.nav.logout")}
               </Link>
+              
+              <Link
+                href="/account"
+                className="nav-link p-2 fs-6 text-dark  m-1 rounded-md hover:bg-[#d8cfc4]"
+              >
+              my account
+              </Link>
+            
+          
             </>
           )}
         </nav>

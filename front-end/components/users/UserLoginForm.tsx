@@ -48,7 +48,7 @@ const UserLoginFrom: React.FC = () => {
           role: user.role,
         })
       );
-      sessionStorage.setItem("loggedInUser", username);
+      
       setStatusMessage([
         {
           message: t('login.success'),

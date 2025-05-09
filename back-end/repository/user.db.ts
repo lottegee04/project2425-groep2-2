@@ -95,9 +95,39 @@ const createUser = async (user: User): Promise<User> => {
     }
 };
 
+const deleteUser = async (id: number): Promise<void> => {
+    try {
+        await database.user.delete({
+            where: { id },
+        });
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
+const updateUser = async (user: User): Promise<User> => {
+    try {
+        const userPrisma = await database.user.update({
+            where: { id: user.getId() },
+            data: {
+                username: user.getUsername(),
+                password: user.getPassword(),
+                role: user.getRole(),
+            },
+        });
+        return User.from(userPrisma);
+    }
+    catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
 export default {
     getAllUsers,
     getUserById,
     createUser,
     getUserByUserName,
+    deleteUser,
+    updateUser,
 };

@@ -125,5 +125,27 @@
         "title": "Task History",
         "p": "Here you can find all your finished tasks.",
         "back": "Back to Tasks"
+    },
+    "account": {
+        "title": "Account",
+        "p": "Here you can find your account information.",
+        "username": "Username",
+        "role": "Role",
+        "delete": "Delete Account",
+        "deleteConfirm": {
+            "Title": "Are you sure you want to delete your account?",
+            "p": "This action cannot be undone.",
+            "button": {
+                "yes": "Yes, delete my account",
+                "no": "No, keep my account"
+            }
+        },
+        "messages": {
+            "passwordUpdate": "Password updated successfully.",
+            "delete": {
+                "success": "Account deleted successfully.",
+                "error": "An error occurred while deleting the account."
+            }
+        }
     }
 }

@@ -66,6 +66,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import userService from '../service/user.service';
 import { Role, UserInput } from '../types';
+import { User } from '../model/user';
 
 const userRouter = express.Router();
 
@@ -215,5 +216,60 @@ userRouter.get('/exists/:username', async (req: Request, res: Response, next: Ne
         next(error);
     }
 });
+
+userRouter.delete('/:username', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userInput: UserInput = req.body;
+        const request = req as Request & { auth: { username: string; role: Role } };
+        const { username, role } = request.auth;
+        const user = await userService.getUserByUserName(username);
+        const userId = user.getId();
+        if (userId === undefined) {
+            return res.status(400).json({ message: 'Invalid user ID.' });
+        }
+        const isValid = await userService.verifyPassword(userInput);
+        if (!isValid) {
+            return res.status(401).json({ message: 'Invalid password.' });
+        }
+        const deletion = await userService.deleteUser(userId);
+        if (deletion) {
+            res.status(200).json({ message: `User with id ${req.params.id} deleted.` });
+        } else {
+            res.status(404).json({ message: `No user deleted.` });
+        }
+    }
+    catch (error) {
+        next(error);
+    }
+
+
+})
+
+userRouter.put('/:username', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { username } = req.params;
+        const { userName, oldPassword, role, newPassword } = req.body;
+
+        
+        if (!newPassword || oldPassword === newPassword) {
+            return res.status(400).json({ message: "New password must be provided and different from the old password." });
+        }
+
+        const isVerified = await userService.verifyPassword({ username, password: oldPassword, role });
+        if (!isVerified) {
+            return res.status(401).json({ message: "Authentication failed. Incorrect old password." });
+        }
+
+        userService.changePassword(username, newPassword)
+
+        
+
+        res.status(200).json({ message: "Password updated successfully." });
+    } 
+    catch (error) {
+        next(error);
+    }
+})
+
 
 export { userRouter };

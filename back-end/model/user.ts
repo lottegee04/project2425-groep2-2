@@ -37,6 +37,10 @@ export class User {
     getPassword() : string {
         return this.password;
     }
+
+    setPassword(password: string) {
+        this.password = password;  
+    }
     getRole() : Role {
         return this.role;
     }

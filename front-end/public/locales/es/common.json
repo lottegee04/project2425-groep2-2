@@ -121,5 +121,28 @@
         "title": "Historial de tareas",
         "p": "Aqui puedes ver todas las tareas que has completado.",
         "back": "Volver a tareas"
+    },
+    "account": {
+        "title": "Cuenta",
+        
+        "p": "Aquí puedes ver y editar tu información de cuenta.",
+        "username": "Nombre de usuario",
+        "role": "Rol",
+        "delete": "Eliminar cuenta",
+        "deleteConfirm": {
+            "title": "¿Estás seguro?",
+            "p": "Esta acción no se puede deshacer.",
+            "button": {
+                "yes": "Sí, eliminar mi cuenta",
+                "no": "No, mantener mi cuenta"
+            }
+        },
+        "messages": {
+            "passwordUpdate": "Contraseña actualizada con éxito.",
+            "delete": {
+                "success": "Cuenta eliminada con éxito.",
+                "error": "Ocurrió un error al eliminar la cuenta."
+            }
+        }
     }
 }

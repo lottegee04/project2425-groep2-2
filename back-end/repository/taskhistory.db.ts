@@ -115,9 +115,27 @@ const finishTask = async ({task}:{task:Task;}): Promise<Task | null> => {
     }
 }
 
+const deleteTaskHistoryByUserId = async (id: number): Promise<void> => {
+    try {
+        const taskHistory = await database.taskHistory.findUnique({
+            where: { userId: id },
+        });
+        if (!taskHistory) {
+            throw new Error(`Task history from user with id ${id} does not exist.`);
+        }
+        await database.taskHistory.delete({
+            where: { userId: id },
+        });
+    } catch (error) {
+        console.error(error);
+        throw new Error('Database error. See server log for details.');
+    }
+}
+
 export default {
     createTaskHistory,
     getAllTaskHistories,
     getTaskHistoryByUser,
-    finishTask
+    finishTask,
+    deleteTaskHistoryByUserId,
 };
