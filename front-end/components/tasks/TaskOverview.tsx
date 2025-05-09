@@ -3,10 +3,10 @@ import { table } from "console";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import TaskService from "../../services/TaskService";
-import { stringify } from "querystring";
+
 import classNames from "classnames";
 import { useRouter } from "next/router";
-import EditTaskForm from "./EditTaskForm";
+
 import { useTranslation } from "next-i18next";
 type Props = {
   tasks: Array<Task>;
@@ -15,7 +15,7 @@ type Props = {
 const TaskOverview: React.FC<Props> = ({ tasks }) => {
   const router = useRouter();
   const [statusMessage, setStatusMessage] = useState<StatusMessage[]>([]);
-  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  
   const { t } = useTranslation();
   const [areYouSure, setAreYouSure] = useState<boolean>(false);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
@@ -70,7 +70,7 @@ const TaskOverview: React.FC<Props> = ({ tasks }) => {
     }
   }, [statusMessage]);
   return (
-    <>
+    
       <div className="flex flex-column">
         {statusMessage && (
           <div className="text-center">
@@ -195,7 +195,7 @@ const TaskOverview: React.FC<Props> = ({ tasks }) => {
           </ul>
         )}
       </div>
-    </>
+    
   );
 };
 

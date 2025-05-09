@@ -13,7 +13,7 @@ const Header: React.FC = () => {
   }, []);
 
   return (
-    <>
+    
       <header className=" bg-[#e2dbd3] flex flex-wrap flex-row items-center justify-between m-3 p-2 rounded-2xl">
         <Image
           src="/images/donedeal_logo_transparant.png"
@@ -86,7 +86,7 @@ const Header: React.FC = () => {
           )}
         </nav>
       </header>
-    </>
+    
   );
 };
 

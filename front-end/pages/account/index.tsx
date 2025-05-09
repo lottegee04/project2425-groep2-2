@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { User } from "../../types";
 import { useTranslation } from "next-i18next";
-import Link from "next/link";
+
 import Header from "../../components/header";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import UserService from "../../services/UserService";
@@ -13,7 +13,7 @@ const Account: React.FC = () => {
   const [areYouSure, setAreYouSure] = useState<boolean>(false);
   const [confirmPassword, setConfirmPassword] = useState<boolean>(false);
   const [newPassword, setNewPassword] = useState<string>("");
-  const [confirmNewPassword, setConfirmNewPassword] = useState<string>("");
+  
   useEffect(() => {
     setloggedInUser(JSON.parse(localStorage.getItem("loggedInUser")));
   }, []);

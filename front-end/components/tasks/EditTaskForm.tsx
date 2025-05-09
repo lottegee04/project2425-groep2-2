@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { Priority, StatusMessage, Task } from "../../types";
+import { Priority, Task } from "../../types";
 import { useRouter } from "next/router";
 import TaskService from "../../services/TaskService";
-import classNames from "classnames";
 import { useTranslation } from "next-i18next";
 
 type Props = {
@@ -112,7 +111,7 @@ const EditTaskForm: React.FC<Props> = ({ task }) => {
     }
   };
   return (
-    <>
+    
       <form className="w-full max-w-md p-8 pt-1 rounded-lg mx-auto shadow flex flex-col items-stretch">
         <button
           className="p-1 m-0"
@@ -121,7 +120,7 @@ const EditTaskForm: React.FC<Props> = ({ task }) => {
             router.push("/tasks");
           }}
         >
-          <img className="size-8" src="/images/exit-cross.png" />
+          <img alt="exit" className="size-8" src="/images/exit-cross.png" />
         </button>
         <div className=" flex flex-col my-3">
           <h4 className="text-center">{t("editTask.title")} </h4>
@@ -137,9 +136,9 @@ const EditTaskForm: React.FC<Props> = ({ task }) => {
             onChange={(e) => setDescription(e.target.value)}
           />
           {descriptionError && (
-            <>
+            
               <small className="text-[#b62626]">{descriptionError}</small>
-            </>
+            
           )}
         </div>
         <div className="flex flex-col my-3">
@@ -195,7 +194,7 @@ const EditTaskForm: React.FC<Props> = ({ task }) => {
           {t("editTask.button")}{" "}
         </button>
       </form>
-    </>
+    
   );
 };
 

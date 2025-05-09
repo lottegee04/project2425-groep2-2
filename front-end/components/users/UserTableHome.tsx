@@ -18,7 +18,7 @@ const UserTableHome: React.FC<Props> = ({ users }) => {
         return null;
     }
     return (
-        <>
+        
         <table className="md:w-4 ">
         <thead>
             <tr className=" bg-[#af9a81] flex flex-row items-center m-2 p-1 rounded-2xl text-white font-bold text-xl">
@@ -39,7 +39,7 @@ const UserTableHome: React.FC<Props> = ({ users }) => {
         } )}
         </tbody>
         </table>
-        </>
+        
     )
 }
 

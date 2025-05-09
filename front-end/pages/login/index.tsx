@@ -3,7 +3,6 @@ import Header from "../../components/header";
 import UserLoginFrom from "../../components/users/UserLoginForm";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import UserTableHome from "../../components/users/UserTableHome";
 
 const Login: React.FC = () => {
   const { t } = useTranslation();
