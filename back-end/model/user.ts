@@ -1,13 +1,11 @@
 import { Role } from '../types';
-import {Task} from './task';
 import { User as UserPrisma, 
-    Task as TaskPrisma
 } from '@prisma/client';
 export class User {
-    private id?: number;
-    private username: string;
+    readonly id?: number;
+    readonly username: string;
     private password: string;
-    private role: Role;
+    readonly role: Role;
 
 
     constructor(user : { id?: number; username: string; password: string; role: Role; }) {

@@ -7,8 +7,8 @@ import { TaskHistory as TaskHistoryPrisma,
  } from '@prisma/client';
 
 export class TaskHistory {
-    private user: User;
-    private finishedTasks: Task[];
+    readonly user: User;
+    readonly finishedTasks: Task[];
 
     constructor(task: { user: User; finishedTasks: Task[] }) {
         this.user = task.user;

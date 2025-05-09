@@ -2,9 +2,9 @@ import { Priority as PriorityPrisma } from '@prisma/client';
 import { Colour, Level } from '../types';
 
 export class Priority{
-    private id?: number;
-    private levelName: Level;
-    private colour: Colour;
+    readonly id?: number;
+    readonly levelName: Level;
+    readonly colour: Colour;
 
     constructor(priority : {id?: number; levelName: Level; colour: Colour}) {
         this.validate(priority)

@@ -1,7 +1,6 @@
-import { addDays } from 'date-fns';
-import { Task } from '../model/task';
+
 import { User } from '../model/user';
-import { Priority } from '../model/priority';
+
 import database from './database';
 
 // const users = [

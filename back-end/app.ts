@@ -13,7 +13,7 @@ import helmet from 'helmet';
 const app = express();
 app.use(helmet());
 dotenv.config();
-const port = process.env.APP_PORT || 3000;
+const port = process.env.APP_PORT ?? 3000;
 
 app.use(function (req, res, next) {
     res.setHeader(
@@ -28,7 +28,7 @@ app.use(bodyParser.json());
 //use tokens except following routes:
 app.use(
     expressjwt({
-        secret: process.env.JWT_SECRET || 'default_secret',
+        secret: process.env.JWT_SECRET ?? 'default_secret',
         algorithms: ['HS256'],
     }).unless({
         path: [

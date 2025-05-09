@@ -5,15 +5,15 @@ import { Task as TaskPrisma,
     User as UserPrisma  } from '@prisma/client';
 
 export class Task {
-    private id?: number;
-    private description: string;
-    private sidenote?: string;
-    private startDate: Date;
+    readonly id?: number;
+    readonly description: string;
+    readonly sidenote?: string;
+    readonly startDate: Date;
     private endDate: Date | null;
-    private deadline: Date;
+    readonly deadline: Date;
     private done: boolean;
-    private priority: Priority;
-    private user: User;
+    readonly priority: Priority;
+    readonly user: User;
 
     constructor(task: {
         id?: number;
@@ -101,7 +101,7 @@ export class Task {
         return new Task({
             id,
             description,
-            sidenote: sidenote || undefined,
+            sidenote: sidenote ?? undefined,
             startDate,
             endDate,
             deadline,

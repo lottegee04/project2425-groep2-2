@@ -1,5 +1,4 @@
 import { Priority } from "../../model/priority"
-import { Level } from "../../types"
 
 test("given valid priority parameters; when: creating a new priority; then: a priority is created with the right parameters;", () => {
     //given:
