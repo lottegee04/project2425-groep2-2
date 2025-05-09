@@ -15,6 +15,14 @@ app.use(helmet());
 dotenv.config();
 const port = process.env.APP_PORT || 3000;
 
+app.use(function (req, res, next) {
+    res.setHeader(
+      'Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; frame-src 'self'"
+    );
+    
+    next();
+  });
+
 app.use(cors({ origin: 'http://localhost:8080' }));
 app.use(bodyParser.json());
 //use tokens except following routes:
